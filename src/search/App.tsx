@@ -10,6 +10,7 @@ const App: React.FC = () => {
   const [filteredPlayers, setFilteredPlayers] =
     useState<Player[]>(initialPlayer);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isSearched, setIsSearched] = useState<boolean>(false); // Nowy stan
 
   const handleSearchPlayer = (criteria: {
     name: string;
@@ -51,6 +52,7 @@ const App: React.FC = () => {
     });
 
     setFilteredPlayers(filtered);
+    setIsSearched(true); // Ustaw stan isSearched na true
   };
 
   return (
@@ -64,7 +66,8 @@ const App: React.FC = () => {
         )}
         <h1>Wyszukiwarka Zawodników</h1>
         <SearchForm onSearchPlayer={handleSearchPlayer} />
-        <PlayerTable players={filteredPlayers} />
+        {/* Tabela pojawia się tylko jeśli isSearched jest true */}
+        {isSearched && <PlayerTable players={filteredPlayers} />}
       </div>
     </div>
   );

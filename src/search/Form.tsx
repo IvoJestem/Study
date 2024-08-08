@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Form.css";
+
 // Utility function to convert price from amount and unit to number
 export const convertPriceToNumber = (amount: number, unit: string): number => {
   let numericPrice = amount;
@@ -48,7 +49,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
   const [ageMin, setAgeMin] = useState<number | null>(null);
   const [ageMax, setAgeMax] = useState<number | null>(null);
   const [nation, setNation] = useState<string>("");
-  const [club] = useState<string>("");
+  const [club, setClub] = useState<string>("");
   const [priceMinAmount, setPriceMinAmount] = useState<number | null>(null);
   const [priceMinUnit, setPriceMinUnit] = useState<string>("tyś");
   const [priceMaxAmount, setPriceMaxAmount] = useState<number | null>(null);
@@ -71,6 +72,29 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         priceMaxAmount !== null
           ? convertPriceToNumber(priceMaxAmount, priceMaxUnit)
           : null,
+    });
+  };
+
+  const handleReset = () => {
+    setName("");
+    setPosition("");
+    setAgeMin(null);
+    setAgeMax(null);
+    setNation("");
+    setClub("");
+    setPriceMinAmount(null);
+    setPriceMinUnit("tyś");
+    setPriceMaxAmount(null);
+    setPriceMaxUnit("tyś");
+    onSearchPlayer({
+      name: "",
+      position: "",
+      ageMin: null,
+      ageMax: null,
+      nation: "",
+      club: "",
+      priceMin: null,
+      priceMax: null,
     });
   };
 
@@ -122,6 +146,14 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
       </div>
       <div>
         <input
+          value={club}
+          onChange={(e) => setClub(e.target.value)}
+          type="text"
+          placeholder="Klub"
+        />
+      </div>
+      <div>
+        <input
           type="number"
           value={priceMinAmount ?? ""}
           onChange={(e) =>
@@ -155,6 +187,9 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         </select>
       </div>
       <button type="submit">Szukaj</button>
+      <button type="button" onClick={handleReset}>
+        Resetuj
+      </button>
     </form>
   );
 };
