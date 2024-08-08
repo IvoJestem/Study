@@ -1,0 +1,23 @@
+.app-container {
+  margin-left: 200px;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000; /* Ensure button is above other content */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 0; /* Initial margin when menu is closed */
+  transition: margin-left 0.3s ease; /* Smooth transition when opening/closing menu */
+}
+
+.menu-open {
+  margin-left: 150px; /* Shift content when menu is open */
+}
