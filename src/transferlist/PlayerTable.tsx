@@ -12,7 +12,6 @@ const CardTable: React.FC<CardTableProps> = ({ cards }) => {
     direction: "asc" | "desc";
   } | null>(null);
 
-  // Define the custom sorting order for positions
   const positionOrder: { [key: string]: number } = {
     Bramkarz: 1,
     "Prawy Obrońca": 2,

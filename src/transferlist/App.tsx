@@ -5,7 +5,7 @@ import { Player, initialPlayer } from "../components/Database";
 import "./App.css";
 import SlideOutMenu from "../components/SlideOutMenu";
 
-const App: React.FC = () => {
+const TransferList: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [cards] = useState<Player[]>(initialPlayer);
 
@@ -27,4 +27,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default TransferList;

@@ -3,7 +3,7 @@ export interface Player {
   position: string;
   age: number;
   nation: string;
-  club: string;
+  club?: string;
   price: string;
 }
 
@@ -29,7 +29,7 @@ export const initialPlayer: Player[] = [
     position: "Ofensywny Pomocnik",
     age: 35,
     nation: "Niemcy",
-    club: "Bez Klubu",
+    club: "",
     price: "0 €",
   },
   {
@@ -85,7 +85,7 @@ export const initialPlayer: Player[] = [
     position: "Prawy Obrońca",
     age: 20,
     nation: "Polska",
-    club: "Bez Klubu",
+    club: "",
     price: "0 €",
   },
   {

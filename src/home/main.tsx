@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import TransferList from "./App.tsx";
-import "./index.css";
+import Home from "./App.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <TransferList />
+    <Home />
   </React.StrictMode>
 );

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./App.css"; // Styl główny aplikacji
-import SlideOutMenu from "./src/components/SlideOutMenu"; // Import SlideOutMenu
+import "./App.css";
+import SlideOutMenu from "../components/SlideOutMenu";
 
-const App: React.FC = () => {
+const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false); // Stan menu (otwarte/zamknięte)
 
   // Funkcja do przełączania stanu menu
@@ -31,4 +31,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Home;
