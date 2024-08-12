@@ -12,7 +12,7 @@ const Login: React.FC = () => {
     event.preventDefault();
 
     if (username === "admin" && password === "123") {
-      navigate("/src/home/");
+      navigate("/src/pages/home/");
     } else {
       setError("Niepoprawna nazwa użytkownika lub hasło");
     }

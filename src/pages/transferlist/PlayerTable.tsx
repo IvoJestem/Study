@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Player } from "../components/Database";
+import { Player } from "../../components/Database/Database";
 import "./PlayerTable.css";
 
 interface CardTableProps {

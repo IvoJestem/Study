@@ -1,6 +1,6 @@
 import "./Form.css";
 import "./PlayerTable.css"; // Ensure this path is correct based on your project structure
-import { Player } from "../components/Database";
+import { Player } from "../../components/Database/Database";
 
 interface PlayerTableProps {
   players: Player[];

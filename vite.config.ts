@@ -9,10 +9,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         login: resolve(__dirname, "index.html"),
-        home: resolve(__dirname, "src/home/index.html"),
-        transferlist: resolve(__dirname, "src/transferlist/index.html"),
-        search: resolve(__dirname, "src/search/index.html"),
-        about: resolve(__dirname, "src/about/index.html"),
+        home: resolve(__dirname, "src/pages/home/index.html"),
+        transferlist: resolve(__dirname, "src/pages/transferlist/index.html"),
+        search: resolve(__dirname, "src/pages/search/index.html"),
       },
     },
   },

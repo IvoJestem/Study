@@ -19,21 +19,17 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
             <div className="pusto">"Transfer Application"</div>
           </li>
           <li>
-            <a href="/src/home/">Home</a>
+            <a href="/../src/pages/home/">Home</a>
           </li>
           <li>
-            <a href="/src/transferlist/">Lista Transferowa</a>
+            <a href="/../src/pages/transferlist/">Lista Transferowa</a>
           </li>
           <li>
-            <a href="/src/search/">Wyszukiwarka</a>
+            <a href="/../src/pages/search/">Wyszukiwarka</a>
           </li>
-          <li>
-            <a href="/src/about/">About</a>
-          </li>
-          <li></li>
         </ul>
         <div className="logout">
-          <a href="../../">Wyloguj</a>
+          <a href="/../src/pages/login/">Wyloguj</a>
         </div>
       </nav>
     </div>

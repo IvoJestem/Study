@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
 import CardTable from "./PlayerTable";
-import { Player, initialPlayer } from "../components/Database";
+import { Player, initialPlayer } from "../../components/Database/Database";
 import "./App.css";
-import SlideOutMenu from "../components/SlideOutMenu";
+import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const TransferList: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);

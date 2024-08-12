@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { convertPriceToNumber, SearchForm } from "./Form";
 import PlayerTable from "./PlayerTable";
-import { initialPlayer, Player } from "../components/Database";
-import SlideOutMenu from "../components/SlideOutMenu";
+import { initialPlayer, Player } from "../../components/Database/Database";
+import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import "./App.css";
 
 const Search: React.FC = () => {
