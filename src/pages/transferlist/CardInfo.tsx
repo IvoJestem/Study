@@ -1,5 +1,5 @@
 import React from "react";
-import "./CardInfo.css";
+import "../../../index.css";
 
 interface PlayerInfoProps {
   name: string;

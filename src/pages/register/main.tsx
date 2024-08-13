@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import TransferList from "./App.tsx";
 import "../../../index.css";
+import Register from "./register.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <TransferList />
+    <Register />
   </React.StrictMode>
 );

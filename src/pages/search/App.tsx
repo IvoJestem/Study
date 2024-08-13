@@ -3,7 +3,7 @@ import { convertPriceToNumber, SearchForm } from "./Form";
 import PlayerTable from "./PlayerTable";
 import { initialPlayer, Player } from "../../components/Database/Database";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
-import "./App.css";
+import "../../../index.css";
 
 const Search: React.FC = () => {
   const [players] = useState<Player[]>(initialPlayer);

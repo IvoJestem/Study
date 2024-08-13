@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import "./Carousel.css";
+import "../../../index.css";
 
 interface CarouselItem {
   id: number;

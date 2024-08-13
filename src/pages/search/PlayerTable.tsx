@@ -1,5 +1,4 @@
-import "./Form.css";
-import "./PlayerTable.css"; // Ensure this path is correct based on your project structure
+import "../../../index.css";
 import { Player } from "../../components/Database/Database";
 
 interface PlayerTableProps {

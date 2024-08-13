@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./App.css";
+import "../../../index.css";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import Carousel from "./Carousel";
 import "slick-carousel/slick/slick.css";
@@ -11,13 +11,13 @@ const Home: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <div className={`app-container ${isMenuOpen ? "menu-open" : ""}`}>
+    <div className={`app-container2 ${isMenuOpen ? "menu-open" : ""}`}>
       <header className="header">
         <button
           className={`menu-toggle-btn ${isMenuOpen ? "close-btn" : "open-btn"}`}
           onClick={toggleMenu}
         >
-          {isMenuOpen ? "Close Menu" : "Open Menu"}
+          {isMenuOpen ? "" : "Open Menu"}
         </button>
         <div className="logo">
           <img src={"/pic.jpg"} alt="Logo" />
@@ -26,7 +26,7 @@ const Home: React.FC = () => {
 
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      <main className="main-content">
+      <main className="main-content3">
         <section className="hero-section">
           <h1>Welcome to Our Service</h1>
           <p>
@@ -53,7 +53,13 @@ const Home: React.FC = () => {
                 <a href="#about">About Us</a>
               </li>
               <li>
-                <a href="#services">Services</a>
+                <a
+                  href="../../../public/services.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Services
+                </a>
               </li>
               <li>
                 <a href="#contact">Contact</a>
@@ -61,9 +67,17 @@ const Home: React.FC = () => {
             </ul>
           </nav>
           <div className="social-icons">
-            <a href="#facebook">Facebook</a>
-            <a href="#twitter">Twitter</a>
-            <a href="#instagram">Instagram</a>
+            <ul>
+              <li>
+                <a href="#facebook">Facebook</a>
+              </li>
+              <li>
+                <a href="#twitter">Twitter</a>
+              </li>
+              <li>
+                <a href="#instagram">Instagram</a>
+              </li>
+            </ul>
           </div>
         </div>
       </footer>

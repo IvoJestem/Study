@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Form.css";
+import "../../../index.css";
 
 // Utility function to convert price from amount and unit to number
 export const convertPriceToNumber = (amount: number, unit: string): number => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import CardTable from "./PlayerTable";
 import { Player, initialPlayer } from "../../components/Database/Database";
-import "./App.css";
+import "../../../index.css";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const TransferList: React.FC = () => {

@@ -1,6 +1,6 @@
 // SlideOutMenu.tsx
 import React from "react";
-import "./SlideOutMenu.css";
+import "../../../index.css";
 
 interface SlideOutMenuProps {
   isOpen: boolean;
@@ -16,7 +16,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
       <nav>
         <ul>
           <li>
-            <div className="pusto">"Transfer Application"</div>
+            <div className="pusto">Transfer Application</div>
           </li>
           <li>
             <a href="/../src/pages/home/">Home</a>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./login.css"; // Import stylów
+import "../../../index.css";
+import { users } from "../../components/Users/Users";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -11,11 +12,19 @@ const Login: React.FC = () => {
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (username === "admin" && password === "123") {
+    const user = users.find(
+      (user) => user.login === username && user.password === password
+    );
+
+    if (user) {
       navigate("/src/pages/home/");
     } else {
       setError("Niepoprawna nazwa użytkownika lub hasło");
     }
+  };
+
+  const goToRegister = () => {
+    navigate("/src/pages/register/");
   };
 
   return (
@@ -45,6 +54,9 @@ const Login: React.FC = () => {
         {error && <p>{error}</p>}
         <button type="submit">Zaloguj</button>
       </form>
+      <div className="register">
+        <button onClick={goToRegister}>Zarejestruj</button>
+      </div>
     </div>
   );
 };
