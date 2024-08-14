@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../index.css";
+import { TextField, Button, Typography, Box, Alert } from "@mui/material";
 import { users } from "../../components/Users/Users";
 
 const Login: React.FC = () => {
@@ -28,36 +28,50 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
+    <Box
+      className="login-container"
+      sx={{ maxWidth: 400, margin: "auto", padding: 3 }}
+    >
+      <Typography variant="h4" component="h2" align="center" gutterBottom>
+        Login
+      </Typography>
       <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Nazwa użytkownika:</label>
-          <input
-            type="text"
-            id="username"
+        <Box mb={2}>
+          <TextField
+            label="Nazwa użytkownika"
+            variant="outlined"
+            fullWidth
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div>
-          <label htmlFor="password">Hasło:</label>
-          <input
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label="Hasło"
+            variant="outlined"
             type="password"
-            id="password"
+            fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        {error && <p>{error}</p>}
-        <button type="submit">Zaloguj</button>
+        </Box>
+        {error && (
+          <Box mb={2}>
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        )}
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Zaloguj
+        </Button>
       </form>
-      <div className="register">
-        <button onClick={goToRegister}>Zarejestruj</button>
-      </div>
-    </div>
+      <Box mt={2} textAlign="center">
+        <Button onClick={goToRegister} color="secondary">
+          Zarejestruj
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

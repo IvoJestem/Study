@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./src/pages/home/App";
+
+import Home from "./src/pages/home/Home";
 import Login from "./src/pages/login/login";
-import Register from "./src/pages/register/register";
+import Register from "./src/pages/register/Register";
 import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
