@@ -19,8 +19,8 @@ Ten projekt jest przykładem aplikacji webowej zbudowanej przy użyciu React, Ty
 
 ## Instalacja
 
-1. Klonuj repozytorium: `git clone https://github.com/twoje-repozytorium.git`
-2. Przejdź do katalogu projektu: `cd twoje-repozytorium`
+1. Klonuj repozytorium: `git clone https://github.com/IvoJestem/Study.git`
+2. Przejdź do katalogu projektu: `cd Study`
 3. Zainstaluj zależności: `npm install` lub `yarn install`
 
 ## Konfiguracja ESLint
