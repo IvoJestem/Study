@@ -1,4 +1,4 @@
-# React + TypeScript + Vite Project
+# Wielodostępowa aplikacja internetowa do zarządzania transferami piłkarzy
 
 Ten projekt jest przykładem aplikacji webowej zbudowanej przy użyciu React, TypeScript i Vite. Projekt korzysta z najnowszych technologii i narzędzi, aby zapewnić szybki rozwój i wydajność.
 
