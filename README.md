@@ -104,7 +104,7 @@ yarn build
 
 ## Użyte technologie
 
-React - Biblioteka do budowy interfejsów użytkownika.
-TypeScript - Język programowania wzbogacający JavaScript o typowanie statyczne.
-Vite - Szybki budowniczy dla aplikacji webowych.
-ESLint - Narzędzie do analizy kodu i utrzymania wysokiej jakości kodu.
+- **React** - Biblioteka do budowy interfejsów użytkownika.
+- **TypeScript** - Język programowania wzbogacający JavaScript o typowanie statyczne.
+- **Vite** - Szybki budowniczy dla aplikacji webowych.
+- **ESLint** - Narzędzie do analizy kodu i utrzymania wysokiej jakości kodu.
