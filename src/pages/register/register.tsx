@@ -7,6 +7,7 @@ const Register: React.FC = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [club, setClub] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -14,10 +15,13 @@ const Register: React.FC = () => {
   const handleRegister = (event: React.FormEvent) => {
     event.preventDefault();
 
+    // Sprawdzenie, czy użytkownik istnieje
     const userExists = users.some((user) => user.login === username);
 
     if (userExists) {
       setError("Nazwa użytkownika jest już zajęta");
+    } else if (password !== confirmPassword) {
+      setError("Hasła się nie zgadzają");
     } else {
       users.push({
         name: name,
@@ -26,6 +30,7 @@ const Register: React.FC = () => {
         club: club,
       });
 
+      // Po udanej rejestracji przekieruj do strony głównej
       navigate("../../../../");
     }
   };
@@ -75,6 +80,16 @@ const Register: React.FC = () => {
           margin="normal"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <TextField
+          label="Powtórz hasło"
+          variant="outlined"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
         <TextField

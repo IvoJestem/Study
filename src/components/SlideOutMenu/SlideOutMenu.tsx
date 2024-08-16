@@ -18,12 +18,13 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
         backgroundColor: "background.paper", // Użycie koloru tła z motywu
         boxShadow: 5, // Mocniejszy cień
         transform: isOpen ? "translateX(0)" : "translateX(-100%)",
-        transition: "transform 0.3s ease",
+        transition: "transform 0.4s ease", // Płynniejsza animacja otwierania/zamykania
         zIndex: 1300,
         borderRadius: "0 8px 8px 0", // Zaokrąglenie po prawej stronie
         overflowY: "auto", // Przewijanie, jeśli treść jest za duża
       }}
     >
+      {/* Button for closing the menu */}
       <Button
         onClick={onClose}
         sx={{
@@ -39,6 +40,8 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
       >
         &times;
       </Button>
+
+      {/* Menu content */}
       <Box
         component="nav"
         sx={{
@@ -50,10 +53,17 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
       >
         <Typography
           variant="h6"
-          sx={{ marginBottom: 2, color: "primary.main" }}
+          sx={{
+            marginBottom: 3,
+            color: "primary.main",
+            fontWeight: "bold", // Wyróżniony tytuł
+            textAlign: "center", // Wycentrowany tytuł
+          }}
         >
           Transfer Application
         </Typography>
+
+        {/* Links in the menu */}
         <Box
           component="ul"
           sx={{
@@ -69,7 +79,11 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 textDecoration: "none",
                 color: "primary.main",
                 fontWeight: "bold",
+                padding: 1,
+                display: "block", // Cały obszar klikalny
+                borderRadius: 2, // Zaokrąglone rogi
                 "&:hover": {
+                  backgroundColor: "primary.light", // Tło hovera
                   color: "secondary.main",
                 },
               }}
@@ -77,6 +91,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               Home
             </Link>
           </Box>
+
           <Box component="li" sx={{ marginBottom: 2 }}>
             <Link
               href="/../src/pages/transferlist/"
@@ -84,7 +99,11 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 textDecoration: "none",
                 color: "primary.main",
                 fontWeight: "bold",
+                padding: 1,
+                display: "block", // Cały obszar klikalny
+                borderRadius: 2,
                 "&:hover": {
+                  backgroundColor: "primary.light",
                   color: "secondary.main",
                 },
               }}
@@ -92,6 +111,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               Lista Transferowa
             </Link>
           </Box>
+
           <Box component="li" sx={{ marginBottom: 2 }}>
             <Link
               href="/../src/pages/search/"
@@ -99,7 +119,11 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 textDecoration: "none",
                 color: "primary.main",
                 fontWeight: "bold",
+                padding: 1,
+                display: "block", // Cały obszar klikalny
+                borderRadius: 2,
                 "&:hover": {
+                  backgroundColor: "primary.light",
                   color: "secondary.main",
                 },
               }}
@@ -108,11 +132,14 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
             </Link>
           </Box>
         </Box>
+
+        {/* Logout link */}
         <Box
           sx={{
             marginTop: "auto",
             paddingY: 2,
-            borderTop: "1px solid #e0e0e0",
+            borderTop: "1px solid #e0e0e0", // Linie oddzielająca
+            textAlign: "center", // Wycentrowany tekst
           }}
         >
           <Link

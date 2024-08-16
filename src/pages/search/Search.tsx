@@ -29,45 +29,63 @@ const Search: React.FC = () => {
       sx={{
         display: "flex",
         height: "100vh",
+        backgroundColor: "#f5f5f5", // Dodanie tła dla lepszej czytelności
       }}
     >
+      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
       <Box
         sx={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          padding: 2,
-          marginLeft: isMenuOpen ? "250px" : 0, // Dodaj margines w lewo, gdy menu jest otwarte
+          padding: 3,
+          marginLeft: isMenuOpen ? "250px" : 0,
           transition: "margin-left 0.3s ease", // Płynne przejście marginesu
           height: "100%",
+          backgroundColor: "#fff", // Tło dla głównej treści
+          boxShadow: 2, // Dodanie cienia dla głębi
+          borderRadius: 2, // Zaokrąglone rogi
         }}
       >
+        {/* Header Section */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            paddingBottom: 2,
+            paddingBottom: 3,
           }}
         >
           <Button
             variant="contained"
             color="primary"
             onClick={() => setIsMenuOpen(true)}
+            sx={{
+              borderRadius: 4, // Zaokrąglone rogi przycisku
+              boxShadow: 3, // Dodanie lekkiego cienia
+            }}
           >
             Open Menu
           </Button>
-          <Typography variant="h4" gutterBottom>
+
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>
             Wyszukiwarka Zawodników
           </Typography>
         </Box>
+
+        {/* Search Form Section */}
         <SearchForm onSearchPlayer={handleSearchPlayer} />
-        <CombinationResults
-          players={players}
-          positions={positions}
-          budget={budget}
-        />
+
+        {/* Results Section */}
+        <Box sx={{ marginTop: 4 }}>
+          <CombinationResults
+            players={players}
+            positions={positions}
+            budget={budget}
+          />
+        </Box>
       </Box>
     </Box>
   );

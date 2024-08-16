@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, Typography, IconButton, Avatar } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  Avatar,
+  useTheme,
+} from "@mui/material";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Slider from "react-slick";
@@ -26,6 +33,7 @@ const testimonials = [
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const theme = useTheme();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -45,11 +53,12 @@ const Home: React.FC = () => {
       sx={{
         position: "relative",
         minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#f0f4f8", // Lighter background for cleaner look
         padding: 2,
         overflow: "hidden",
       }}
     >
+      {/* Header */}
       <Box
         component="header"
         sx={{
@@ -58,12 +67,16 @@ const Home: React.FC = () => {
           alignItems: "center",
           padding: 2,
           backgroundColor: "#fff",
-          boxShadow: 1,
+          boxShadow: 2,
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
+          zIndex: 10,
         }}
       >
-        <IconButton onClick={toggleMenu} sx={{ color: "primary.main" }}>
+        <IconButton
+          onClick={toggleMenu}
+          sx={{ color: theme.palette.primary.main }}
+        >
           <MenuIcon />
         </IconButton>
         <Box
@@ -78,8 +91,10 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
+      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -88,24 +103,42 @@ const Home: React.FC = () => {
           marginLeft: isMenuOpen ? "250px" : "0",
         }}
       >
+        {/* Hero Section */}
         <Box
           component="section"
           sx={{
             textAlign: "center",
             marginBottom: 4,
+            backgroundColor: theme.palette.background.default,
+            padding: 4,
+            boxShadow: 1,
+            borderRadius: 3,
+            backgroundImage:
+              "linear-gradient(135deg, #6b73ff 0%, #000dff 100%)",
+            color: "#fff",
           }}
         >
-          <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
+          <Typography
+            variant="h3"
+            component="h1"
+            sx={{ mb: 2, fontWeight: 600 }}
+          >
             Welcome to Our Service
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
+          <Typography variant="body1" sx={{ mb: 3 }}>
             Discover our offerings. Use the menu to explore various sections.
           </Typography>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            sx={{ paddingX: 4 }}
+          >
             Get Started
           </Button>
         </Box>
 
+        {/* Services Section */}
         <Box component="section" sx={{ mb: 4 }}>
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
             What We Offer
@@ -123,7 +156,7 @@ const Home: React.FC = () => {
             marginBottom: 4,
             backgroundColor: "#fff",
             padding: 3,
-            boxShadow: 1,
+            boxShadow: 3,
             borderRadius: 2,
           }}
         >
@@ -141,6 +174,7 @@ const Home: React.FC = () => {
                     height: 64,
                     margin: "0 auto",
                     marginBottom: 2,
+                    boxShadow: 2,
                   }}
                 />
                 <Typography variant="body1" sx={{ fontStyle: "italic", mb: 1 }}>
@@ -155,15 +189,17 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
+      {/* Footer */}
       <Box
         component="footer"
         sx={{
-          padding: 2,
+          padding: 3,
           backgroundColor: "#fff",
-          boxShadow: 1,
+          boxShadow: 2,
           marginTop: "auto",
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
+          borderTop: `3px solid ${theme.palette.primary.light}`,
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -174,7 +210,10 @@ const Home: React.FC = () => {
                   href="https://www.youtube.com/watch?v=6yP4Nm86yk0"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                  }}
                 >
                   About Us
                 </a>
@@ -184,7 +223,10 @@ const Home: React.FC = () => {
                   href="../../../public/services.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                  }}
                 >
                   Services
                 </a>
@@ -192,7 +234,10 @@ const Home: React.FC = () => {
               <li>
                 <a
                   href="mailto:mail@mail.pl"
-                  style={{ textDecoration: "none", color: "#007bff" }}
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.primary.main,
+                  }}
                 >
                   Contact
                 </a>
@@ -205,7 +250,10 @@ const Home: React.FC = () => {
               href="https://www.facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ textDecoration: "none", color: "#007bff" }}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.primary.main,
+              }}
             >
               Facebook
             </a>
@@ -213,7 +261,10 @@ const Home: React.FC = () => {
               href="https://twitter.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ textDecoration: "none", color: "#007bff" }}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.primary.main,
+              }}
             >
               Twitter
             </a>
@@ -221,7 +272,10 @@ const Home: React.FC = () => {
               href="https://www.instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ textDecoration: "none", color: "#007bff" }}
+              style={{
+                textDecoration: "none",
+                color: theme.palette.primary.main,
+              }}
             >
               Instagram
             </a>

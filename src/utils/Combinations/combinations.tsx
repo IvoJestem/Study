@@ -1,13 +1,6 @@
 import { Player } from "../../components/Database/Database";
 import { calculateTotalPrice } from "../price/price";
 
-/**
- * Funkcja generuje wszystkie możliwe kombinacje zawodników, które spełniają wymagania dotyczące pozycji i budżetu.
- * @param players Lista zawodników.
- * @param positions Wymagane pozycje.
- * @param budget Budżet na zawodników.
- * @returns Lista kombinacji zawodników.
- */
 const generateCombinations = (
   players: Player[],
   positions: string[],

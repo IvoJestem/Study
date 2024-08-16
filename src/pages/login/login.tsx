@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Box, Alert } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { users } from "../../components/Users/Users";
-
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = (event: React.FormEvent) => {
@@ -17,20 +18,27 @@ const Login: React.FC = () => {
     );
 
     if (user) {
-      navigate("/src/pages/home/");
+      navigate("src/pages/home"); // Updated to use relative path
     } else {
       setError("Niepoprawna nazwa użytkownika lub hasło");
     }
   };
 
   const goToRegister = () => {
-    navigate("/src/pages/register/");
+    navigate("src/pages/register"); // Updated to use relative path
   };
 
   return (
     <Box
-      className="login-container"
-      sx={{ maxWidth: 400, margin: "auto", padding: 3 }}
+      sx={{
+        maxWidth: 400,
+        margin: "auto",
+        padding: 3,
+        border: "1px solid #ddd",
+        borderRadius: 2,
+        boxShadow: 3,
+        bgcolor: "background.paper",
+      }}
     >
       <Typography variant="h4" component="h2" align="center" gutterBottom>
         Login
@@ -46,15 +54,34 @@ const Login: React.FC = () => {
             required
           />
         </Box>
-        <Box mb={2}>
+        <Box mb={2} position="relative">
           <TextField
             label="Hasło"
             variant="outlined"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            InputProps={{
+              endAdornment: (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    px: 2,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </Box>
+              ),
+            }}
           />
         </Box>
         {error && (
@@ -62,7 +89,13 @@ const Login: React.FC = () => {
             <Alert severity="error">{error}</Alert>
           </Box>
         )}
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+        >
           Zaloguj
         </Button>
       </form>

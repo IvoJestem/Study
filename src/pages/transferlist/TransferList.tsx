@@ -9,39 +9,61 @@ const TransferList: React.FC = () => {
   const [cards] = useState<Player[]>(initialPlayer);
 
   return (
-    <Container>
+    <Container
+      maxWidth="lg"
+      sx={{
+        paddingTop: 4,
+        paddingBottom: 4,
+        backgroundColor: "#f5f5f5", // Lekkie tło dla lepszej czytelności
+        minHeight: "100vh",
+      }}
+    >
+      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+      {/* Header Section */}
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-          bgcolor: "background.paper",
-          paddingTop: 2,
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+          backgroundColor: "#fff", // Oddzielenie tła nagłówka
+          padding: 2,
+          boxShadow: 2, // Delikatny cień dla głębi
+          borderRadius: 2,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: 2,
-          }}
-        >
-          {!isMenuOpen && (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setIsMenuOpen(true)}
-            >
-              Open Menu
-            </Button>
-          )}
-          <Typography variant="h4">Lista Transferowa</Typography>
-        </Box>
-        <Box sx={{ flex: 1, overflow: "auto", padding: 2 }}>
-          <CardTable cards={cards} /> {/* Używamy CardTable */}
-        </Box>
+        {!isMenuOpen && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsMenuOpen(true)}
+            sx={{
+              borderRadius: 4, // Zaokrąglone rogi przycisku
+              boxShadow: 3, // Lekki cień przycisku
+            }}
+          >
+            Open Menu
+          </Button>
+        )}
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          Lista Transferowa
+        </Typography>
+      </Box>
+
+      {/* Main Content Section */}
+      <Box
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          backgroundColor: "#fff", // Tło dla sekcji tabeli
+          padding: 3,
+          boxShadow: 2,
+          borderRadius: 2,
+        }}
+      >
+        <CardTable cards={cards} /> {/* Używamy CardTable */}
       </Box>
     </Container>
   );
