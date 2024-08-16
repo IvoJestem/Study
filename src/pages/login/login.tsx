@@ -18,14 +18,14 @@ const Login: React.FC = () => {
     );
 
     if (user) {
-      navigate("src/pages/home"); // Updated to use relative path
+      navigate("src/pages/home");
     } else {
       setError("Niepoprawna nazwa użytkownika lub hasło");
     }
   };
 
   const goToRegister = () => {
-    navigate("src/pages/register"); // Updated to use relative path
+    navigate("src/pages/register");
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Box, Typography, Button } from "@mui/material";
-import { initialPlayer, Player } from "../../components/Database/Database";
+import { Container, Typography, Button, Box } from "@mui/material";
+import { Player, initialPlayer } from "../../components/Database/Database";
 import { SearchForm } from "../../components/Form/Form";
 import CombinationResults from "../../components/CombinationResults/CombinationResults";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
@@ -25,60 +25,57 @@ const Search: React.FC = () => {
   };
 
   return (
-    <Box
+    <Container
+      maxWidth="lg"
       sx={{
-        display: "flex",
-        height: "100vh",
-        backgroundColor: "#f5f5f5", // Dodanie tła dla lepszej czytelności
+        paddingTop: 4,
+        paddingBottom: 4,
+        backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
       }}
     >
-      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       <Box
         sx={{
-          flex: 1,
           display: "flex",
-          flexDirection: "column",
-          padding: 3,
-          marginLeft: isMenuOpen ? "250px" : 0,
-          transition: "margin-left 0.3s ease", // Płynne przejście marginesu
-          height: "100%",
-          backgroundColor: "#fff", // Tło dla głównej treści
-          boxShadow: 2, // Dodanie cienia dla głębi
-          borderRadius: 2, // Zaokrąglone rogi
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+          backgroundColor: "#fff",
+          padding: 2,
+          boxShadow: 2,
+          borderRadius: 2,
         }}
       >
-        {/* Header Section */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingBottom: 3,
-          }}
-        >
+        {!isMenuOpen && (
           <Button
             variant="contained"
             color="primary"
             onClick={() => setIsMenuOpen(true)}
             sx={{
-              borderRadius: 4, // Zaokrąglone rogi przycisku
-              boxShadow: 3, // Dodanie lekkiego cienia
+              borderRadius: 4,
+              boxShadow: 3,
             }}
           >
             Open Menu
           </Button>
+        )}
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+          Wyszukiwarka Zawodników
+        </Typography>
+      </Box>
 
-          <Typography variant="h4" sx={{ fontWeight: 600 }}>
-            Wyszukiwarka Zawodników
-          </Typography>
-        </Box>
-
-        {/* Search Form Section */}
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 2,
+        }}
+      >
         <SearchForm onSearchPlayer={handleSearchPlayer} />
 
-        {/* Results Section */}
         <Box sx={{ marginTop: 4 }}>
           <CombinationResults
             players={players}
@@ -87,7 +84,7 @@ const Search: React.FC = () => {
           />
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

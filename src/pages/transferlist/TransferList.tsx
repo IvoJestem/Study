@@ -14,23 +14,21 @@ const TransferList: React.FC = () => {
       sx={{
         paddingTop: 4,
         paddingBottom: 4,
-        backgroundColor: "#f5f5f5", // Lekkie tło dla lepszej czytelności
+        backgroundColor: "#f5f5f5",
         minHeight: "100vh",
       }}
     >
-      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* Header Section */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           mb: 4,
-          backgroundColor: "#fff", // Oddzielenie tła nagłówka
+          backgroundColor: "#fff",
           padding: 2,
-          boxShadow: 2, // Delikatny cień dla głębi
+          boxShadow: 2,
           borderRadius: 2,
         }}
       >
@@ -40,8 +38,8 @@ const TransferList: React.FC = () => {
             color="primary"
             onClick={() => setIsMenuOpen(true)}
             sx={{
-              borderRadius: 4, // Zaokrąglone rogi przycisku
-              boxShadow: 3, // Lekki cień przycisku
+              borderRadius: 4,
+              boxShadow: 3,
             }}
           >
             Open Menu
@@ -52,18 +50,17 @@ const TransferList: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Main Content Section */}
       <Box
         sx={{
           flex: 1,
           overflow: "auto",
-          backgroundColor: "#fff", // Tło dla sekcji tabeli
+          backgroundColor: "#fff",
           padding: 3,
           boxShadow: 2,
           borderRadius: 2,
         }}
       >
-        <CardTable cards={cards} /> {/* Używamy CardTable */}
+        <CardTable cards={cards} />
       </Box>
     </Container>
   );

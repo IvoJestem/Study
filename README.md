@@ -64,7 +64,7 @@ Projekt korzysta z ESLint do zapewnienia wysokiej jakości kodu. Oto podstawowa 
        "plugin:@typescript-eslint/strict-type-checked",
      ],
      plugins: ["react", "@typescript-eslint"],
-     rules: {},
+     rules: {"Rule"},
    };
    ```
 

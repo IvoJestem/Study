@@ -12,19 +12,18 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
       sx={{
         position: "fixed",
         top: 0,
-        left: 0, // Menu z lewej strony
+        left: 0,
         width: "250px",
         height: "100%",
-        backgroundColor: "background.paper", // Użycie koloru tła z motywu
-        boxShadow: 5, // Mocniejszy cień
+        backgroundColor: "background.paper",
+        boxShadow: 5,
         transform: isOpen ? "translateX(0)" : "translateX(-100%)",
-        transition: "transform 0.4s ease", // Płynniejsza animacja otwierania/zamykania
+        transition: "transform 0.4s ease",
         zIndex: 1300,
-        borderRadius: "0 8px 8px 0", // Zaokrąglenie po prawej stronie
-        overflowY: "auto", // Przewijanie, jeśli treść jest za duża
+        borderRadius: "0 8px 8px 0",
+        overflowY: "auto",
       }}
     >
-      {/* Button for closing the menu */}
       <Button
         onClick={onClose}
         sx={{
@@ -32,23 +31,22 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
           top: 16,
           right: 16,
           fontSize: "1.5rem",
-          color: "text.primary", // Tekst w kolorze podstawowym
+          color: "text.primary",
           "&:hover": {
-            color: "error.main", // Kolor hovera w kolorze błędu
+            color: "error.main",
           },
         }}
       >
         &times;
       </Button>
 
-      {/* Menu content */}
       <Box
         component="nav"
         sx={{
           display: "flex",
           flexDirection: "column",
           padding: 2,
-          marginTop: "64px", // Ustawienie menu poniżej przycisku zamknięcia
+          marginTop: "64px",
         }}
       >
         <Typography
@@ -56,14 +54,13 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
           sx={{
             marginBottom: 3,
             color: "primary.main",
-            fontWeight: "bold", // Wyróżniony tytuł
-            textAlign: "center", // Wycentrowany tytuł
+            fontWeight: "bold",
+            textAlign: "center",
           }}
         >
           Transfer Application
         </Typography>
 
-        {/* Links in the menu */}
         <Box
           component="ul"
           sx={{
@@ -80,10 +77,10 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 color: "primary.main",
                 fontWeight: "bold",
                 padding: 1,
-                display: "block", // Cały obszar klikalny
-                borderRadius: 2, // Zaokrąglone rogi
+                display: "block",
+                borderRadius: 2,
                 "&:hover": {
-                  backgroundColor: "primary.light", // Tło hovera
+                  backgroundColor: "primary.light",
                   color: "secondary.main",
                 },
               }}
@@ -100,7 +97,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 color: "primary.main",
                 fontWeight: "bold",
                 padding: 1,
-                display: "block", // Cały obszar klikalny
+                display: "block",
                 borderRadius: 2,
                 "&:hover": {
                   backgroundColor: "primary.light",
@@ -120,7 +117,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
                 color: "primary.main",
                 fontWeight: "bold",
                 padding: 1,
-                display: "block", // Cały obszar klikalny
+                display: "block",
                 borderRadius: 2,
                 "&:hover": {
                   backgroundColor: "primary.light",
@@ -133,13 +130,12 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
           </Box>
         </Box>
 
-        {/* Logout link */}
         <Box
           sx={{
             marginTop: "auto",
             paddingY: 2,
-            borderTop: "1px solid #e0e0e0", // Linie oddzielająca
-            textAlign: "center", // Wycentrowany tekst
+            borderTop: "1px solid #e0e0e0",
+            textAlign: "center",
           }}
         >
           <Link

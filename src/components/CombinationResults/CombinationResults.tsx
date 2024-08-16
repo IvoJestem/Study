@@ -1,4 +1,3 @@
-// components/CombinationResults.tsx
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 
@@ -6,12 +5,6 @@ import { Player } from "../../components/Database/Database";
 import generateCombinations from "../../utils/Combinations/combinations";
 import PlayerTable from "../PlayerTable/PlayerTable";
 
-/**
- * Komponent do wyświetlania wyników kombinacji zawodników.
- * @param players Lista zawodników.
- * @param positions Wymagane pozycje.
- * @param budget Budżet na zawodników.
- */
 const CombinationResults: React.FC<{
   players: Player[];
   positions: string[];

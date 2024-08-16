@@ -15,7 +15,6 @@ const Register: React.FC = () => {
   const handleRegister = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Sprawdzenie, czy użytkownik istnieje
     const userExists = users.some((user) => user.login === username);
 
     if (userExists) {
@@ -30,7 +29,6 @@ const Register: React.FC = () => {
         club: club,
       });
 
-      // Po udanej rejestracji przekieruj do strony głównej
       navigate("../../../../");
     }
   };

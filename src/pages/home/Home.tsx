@@ -53,12 +53,11 @@ const Home: React.FC = () => {
       sx={{
         position: "relative",
         minHeight: "100vh",
-        backgroundColor: "#f0f4f8", // Lighter background for cleaner look
+        backgroundColor: "#f0f4f8",
         padding: 2,
         overflow: "hidden",
       }}
     >
-      {/* Header */}
       <Box
         component="header"
         sx={{
@@ -91,10 +90,8 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Slide-out Menu */}
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -103,7 +100,6 @@ const Home: React.FC = () => {
           marginLeft: isMenuOpen ? "250px" : "0",
         }}
       >
-        {/* Hero Section */}
         <Box
           component="section"
           sx={{
@@ -138,7 +134,6 @@ const Home: React.FC = () => {
           </Button>
         </Box>
 
-        {/* Services Section */}
         <Box component="section" sx={{ mb: 4 }}>
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
             What We Offer
@@ -148,7 +143,6 @@ const Home: React.FC = () => {
           </Typography>
         </Box>
 
-        {/* Testimonials Section */}
         <Box
           component="section"
           sx={{
@@ -189,7 +183,6 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Footer */}
       <Box
         component="footer"
         sx={{

@@ -46,9 +46,24 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
   const [club, setClub] = useState<string>("");
   const [budgetAmount, setBudgetAmount] = useState<number | null>(null);
   const [budgetUnit, setBudgetUnit] = useState<string>("tyś");
+  const [isLocked, setIsLocked] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log({
+      name,
+      position: positionsSelected,
+      ageMin,
+      ageMax,
+      nation,
+      club,
+      budget:
+        budgetAmount !== null
+          ? convertPriceToNumber(budgetAmount, budgetUnit)
+          : null,
+    });
+
     onSearchPlayer({
       name,
       position: positionsSelected,
@@ -61,6 +76,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           ? convertPriceToNumber(budgetAmount, budgetUnit)
           : null,
     });
+
+    setIsLocked(true);
   };
 
   const handleReset = () => {
@@ -72,6 +89,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
     setClub("");
     setBudgetAmount(null);
     setBudgetUnit("tyś");
+    setIsLocked(false);
+
     onSearchPlayer({
       name: "",
       position: [],
@@ -81,6 +100,10 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
       club: "",
       budget: null,
     });
+  };
+
+  const handleEdit = () => {
+    setIsLocked(false);
   };
 
   return (
@@ -101,6 +124,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         onChange={(e) => setName(e.target.value)}
         variant="outlined"
         fullWidth
+        disabled={isLocked}
+        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
       <InputLabel id="position-select-label">Pozycja</InputLabel>
       <Select
@@ -112,6 +137,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         inputProps={{ "aria-label": "Pozycja" }}
         fullWidth
         variant="outlined"
+        disabled={isLocked}
+        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       >
         {positions.map((pos) => (
           <MenuItem key={pos} value={pos}>
@@ -129,6 +156,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           }
           variant="outlined"
           fullWidth
+          disabled={isLocked}
+          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
         <TextField
           label="Wiek max"
@@ -139,6 +168,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           }
           variant="outlined"
           fullWidth
+          disabled={isLocked}
+          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
       </Box>
       <TextField
@@ -147,6 +178,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         onChange={(e) => setNation(e.target.value)}
         variant="outlined"
         fullWidth
+        disabled={isLocked}
+        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
       <TextField
         label="Klub"
@@ -154,6 +187,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         onChange={(e) => setClub(e.target.value)}
         variant="outlined"
         fullWidth
+        disabled={isLocked}
+        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
@@ -165,6 +200,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           }
           variant="outlined"
           fullWidth
+          disabled={isLocked}
+          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
         <Select
           value={budgetUnit}
@@ -173,6 +210,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           inputProps={{ "aria-label": "Jednostka" }}
           fullWidth
           variant="outlined"
+          disabled={isLocked}
+          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         >
           <MenuItem value="tyś">tyś</MenuItem>
           <MenuItem value="mln">mln</MenuItem>
@@ -180,7 +219,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
       </Box>
       <Box sx={{ display: "flex", gap: 2 }}>
         <Button type="submit" variant="contained" color="primary">
-          Zatwierdz
+          Zatwierdź
         </Button>
         <Button
           type="button"
@@ -189,6 +228,9 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           color="secondary"
         >
           Resetuj
+        </Button>
+        <Button type="button" onClick={handleEdit} variant="contained">
+          Edytuj
         </Button>
       </Box>
     </Box>
