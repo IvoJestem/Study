@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
-import CardTable from "../../components/CardTable"; // Używamy CardTable z MUI
 import { Player, initialPlayer } from "../../components/Database/Database";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
+import CardTable from "../../components/CardTable/CardTable";
 
 const TransferList: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);

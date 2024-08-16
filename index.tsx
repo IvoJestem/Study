@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Route1 from "./Route1";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Route1 />
   </React.StrictMode>,
   document.getElementById("root")
 );

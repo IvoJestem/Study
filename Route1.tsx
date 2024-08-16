@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./src/pages/login/Login";
 
-import Home from "./src/pages/home/Home";
-import Login from "./src/pages/login/login";
-import Register from "./src/pages/register/Register";
 import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Home from "./src/pages/home/Home";
+import Register from "./src/pages/register/Register";
 
-const App: React.FC = () => {
+const Route1: React.FC = () => {
   return (
     <Router>
       <Routes>
@@ -19,4 +19,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Route1;
