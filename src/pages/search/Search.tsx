@@ -1,4 +1,3 @@
-// pages/search/Search.tsx
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { initialPlayer, Player } from "../../components/Database/Database";
@@ -6,19 +5,12 @@ import { SearchForm } from "../../components/Form/Form";
 import CombinationResults from "../../components/CombinationResults/CombinationResults";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
-/**
- * Komponent główny do wyszukiwania zawodników i wyświetlania wyników.
- */
 const Search: React.FC = () => {
   const [players] = useState<Player[]>(initialPlayer);
   const [positions, setPositions] = useState<string[]>([]);
   const [budget, setBudget] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-  /**
-   * Funkcja obsługująca wyszukiwanie zawodników na podstawie kryteriów.
-   * @param criteria Kryteria wyszukiwania.
-   */
   const handleSearchPlayer = (criteria: {
     name: string;
     position: string[];
@@ -28,7 +20,7 @@ const Search: React.FC = () => {
     club: string;
     budget: number | null;
   }) => {
-    setPositions(criteria.position); // Dostosuj do wielokrotnych pozycji
+    setPositions(criteria.position);
     setBudget(criteria.budget ?? 0);
   };
 

@@ -15,6 +15,10 @@ const generateCombinations = (
 ): Player[][] => {
   const results: Player[][] = [];
 
+  const filteredPlayers = players.filter((player) =>
+    positions.includes(player.position)
+  );
+
   const findCombinations = (currentCombo: Player[], start: number) => {
     const comboPositions = new Set(
       currentCombo.map((player) => player.position)
@@ -27,8 +31,8 @@ const generateCombinations = (
       results.push([...currentCombo]);
     }
 
-    for (let i = start; i < players.length; i++) {
-      findCombinations([...currentCombo, players[i]], i + 1);
+    for (let i = start; i < filteredPlayers.length; i++) {
+      findCombinations([...currentCombo, filteredPlayers[i]], i + 1);
     }
   };
 
