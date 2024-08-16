@@ -23,17 +23,17 @@ interface FormProps {
 
 const positions = [
   "Bramkarz",
-  "Prawy Obrońca",
   "Lewy Obrońca",
   "Środkowy Obrońca",
+  "Prawy Obrońca",
   "Defensywny Pomocnik",
+  "Lewy Pomocnik",
   "Środkowy Pomocnik",
   "Ofensywny Pomocnik",
   "Prawy Pomocnik",
-  "Lewy Pomocnik",
-  "Cofnięty Napastnik",
-  "Prawy Napastnik",
   "Lewy Napastnik",
+  "Prawy Napastnik",
+  "Cofnięty Napastnik",
   "Środkowy Napastnik",
 ];
 
@@ -218,19 +218,24 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         </Select>
       </Box>
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="success">
           Zatwierdź
+        </Button>
+        <Button
+          type="button"
+          onClick={handleEdit}
+          variant="contained"
+          color="warning"
+        >
+          Edytuj
         </Button>
         <Button
           type="button"
           onClick={handleReset}
           variant="outlined"
-          color="secondary"
+          color="error"
         >
           Resetuj
-        </Button>
-        <Button type="button" onClick={handleEdit} variant="contained">
-          Edytuj
         </Button>
       </Box>
     </Box>

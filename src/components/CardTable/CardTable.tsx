@@ -17,17 +17,17 @@ interface CardTableProps {
 
 const positionOrder: { [key: string]: number } = {
   Bramkarz: 1,
-  "Prawy Obrońca": 2,
-  "Lewy Obrońca": 3,
-  "Środkowy Obrońca": 4,
+  "Lewy Obrońca": 2,
+  "Środkowy Obrońca": 3,
+  "Prawy Obrońca": 4,
   "Defensywny Pomocnik": 5,
-  "Środkowy Pomocnik": 6,
-  "Ofensywny Pomocnik": 7,
-  "Prawy Pomocnik": 8,
-  "Lewy Pomocnik": 9,
-  "Cofnięty Napastnik": 10,
+  "Lewy Pomocnik": 6,
+  "Środkowy Pomocnik": 7,
+  "Ofensywny Pomocnik": 8,
+  "Prawy Pomocnik": 9,
+  "Lewy Napastnik": 10,
   "Prawy Napastnik": 11,
-  "Lewy Napastnik": 12,
+  "Cofnięty Napastnik": 12,
   "Środkowy Napastnik": 13,
 };
 
