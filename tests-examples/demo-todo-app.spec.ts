@@ -475,6 +475,7 @@ async function checkNumberOfCompletedTodosInLocalStorage(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (
       JSON.parse(localStorage["react-todos"]).filter(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (todo: any) => todo.completed
       ).length === e
     );
@@ -484,8 +485,11 @@ async function checkNumberOfCompletedTodosInLocalStorage(
 async function checkTodosInLocalStorage(page: Page, title: string) {
   return await page.waitForFunction((t) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return JSON.parse(localStorage["react-todos"])
-      .map((todo: any) => todo.title)
-      .includes(t);
+    return (
+      JSON.parse(localStorage["react-todos"])
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((todo: any) => todo.title)
+        .includes(t)
+    );
   }, title);
 }
