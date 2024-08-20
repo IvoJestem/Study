@@ -18,10 +18,10 @@ const Register: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [club, setClub] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState<number | "">(""); // Change to number or empty string
+  const [phone, setPhone] = useState<number | "">("");
   const [identityDoc, setIdentityDoc] = useState<File | null>(null);
   const [confirmationDoc, setConfirmationDoc] = useState<File | null>(null);
-  const [role, setRole] = useState(""); // State for role
+  const [role, setRole] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -43,9 +43,7 @@ const Register: React.FC = () => {
     } else if (!agreeToTerms) {
       setError("Musisz zgodzić się na warunki korzystania z systemu");
     } else {
-      // Simulate document upload process
       if (identityDoc && confirmationDoc) {
-        // Handle file uploads or save file references
         console.log("Identity Document:", identityDoc);
         console.log("Confirmation Document:", confirmationDoc);
       }
@@ -55,9 +53,9 @@ const Register: React.FC = () => {
         email: email,
         password: password,
         club: club,
-        phone: Number(phone), // Convert phone to number
-        role: role, // Include role in user data
-        verify: false, // Assuming 'verify' is a required field
+        phone: Number(phone),
+        role: role,
+        verify: false,
       });
 
       navigate("../../../../");
@@ -140,7 +138,7 @@ const Register: React.FC = () => {
           onChange={(e) =>
             setPhone(e.target.value === "" ? "" : Number(e.target.value))
           }
-          inputProps={{ pattern: "[0-9]*", maxLength: 15 }} // Allow only numbers, max 15 digits
+          inputProps={{ pattern: "[0-9]*", maxLength: 15 }}
         />
         <FormControl fullWidth variant="outlined" margin="normal">
           <InputLabel>Rola w klubie</InputLabel>
