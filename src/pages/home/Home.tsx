@@ -37,6 +37,10 @@ const Home: React.FC = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const handleGetStartedClick = () => {
+    alert("Witaj użytkowniku, wygrałeś nowego iPhona!");
+  };
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -129,6 +133,7 @@ const Home: React.FC = () => {
             color="secondary"
             size="large"
             sx={{ paddingX: 4 }}
+            onClick={handleGetStartedClick}
           >
             Get Started
           </Button>

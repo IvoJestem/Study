@@ -41,14 +41,6 @@ export const initialPlayer: Player[] = [
     price: "25,00mln €",
   },
   {
-    name: "Marsh Kumbulla",
-    position: "Środkowy Obrońca",
-    age: 24,
-    nation: "Albania",
-    club: "AS Roma",
-    price: "4,50mln €",
-  },
-  {
     name: "Chris Smalling",
     position: "Środkowy Obrońca",
     age: 34,
