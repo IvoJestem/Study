@@ -14,16 +14,19 @@ const Login: React.FC = () => {
     event.preventDefault();
 
     const user = users.find(
-      (user) => user.login === username && user.password === password
+      (user) => user.name === username && user.password === password
     );
 
     if (user) {
-      navigate("src/pages/home");
+      if (user.verify) {
+        navigate("src/pages/home");
+      } else {
+        setError("Twoje konto nie zostało jeszcze zweryfikowane.");
+      }
     } else {
-      setError("Niepoprawna nazwa użytkownika lub hasło");
+      setError("Niepoprawna nazwa użytkownika lub hasło.");
     }
   };
-
   const goToRegister = () => {
     navigate("src/pages/register");
   };
@@ -46,7 +49,7 @@ const Login: React.FC = () => {
       <form onSubmit={handleLogin}>
         <Box mb={2}>
           <TextField
-            label="Nazwa użytkownika"
+            label="Imię i Nazwisko"
             variant="outlined"
             fullWidth
             value={username}
