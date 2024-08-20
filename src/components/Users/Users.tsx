@@ -6,6 +6,7 @@ export interface Users {
   email: string;
   phone: number;
   verify: boolean;
+  avatar?: string;
 }
 
 export const users: Users[] = [

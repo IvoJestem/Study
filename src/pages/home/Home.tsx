@@ -90,7 +90,9 @@ const Home: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <img src="/pic.jpg" alt="Logo" style={{ maxHeight: "50px" }} />
+          <a href="../pages/userprofile/" style={{ textDecoration: "none" }}>
+            <img src="/pic.jpg" alt="Logo" style={{ maxHeight: "50px" }} />
+          </a>
         </Box>
       </Box>
 
