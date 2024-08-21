@@ -47,48 +47,60 @@ Projekt korzysta z ESLint do zapewnienia wysokiej jakości kodu. Oto podstawowa 
 
    ```javascript
    module.exports = {
-     parserOptions: {
-       ecmaVersion: "latest",
-       sourceType: "module",
-       project: [
-         "./tsconfig.json",
-         "./tsconfig.node.json",
-         "./tsconfig.app.json",
-       ],
-       tsconfigRootDir: __dirname,
-     },
-     extends: [
-       "plugin:react/recommended",
-       "plugin:@typescript-eslint/recommended",
-       "plugin:@typescript-eslint/recommended-type-checked",
-       "plugin:@typescript-eslint/strict-type-checked",
-     ],
-     plugins: ["react", "@typescript-eslint"],
-     rules: {"Rule"},
+   parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: [
+      "./tsconfig.json",
+      "./tsconfig.node.json",
+      "./tsconfig.app.json",
+    ],
+    tsconfigRootDir: __dirname,
+   },
+   extends: [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/strict-type-checked",
+   ],
+   plugins: ["react", "@typescript-eslint"],
+   rules: {"Rule"},
    };
    ```
 
+````
+
 2. Instalacja wymaganych pakietów:
 
-   ```bash
-   npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
-   # lub
-   yarn add --dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
-   ```
+  ```bash
+ npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
+# lub
+yarn add --dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
+````
 
 ## Struktura projektu
 
 Projekt jest zorganizowany w następujący sposób:
 
+- `public/` - Statyczne pliki, takie jak favicon
+  - `index.html` - Punkt wejścia aplikacji
 - `src/` - Katalog z kodem źródłowym aplikacji
   - `components/` - Komponenty React
   - `pages/` - Strony aplikacji
   - `utils/` - Narzędzia pomocnicze
-- `public/` - Statyczne pliki, takie jak favicon
-- `index.html` - Punkt wejścia aplikacji
+  - `index.tsx` - Punkt wejścia aplikacji (zawiera kod do uruchamiania React)
+  - `Route1.tsx` - Przykładowa trasa aplikacji
+- `tests/` - Testy
+  - `playwright.config.ts` - Konfiguracja dla Playwright
+- `package.json` - Zawiera informacje o projekcie i jego zależnościach
+- `package-lock.json` - Lockfile dla npm
 - `vite.config.ts` - Konfiguracja Vite
 - `tsconfig.json` - Konfiguracja TypeScript
-- `.eslintrc.js` - Konfiguracja ESLint
+- `tsconfig.app.json` - Konfiguracja TypeScript dla aplikacji
+- `tsconfig.node.json` - Konfiguracja TypeScript dla środowiska Node.js
+- `server.js` - Skrypt serwera dla backendu (jeśli używany)
+- `.gitignore` - Ignorowane pliki i katalogi przez Git
+- `.eslintrc.cjs` - Konfiguracja ESLint w formacie CommonJS
 
 ## Przykładowe komponenty
 
