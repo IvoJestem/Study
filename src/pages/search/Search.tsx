@@ -1,15 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
-import { Player, initialPlayer } from "../../components/Database/Database";
+import { Player } from "../../types/Player";
 import { SearchForm } from "../../components/Form/Form";
 import CombinationResults from "../../components/CombinationResults/CombinationResults";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const Search: React.FC = () => {
-  const [players] = useState<Player[]>(initialPlayer);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [positions, setPositions] = useState<string[]>([]);
   const [budget, setBudget] = useState<number>(0);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/players");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mappedData: Player[] = data.map((item: any[]) => ({
+          id: item[0],
+          name: item[1],
+          position: item[2],
+          age: item[3],
+          nation: item[4],
+          club: item[5],
+          price: item[6],
+        }));
+        setPlayers(mappedData);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
 
   const handleSearchPlayer = (criteria: {
     name: string;
@@ -23,6 +52,10 @@ const Search: React.FC = () => {
     setPositions(criteria.position);
     setBudget(criteria.budget ?? 0);
   };
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <Container

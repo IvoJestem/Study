@@ -9,7 +9,7 @@ import {
   Paper,
   TableSortLabel,
 } from "@mui/material";
-import { Player } from "../Database/Database";
+import { Player } from "../../types/Player";
 
 interface CardTableProps {
   cards: Player[];

@@ -1,12 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
-import { Player, initialPlayer } from "../../components/Database/Database";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
-import CardTable from "../../components/CardTable/CardTable.tsx";
+import CardTable from "../../components/CardTable/CardTable";
+import { Player } from "../../types/Player";
 
 const TransferList: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [cards] = useState<Player[]>(initialPlayer);
+  const [cards, setCards] = useState<Player[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/players");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const mappedData: Player[] = data.map((item: any[]) => ({
+          id: item[0],
+          name: item[1],
+          position: item[2],
+          age: item[3],
+          nation: item[4],
+          club: item[5],
+          price: item[6],
+        }));
+        setCards(mappedData);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    fetchPlayers();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <Container
