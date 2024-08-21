@@ -11,11 +11,13 @@ Ten projekt jest przykładem aplikacji webowej zbudowanej przy użyciu React, Ty
 - [Przykładowe komponenty](#przykładowe-komponenty)
 - [Uruchamianie aplikacji](#uruchamianie-aplikacji)
 - [Użyte technologie](#użyte-technologie)
+- [Konfiguracja bazy danych OracleDB](#konfiguracja-bazy-danych)
 
 ## Wymagania
 
 - Node.js w wersji 16 lub nowszej
 - npm lub yarn
+- Baza danych Oracle DB
 
 ## Instalacja
 
@@ -132,3 +134,37 @@ yarn build
 - **TypeScript** - Język programowania wzbogacający JavaScript o typowanie statyczne.
 - **Vite** - Szybki budowniczy dla aplikacji webowych.
 - **ESLint** - Narzędzie do analizy kodu i utrzymania wysokiej jakości kodu.
+
+## Konfiguracja bazy danych
+
+1. Instalacja klienta Oracle DB:
+   Upewnij się, że masz zainstalowany klient Oracle DB. Możesz pobrać go z oficjalnej strony Oracle.
+2. Konfiguracja połączenia:
+   Skonfiguruj połączenie z bazą danych w pliku konfiguracyjnym serwera. Przykład konfiguracji w pliku `server.js`:
+
+```js
+const oracledb = require("oracledb");
+
+async function initDB() {
+  try {
+    await oracledb.createPool({
+      user: "your_db_user",
+      password: "your_db_password",
+      connectString: "your_db_connect_string",
+    });
+    console.log("Connected to Oracle DB");
+  } catch (err) {
+    console.error("Error connecting to Oracle DB:", err);
+  }
+}
+
+initDB();
+```
+
+Zamień `your_db_user`, `your_db_password` i `your_db_connect_string` na odpowiednie dane dostępu do Twojej bazy danych.
+
+3. Tworzenie tabel i danych:
+   Uruchom skrypty SQL dostarczone z projektem, aby stworzyć wymagane tabele i dane w bazie danych. Skrypty SQL powinny znajdować się w katalogu projektu
+
+4. Testowanie połączenia:
+   Sprawdź, czy połączenie z bazą danych działa poprawnie, uruchamiając aplikację i weryfikując, czy dane są poprawnie pobierane i zapisywane. W przypadku problemów z połączeniem, sprawdź konfigurację i upewnij się, że baza danych jest dostępna.
