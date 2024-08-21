@@ -165,7 +165,7 @@ Zamień `your_db_user`, `your_db_password` i `your_db_connect_string` na odpowie
 
 3. Tworzenie tabel i danych:
 
-   - Uruchom skrypty SQL dostarczone z projektem, aby stworzyć wymagane tabele i dane w bazie danych. Skrypty SQL powinny znajdować się w katalogu projektu
+   - Uruchom skrypty SQL dostarczone z projektem, aby stworzyć wymagane tabele i dane w bazie danych. Skrypty SQL powinny znajdować się w katalogu `public`
 
 4. Testowanie połączenia:
    - Sprawdź, czy połączenie z bazą danych działa poprawnie, uruchamiając aplikację i weryfikując, czy dane są poprawnie pobierane i zapisywane. W przypadku problemów z połączeniem, sprawdź konfigurację i upewnij się, że baza danych jest dostępna.
