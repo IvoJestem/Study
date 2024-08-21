@@ -68,15 +68,13 @@ Projekt korzysta z ESLint do zapewnienia wysokiej jakości kodu. Oto podstawowa 
    };
    ```
 
-````
-
 2. Instalacja wymaganych pakietów:
 
-  ```bash
- npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
+```bash
+npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
 # lub
 yarn add --dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react
-````
+```
 
 ## Struktura projektu
 
