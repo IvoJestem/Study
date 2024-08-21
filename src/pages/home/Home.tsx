@@ -12,24 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-const testimonials = [
-  {
-    name: "John Doe",
-    content: "This service is amazing! I highly recommend it to everyone.",
-    avatar: "/path-to-avatar1.jpg",
-  },
-  {
-    name: "Jane Smith",
-    content: "Excellent customer service and fantastic results!",
-    avatar: "/path-to-avatar2.jpg",
-  },
-  {
-    name: "Sam Wilson",
-    content: "A seamless experience from start to finish. Great job!",
-    avatar: "/path-to-avatar3.jpg",
-  },
-];
+import { testimonials } from "../../components/opinions/opinions";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -38,7 +21,7 @@ const Home: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleGetStartedClick = () => {
-    alert("Witaj użytkowniku, wygrałeś nowego iPhona!");
+    alert("Witaj użytkowniku, na naszej stronie");
   };
 
   const sliderSettings = {

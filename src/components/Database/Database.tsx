@@ -1,4 +1,5 @@
 export interface Player {
+  id: number;
   name: string;
   position: string;
   age: number;
@@ -9,6 +10,7 @@ export interface Player {
 
 export const initialPlayer: Player[] = [
   {
+    id: 99,
     name: "Mile Svilar",
     position: "Bramkarz",
     age: 24,
@@ -17,6 +19,7 @@ export const initialPlayer: Player[] = [
     price: "9,00mln €",
   },
   {
+    id: 98,
     name: "Mathew Ryan",
     position: "Bramkarz",
     age: 32,
@@ -25,6 +28,7 @@ export const initialPlayer: Player[] = [
     price: "3,50mln €",
   },
   {
+    id: 5,
     name: "Evan Ndicka",
     position: "Środkowy Obrońca",
     age: 24,
@@ -33,6 +37,7 @@ export const initialPlayer: Player[] = [
     price: "25,00mln €",
   },
   {
+    id: 23,
     name: "Gianluca Mancini",
     position: "Środkowy Obrońca",
     age: 28,
@@ -41,6 +46,7 @@ export const initialPlayer: Player[] = [
     price: "25,00mln €",
   },
   {
+    id: 6,
     name: "Chris Smalling",
     position: "Środkowy Obrońca",
     age: 34,
@@ -49,6 +55,7 @@ export const initialPlayer: Player[] = [
     price: "2,50mln €",
   },
   {
+    id: 2,
     name: "Angelino",
     position: "Lewy Obrońca",
     age: 27,
@@ -57,6 +64,7 @@ export const initialPlayer: Player[] = [
     price: "8,00mln €",
   },
   {
+    id: 26,
     name: "Samuel Dahl",
     position: "Lewy Obrońca",
     age: 21,
@@ -65,6 +73,7 @@ export const initialPlayer: Player[] = [
     price: "3,00mln €",
   },
   {
+    id: 19,
     name: "Zeki Celik",
     position: "Prawy Obrońca",
     age: 27,
@@ -73,6 +82,7 @@ export const initialPlayer: Player[] = [
     price: "6,00mln €",
   },
   {
+    id: 2,
     name: "Rick Karsdorp",
     position: "Prawy Obrońca",
     age: 29,
@@ -81,6 +91,7 @@ export const initialPlayer: Player[] = [
     price: "5,00mln €",
   },
   {
+    id: 4,
     name: "Bryan Cristante",
     position: "Defensywny Pomocnik",
     age: 29,
@@ -89,6 +100,7 @@ export const initialPlayer: Player[] = [
     price: "20,00mln €",
   },
   {
+    id: 16,
     name: "Leonardo Paredes",
     position: "Defensywny Pomocnik",
     age: 30,
@@ -97,6 +109,7 @@ export const initialPlayer: Player[] = [
     price: "8,00mln €",
   },
   {
+    id: 28,
     name: "Enzo La Fee",
     position: "Środkowy Pomocnik",
     age: 24,
@@ -105,6 +118,7 @@ export const initialPlayer: Player[] = [
     price: "18,00mln €",
   },
   {
+    id: 8,
     name: "Edoardo Bove",
     position: "Środkowy Pomocnik",
     age: 22,
@@ -113,6 +127,7 @@ export const initialPlayer: Player[] = [
     price: "18,00mln €",
   },
   {
+    id: 61,
     name: "Niccolo Pisilli",
     position: "Środkowy Pomocnik",
     age: 19,
@@ -121,6 +136,7 @@ export const initialPlayer: Player[] = [
     price: "3,50mln €",
   },
   {
+    id: 59,
     name: "Nicola Zalewski",
     position: "Lewy Pomocnik",
     age: 22,
@@ -129,6 +145,7 @@ export const initialPlayer: Player[] = [
     price: "12,00mln €",
   },
   {
+    id: 7,
     name: "Lorenzo Pellegrini",
     position: "Ofensywny Pomocnik",
     age: 28,
@@ -137,6 +154,7 @@ export const initialPlayer: Player[] = [
     price: "25,00mln €",
   },
   {
+    id: 35,
     name: "Tommaso Baldanzi",
     position: "Ofensywny Pomocnik",
     age: 21,
@@ -145,6 +163,7 @@ export const initialPlayer: Player[] = [
     price: "15,00mln €",
   },
   {
+    id: 92,
     name: "Stephan El Shaarawy",
     position: "Lewy Napastnik",
     age: 31,
@@ -153,6 +172,7 @@ export const initialPlayer: Player[] = [
     price: "5,00mln €",
   },
   {
+    id: 18,
     name: "Matias Soule",
     position: "Prawy Napastnik",
     age: 21,
@@ -161,6 +181,7 @@ export const initialPlayer: Player[] = [
     price: "25,00mln €",
   },
   {
+    id: 67,
     name: "Joao Costa",
     position: "Prawy Napastnik",
     age: 19,
@@ -169,6 +190,7 @@ export const initialPlayer: Player[] = [
     price: "1,00mln €",
   },
   {
+    id: 21,
     name: "Paulo Dybala",
     position: "Cofnięty Napastnik",
     age: 30,
@@ -177,6 +199,7 @@ export const initialPlayer: Player[] = [
     price: "20,00mln €",
   },
   {
+    id: 11,
     name: "Artem Dovbyk",
     position: "Środkowy Napastnik",
     age: 27,
@@ -185,6 +208,7 @@ export const initialPlayer: Player[] = [
     price: "35,00mln €",
   },
   {
+    id: 9,
     name: "Tammy Abraham",
     position: "Środkowy Napastnik",
     age: 26,
@@ -193,6 +217,7 @@ export const initialPlayer: Player[] = [
     price: "30,00mln €",
   },
   {
+    id: 14,
     name: "Eldor Shomurodov",
     position: "Środkowy Napastnik",
     age: 29,
