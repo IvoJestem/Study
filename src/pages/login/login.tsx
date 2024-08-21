@@ -1,8 +1,8 @@
+import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Box, Alert } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { users } from "../../components/Users/Users";
 import { UserContext } from "../../contexts/UserContext";
 
 const Login: React.FC = () => {
@@ -13,22 +13,23 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext)!;
 
-  const handleLogin = (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const user = users.find(
-      (user) => user.name === username && user.password === password
-    );
+    try {
+      const response = await axios.post("http://localhost:5000/api/login", {
+        name: username, // Zmieniamy `username` na `name`
+        password,
+      });
 
-    if (user) {
-      if (user.verify) {
-        setUser(user);
+      if (response.data.success) {
+        setUser({ name: username, password, verify: true }); // Przykładowe dane użytkownika
         navigate("/src/pages/userprofile/");
       } else {
-        setError("Twoje konto nie zostało jeszcze zweryfikowane.");
+        setError(response.data.message);
       }
-    } else {
-      setError("Niepoprawna nazwa użytkownika lub hasło.");
+    } catch (error) {
+      setError("Wystąpił błąd podczas logowania.");
     }
   };
 

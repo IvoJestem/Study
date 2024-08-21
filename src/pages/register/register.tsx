@@ -10,7 +10,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { users } from "../../components/Users/Users";
+import axios from "axios"; // Dodaj import dla axios
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -19,46 +19,43 @@ const Register: React.FC = () => {
   const [club, setClub] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState<number | "">("");
-  const [identityDoc, setIdentityDoc] = useState<File | null>(null);
-  const [confirmationDoc, setConfirmationDoc] = useState<File | null>(null);
   const [role, setRole] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (event: React.FormEvent) => {
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Hasła nie pasują do siebie");
+      return;
+    }
 
     if (isNaN(phone as number)) {
       setError("Numer telefonu jest nieprawidłowy");
       return;
     }
 
-    const userExists = users.some((user) => user.email === email);
-
-    if (userExists) {
-      setError("Adres e-mail jest już zajęty");
-    } else if (password !== confirmPassword) {
-      setError("Hasła się nie zgadzają");
-    } else if (!agreeToTerms) {
-      setError("Musisz zgodzić się na warunki korzystania z systemu");
-    } else {
-      if (identityDoc && confirmationDoc) {
-        console.log("Identity Document:", identityDoc);
-        console.log("Confirmation Document:", confirmationDoc);
-      }
-
-      users.push({
-        name: name,
-        email: email,
-        password: password,
-        club: club,
+    try {
+      // Wyślij dane rejestracyjne do backendu
+      const response = await axios.post("http://localhost:5000/api/register", {
+        name,
+        password,
+        club,
+        email,
         phone: Number(phone),
-        role: role,
+        role,
         verify: false,
       });
 
-      navigate("../../../../");
+      if (response.data.success) {
+        navigate("/"); // Przekierowanie po pomyślnej rejestracji
+      } else {
+        setError(response.data.error);
+      }
+    } catch (error) {
+      setError("Błąd podczas rejestracji użytkownika");
     }
   };
 
@@ -156,29 +153,6 @@ const Register: React.FC = () => {
           </Select>
         </FormControl>
         <Box sx={{ mt: 2 }}>
-          <Typography variant="h6">Dokumenty</Typography>
-          <input
-            type="file"
-            accept=".pdf,.jpg,.png"
-            onChange={(e) =>
-              setIdentityDoc(e.target.files ? e.target.files[0] : null)
-            }
-          />
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            Dokument tożsamości
-          </Typography>
-          <input
-            type="file"
-            accept=".pdf,.jpg,.png"
-            onChange={(e) =>
-              setConfirmationDoc(e.target.files ? e.target.files[0] : null)
-            }
-          />
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            Dokument potwierdzający rejestrację
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 2 }}>
           <input
             type="checkbox"
             checked={agreeToTerms}
@@ -190,9 +164,9 @@ const Register: React.FC = () => {
           </Typography>
         </Box>
         {error && (
-          <Typography color="error" sx={{ mt: 2 }}>
-            {error}
-          </Typography>
+          <Box mt={2}>
+            <Typography color="error">{error}</Typography>
+          </Box>
         )}
         <Button
           type="submit"

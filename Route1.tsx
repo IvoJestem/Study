@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Home from "./src/pages/home/Home";
 import Register from "./src/pages/register/Register";
 import TransferList from "./src/pages/transferlist/TransferList";
-import UserProfilePage from "./src/pages/userprofile/UserProfile";
+import UserProfile from "./src/pages/userprofile/UserProfile";
 import { UserProvider } from "./src/contexts/UserContext";
 import { Search } from "@mui/icons-material";
 
@@ -19,7 +19,7 @@ const Route1: React.FC = () => {
           <Route path="/" element={<Login />} />
           <Route path="/src/pages/register/" element={<Register />} />
           <Route path="/src/pages/home/" element={<Home />} />
-          <Route path="/src/pages/userprofile/" element={<UserProfilePage />} />
+          <Route path="/src/pages/userprofile/" element={<UserProfile />} />
           <Route path="/src/pages/transferlist" element={<TransferList />} />
           <Route path="/src/pages/search" element={<Search />} />
         </Routes>

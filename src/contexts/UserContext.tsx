@@ -1,9 +1,20 @@
 import React, { createContext, useState, ReactNode, useContext } from "react";
-import { Users } from "../components/Users/Users";
+
+interface User {
+  id: string;
+  name: string;
+  password: string;
+  club: string;
+  role: string;
+  email: string;
+  phone: string;
+  verify: boolean;
+  avatar: string;
+}
 
 interface UserContextType {
-  user: Users | null;
-  setUser: (user: Users | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -13,7 +24,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<Users | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

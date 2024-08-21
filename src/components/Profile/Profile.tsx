@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios"; // Dodaj import axios
 import {
   Box,
   Typography,
@@ -9,21 +10,22 @@ import {
   Button,
 } from "@mui/material";
 import { useUser } from "../../contexts/UserContext";
-import { Users } from "../Users/Users";
 
 const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState<Users>({
+  const [editedUser, setEditedUser] = useState({
+    id: user?.id || "", // Dodaj id tutaj
     name: user?.name || "",
     password: user?.password || "",
     club: user?.club || "",
     role: user?.role || "",
     email: user?.email || "",
-    phone: user?.phone || 0,
-    verify: user?.verify || true,
+    phone: user?.phone || "",
+    verify: user?.verify || false,
     avatar: user?.avatar || "",
   });
+
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(
     user?.avatar || null
   );
@@ -36,6 +38,7 @@ const UserProfile: React.FC = () => {
     setIsEditing(false);
     if (user) {
       setEditedUser({
+        id: user.id,
         name: user.name,
         password: user.password,
         club: user.club,
@@ -49,9 +52,27 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  const handleSaveClick = () => {
-    setUser({ ...editedUser, avatar: avatar as string });
-    setIsEditing(false);
+  const handleSaveClick = async () => {
+    try {
+      const response = await axios.post("/api/update-profile", {
+        name: editedUser.name,
+        password: editedUser.password,
+        club: editedUser.club,
+        email: editedUser.email,
+        phone: editedUser.phone,
+        role: editedUser.role,
+        avatar: avatar as string,
+      });
+
+      if (response.data.success) {
+        setUser({ ...editedUser, avatar: avatar as string });
+        setIsEditing(false);
+      } else {
+        console.error(response.data.error);
+      }
+    } catch (error) {
+      console.error("Błąd podczas aktualizacji profilu", error);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +153,7 @@ const UserProfile: React.FC = () => {
           <TextField
             label="Telefon"
             name="phone"
-            type="number"
+            type="text"
             value={editedUser.phone}
             onChange={handleChange}
             fullWidth
