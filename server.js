@@ -78,13 +78,15 @@ app.post("/api/login", async (req, res) => {
       success: true,
       message: "Zalogowano pomyślnie!",
       user: {
-        id: user[0],
-        name: user[1],
-        email: user[5],
-        role: user[4],
-        phone: user[6],
-        club: user[3],
-        avatar: user[7] || "",
+        id: user[0], // ID
+        name: user[1], // NAME
+        password: user[2], // PASSWORD
+        club: user[3], // CLUB
+        role: user[4], // ROLE
+        email: user[5], // EMAIL
+        phone: user[6], // PHONE
+        verify: user[7] === 1, // VERIFY (Oracle zwraca 0/1)
+        avatar: user[8] || "", // AVATAR
       },
     });
   } catch (err) {
@@ -102,6 +104,7 @@ app.post("/api/login", async (req, res) => {
     }
   }
 });
+
 // Endpoint do rejestracji użytkownika
 // Endpoint do rejestracji użytkownika
 // Endpoint do rejestracji użytkownika
@@ -211,9 +214,7 @@ app.get("/api/user/:email", async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({
-        error: "Użytkownik nie znaleziony",
-      });
+      return res.status(404).json({ error: "Użytkownik nie znaleziony" });
     }
 
     const user = result.rows[0];

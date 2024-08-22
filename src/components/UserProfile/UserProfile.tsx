@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios"; // Dodaj import axios
+import axios from "axios";
 import {
   Box,
   Typography,
@@ -15,7 +15,7 @@ const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({
-    id: user?.id || "", // Dodaj id tutaj
+    id: user?.id || "",
     name: user?.name || "",
     password: user?.password || "",
     club: user?.club || "",
@@ -55,6 +55,7 @@ const UserProfile: React.FC = () => {
   const handleSaveClick = async () => {
     try {
       const response = await axios.post("/api/update-profile", {
+        id: editedUser.id, // Ensure ID is included
         name: editedUser.name,
         password: editedUser.password,
         club: editedUser.club,
@@ -71,7 +72,7 @@ const UserProfile: React.FC = () => {
         console.error(response.data.error);
       }
     } catch (error) {
-      console.error("Błąd podczas aktualizacji profilu", error);
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -95,13 +96,13 @@ const UserProfile: React.FC = () => {
   };
 
   if (!user) {
-    return <Typography variant="h6">Brak danych użytkownika.</Typography>;
+    return <Typography variant="h6">No user data available.</Typography>;
   }
 
   return (
     <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "0 auto" }}>
       <Typography variant="h4" gutterBottom>
-        Mój Profil
+        My Profile
       </Typography>
       <Box textAlign="center" mb={3}>
         <Avatar
@@ -120,7 +121,7 @@ const UserProfile: React.FC = () => {
             />
             <label htmlFor="avatar-upload">
               <Button variant="contained" color="primary" component="span">
-                Zmień Avatar
+                Change Avatar
               </Button>
             </label>
           </Box>
@@ -129,7 +130,7 @@ const UserProfile: React.FC = () => {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
-            label="Imię i Nazwisko"
+            label="Full Name"
             name="name"
             value={editedUser.name}
             onChange={handleChange}
@@ -151,9 +152,8 @@ const UserProfile: React.FC = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Telefon"
+            label="Phone"
             name="phone"
-            type="text"
             value={editedUser.phone}
             onChange={handleChange}
             fullWidth
@@ -163,7 +163,7 @@ const UserProfile: React.FC = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Hasło"
+            label="Password"
             name="password"
             type="password"
             value={editedUser.password}
@@ -175,7 +175,7 @@ const UserProfile: React.FC = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Klub"
+            label="Club"
             name="club"
             value={editedUser.club}
             onChange={handleChange}
@@ -186,7 +186,7 @@ const UserProfile: React.FC = () => {
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Rola"
+            label="Role"
             name="role"
             value={editedUser.role}
             onChange={handleChange}
@@ -202,7 +202,7 @@ const UserProfile: React.FC = () => {
               color="primary"
               onClick={handleEditClick}
             >
-              Edytuj
+              Edit
             </Button>
           ) : (
             <>
@@ -211,7 +211,7 @@ const UserProfile: React.FC = () => {
                 color="secondary"
                 onClick={handleSaveClick}
               >
-                Zapisz
+                Save
               </Button>
               <Button
                 variant="outlined"
@@ -219,7 +219,7 @@ const UserProfile: React.FC = () => {
                 onClick={handleCancelClick}
                 sx={{ ml: 2 }}
               >
-                Anuluj
+                Cancel
               </Button>
             </>
           )}

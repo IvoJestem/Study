@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Box, Alert } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { UserContext } from "../../contexts/UserContext";
+import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -14,17 +14,16 @@ const Login: React.FC = () => {
   const { setUser } = useContext(UserContext)!;
 
   const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault();
-
+    event.preventDefault(); // Prevent the default form submission behavior
     try {
       const response = await axios.post("http://localhost:5000/api/login", {
-        name: username, // Zmieniamy `username` na `name`
+        name: username, // Use `username` instead of `name`
         password,
       });
 
       if (response.data.success) {
-        setUser({ name: username, password, verify: true }); // Przykładowe dane użytkownika
-        navigate("/src/pages/userprofile/");
+        setUser(response.data.user); // Ensure response.data.user matches User context type
+        navigate("src/pages/userprofilepage"); // Correct path
       } else {
         setError(response.data.message);
       }
@@ -34,7 +33,7 @@ const Login: React.FC = () => {
   };
 
   const goToRegister = () => {
-    navigate("/src/pages/register/");
+    navigate("./src/pages/register"); // Correct path
   };
 
   return (
