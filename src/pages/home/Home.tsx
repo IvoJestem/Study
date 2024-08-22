@@ -73,10 +73,7 @@ const Home: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <a
-            href="../pages/userprofilepage/"
-            style={{ textDecoration: "none" }}
-          >
+          <a href="/userprofilepage" style={{ textDecoration: "none" }}>
             <img src="/pic.jpg" alt="Logo" style={{ maxHeight: "50px" }} />
           </a>
         </Box>

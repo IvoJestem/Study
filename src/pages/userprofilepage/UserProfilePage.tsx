@@ -1,6 +1,6 @@
+import React from "react"; // Add this import
 import { Container, Typography, Box, Button } from "@mui/material";
 import UserProfile from "../../components/UserProfile/UserProfile";
-
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/UseUser/UseUser";
 
@@ -23,7 +23,7 @@ const UserProfilePage: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("../src/pages/home")}
+            onClick={() => navigate("/home")}
           >
             Przejdź do Strony Głównej
           </Button>

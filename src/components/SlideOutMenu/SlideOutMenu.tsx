@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Button, Typography, Link } from "@mui/material";
+import { Box, Button, Typography, Link as MUILink } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface SlideOutMenuProps {
   isOpen: boolean;
@@ -7,6 +8,13 @@ interface SlideOutMenuProps {
 }
 
 const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    onClose(); // Close the menu after navigation
+  };
+
   return (
     <Box
       sx={{
@@ -70,8 +78,9 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
           }}
         >
           <Box component="li" sx={{ marginBottom: 2 }}>
-            <Link
-              href="/../src/pages/home/"
+            <MUILink
+              component="button"
+              onClick={() => handleNavigation("/home")}
               sx={{
                 textDecoration: "none",
                 color: "primary.main",
@@ -86,12 +95,13 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               }}
             >
               Home
-            </Link>
+            </MUILink>
           </Box>
 
           <Box component="li" sx={{ marginBottom: 2 }}>
-            <Link
-              href="/../src/pages/transferlist/"
+            <MUILink
+              component="button"
+              onClick={() => handleNavigation("/transferlist")}
               sx={{
                 textDecoration: "none",
                 color: "primary.main",
@@ -106,12 +116,13 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               }}
             >
               Lista Transferowa
-            </Link>
+            </MUILink>
           </Box>
 
           <Box component="li" sx={{ marginBottom: 2 }}>
-            <Link
-              href="/../src/pages/search/"
+            <MUILink
+              component="button"
+              onClick={() => handleNavigation("/search")}
               sx={{
                 textDecoration: "none",
                 color: "primary.main",
@@ -126,7 +137,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               }}
             >
               Wyszukiwarka
-            </Link>
+            </MUILink>
           </Box>
         </Box>
 
@@ -138,8 +149,9 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
             textAlign: "center",
           }}
         >
-          <Link
-            href="/../../.."
+          <MUILink
+            component="button"
+            onClick={() => handleNavigation("/login")}
             sx={{
               textDecoration: "none",
               color: "error.main",
@@ -150,7 +162,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
             }}
           >
             Wyloguj
-          </Link>
+          </MUILink>
         </Box>
       </Box>
     </Box>

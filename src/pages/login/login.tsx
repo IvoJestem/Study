@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
       if (response.data.success) {
         setUser(response.data.user);
-        navigate("src/pages/userprofilepage");
+        navigate("/userprofilepage");
       } else {
         setError(response.data.message);
       }
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   };
 
   const goToRegister = () => {
-    navigate("./src/pages/register");
+    navigate("/register");
   };
 
   return (
