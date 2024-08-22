@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-
-import { Player } from "../../components/Database/Database";
 import generateCombinations from "../../utils/Combinations/combinations";
 import PlayerTable from "../PlayerTable/PlayerTable";
+import { Player } from "../../types/Player";
 
 const CombinationResults: React.FC<{
   players: Player[];
@@ -11,10 +10,12 @@ const CombinationResults: React.FC<{
   budget: number;
 }> = ({ players, positions, budget }) => {
   const [combinations, setCombinations] = useState<Player[][]>([]);
+  const [hasGenerated, setHasGenerated] = useState<boolean>(false);
 
   const handleGenerateCombinations = () => {
     const result = generateCombinations(players, positions, budget);
     setCombinations(result);
+    setHasGenerated(true);
   };
 
   return (
@@ -25,16 +26,26 @@ const CombinationResults: React.FC<{
       <Button variant="contained" onClick={handleGenerateCombinations}>
         Generuj Propozycje
       </Button>
-      {combinations.length > 0 && (
-        <Box mt={2}>
-          {combinations.map((combo, index) => (
+      <Box mt={2}>
+        {!hasGenerated ? (
+          <Typography variant="body1" color="textSecondary">
+            Kliknij 'Zatwierdź' a pózniej 'Generuj Propozycje', aby zobaczyć
+            wyniki.
+          </Typography>
+        ) : combinations.length === 0 ? (
+          <Typography variant="body1" color="textSecondary">
+            Nie znaleziono żadnych propozycji. Może warto zmienić kryteria
+            wyszukiwania.{" "}
+          </Typography>
+        ) : (
+          combinations.map((combo, index) => (
             <Box key={index} mb={2}>
               <Typography variant="h6">Propozycja nr {index + 1}</Typography>
               <PlayerTable players={combo} />
             </Box>
-          ))}
-        </Box>
-      )}
+          ))
+        )}
+      </Box>
     </Box>
   );
 };

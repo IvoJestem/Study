@@ -14,16 +14,16 @@ const Login: React.FC = () => {
   const { setUser } = useContext(UserContext)!;
 
   const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault(); // Prevent the default form submission behavior
+    event.preventDefault();
     try {
       const response = await axios.post("http://localhost:5000/api/login", {
-        name: username, // Use `username` instead of `name`
+        name: username,
         password,
       });
 
       if (response.data.success) {
-        setUser(response.data.user); // Ensure response.data.user matches User context type
-        navigate("src/pages/userprofilepage"); // Correct path
+        setUser(response.data.user);
+        navigate("src/pages/userprofilepage");
       } else {
         setError(response.data.message);
       }
@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   };
 
   const goToRegister = () => {
-    navigate("./src/pages/register"); // Correct path
+    navigate("./src/pages/register");
   };
 
   return (

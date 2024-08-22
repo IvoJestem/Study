@@ -1,25 +1,12 @@
 import { Container, Typography, Box, Button } from "@mui/material";
 import UserProfile from "../../components/UserProfile/UserProfile";
-import { useUser } from "../../contexts/UserContext";
+
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../components/UseUser/UseUser";
 
 const UserProfilePage: React.FC = () => {
-  const { user } = useUser(); // Access user data from context
+  const { user } = useUser();
   const navigate = useNavigate();
-
-  // No need to fetch user data here if UserProfile already handles it
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await axios.get("/api/user");
-  //       setUser(response.data);
-  //     } catch (err) {
-  //       console.error("Error fetching user data:", err);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, [setUser]);
 
   if (!user) {
     return <Typography variant="h6">Proszę się zalogować.</Typography>;
@@ -36,7 +23,7 @@ const UserProfilePage: React.FC = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("../src/pages/home")}
           >
             Przejdź do Strony Głównej
           </Button>

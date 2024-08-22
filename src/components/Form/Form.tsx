@@ -51,19 +51,6 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log({
-      name,
-      position: positionsSelected,
-      ageMin,
-      ageMax,
-      nation,
-      club,
-      budget:
-        budgetAmount !== null
-          ? convertPriceToNumber(budgetAmount, budgetUnit)
-          : null,
-    });
-
     onSearchPlayer({
       name,
       position: positionsSelected,

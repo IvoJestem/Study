@@ -10,7 +10,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import axios from "axios"; // Dodaj import dla axios
+import axios from "axios";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -38,7 +38,6 @@ const Register: React.FC = () => {
     }
 
     try {
-      // Wyślij dane rejestracyjne do backendu
       const response = await axios.post("http://localhost:5000/api/register", {
         name,
         password,
@@ -50,7 +49,7 @@ const Register: React.FC = () => {
       });
 
       if (response.data.success) {
-        navigate("/"); // Przekierowanie po pomyślnej rejestracji
+        navigate("/");
       } else {
         setError(response.data.error);
       }

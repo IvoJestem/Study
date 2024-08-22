@@ -12,7 +12,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { testimonials } from "../../components/opinions/opinions";
+import { testimonials } from "../../components/Opinions/opinions";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -73,7 +73,10 @@ const Home: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <a href="../pages/userprofile/" style={{ textDecoration: "none" }}>
+          <a
+            href="../pages/userprofilepage/"
+            style={{ textDecoration: "none" }}
+          >
             <img src="/pic.jpg" alt="Logo" style={{ maxHeight: "50px" }} />
           </a>
         </Box>

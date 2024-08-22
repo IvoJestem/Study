@@ -9,7 +9,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../UseUser/UseUser";
 
 const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
@@ -54,16 +54,19 @@ const UserProfile: React.FC = () => {
 
   const handleSaveClick = async () => {
     try {
-      const response = await axios.post("/api/update-profile", {
-        id: editedUser.id, // Ensure ID is included
-        name: editedUser.name,
-        password: editedUser.password,
-        club: editedUser.club,
-        email: editedUser.email,
-        phone: editedUser.phone,
-        role: editedUser.role,
-        avatar: avatar as string,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/update-profile",
+        {
+          id: editedUser.id,
+          name: editedUser.name,
+          password: editedUser.password,
+          club: editedUser.club,
+          email: editedUser.email,
+          phone: editedUser.phone,
+          role: editedUser.role,
+          avatar: avatar as string,
+        }
+      );
 
       if (response.data.success) {
         setUser({ ...editedUser, avatar: avatar as string });

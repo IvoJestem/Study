@@ -1,8 +1,8 @@
 import express from "express";
 import oracledb from "oracledb";
 import cors from "cors";
+import path from "path";
 import { fileURLToPath } from "url";
-import path, { dirname } from "path";
 
 const app = express();
 const port = 5000;
@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 const publicPath = path.join(__dirname, "public");
 app.use(express.static(publicPath));
 
@@ -22,14 +22,12 @@ const dbConfig = {
   privilege: oracledb.SYSDBA,
 };
 
-// Endpoint do pobierania graczy
 app.get("/players", async (req, res) => {
   let connection;
 
   try {
     connection = await oracledb.getConnection(dbConfig);
     const result = await connection.execute("SELECT * FROM PLAYERS");
-    console.log("Query Result:", result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error("Error:", err);
@@ -47,12 +45,9 @@ app.get("/players", async (req, res) => {
   }
 });
 
-// Endpoint do logowania
 app.post("/api/login", async (req, res) => {
   const { name, password } = req.body;
   let connection;
-
-  console.log("Received login request:", { name, password });
 
   if (!name || !password) {
     return res
@@ -78,15 +73,15 @@ app.post("/api/login", async (req, res) => {
       success: true,
       message: "Zalogowano pomyślnie!",
       user: {
-        id: user[0], // ID
-        name: user[1], // NAME
-        password: user[2], // PASSWORD
-        club: user[3], // CLUB
-        role: user[4], // ROLE
-        email: user[5], // EMAIL
-        phone: user[6], // PHONE
-        verify: user[7] === 1, // VERIFY (Oracle zwraca 0/1)
-        avatar: user[8] || "", // AVATAR
+        id: user[0],
+        name: user[1],
+        password: user[2],
+        club: user[3],
+        role: user[4],
+        email: user[5],
+        phone: user[6],
+        verify: user[7] === 1,
+        avatar: user[8] || "",
       },
     });
   } catch (err) {
@@ -105,9 +100,6 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// Endpoint do rejestracji użytkownika
-// Endpoint do rejestracji użytkownika
-// Endpoint do rejestracji użytkownika
 app.post("/api/register", async (req, res) => {
   const { name, password, club, email, phone, role, verify } = req.body;
   let connection;
@@ -119,7 +111,6 @@ app.post("/api/register", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Sprawdź, czy użytkownik o danym emailu już istnieje
     const existingUser = await connection.execute(
       `SELECT * FROM USERS WHERE email = :email`,
       [email]
@@ -131,14 +122,12 @@ app.post("/api/register", async (req, res) => {
         .json({ error: "Użytkownik o tym emailu już istnieje" });
     }
 
-    // Dodaj nowego użytkownika do bazy danych
     await connection.execute(
       `INSERT INTO USERS (name, password, club, email, phone, role, verify) 
        VALUES (:name, :password, :club, :email, :phone, :role, :verify)`,
       [name, password, club, email, phone, role, verify ? 1 : 0]
     );
 
-    // Zatwierdź transakcję
     await connection.commit();
 
     res.status(201).json({
@@ -161,26 +150,21 @@ app.post("/api/register", async (req, res) => {
     }
   }
 });
-// Endpoint do aktualizacji danych użytkownika
+
 app.post("/api/update-profile", async (req, res) => {
-  const { name, password, club, email, phone, role, avatar } = req.body;
+  const { id, name, password, club, email, phone, role, avatar } = req.body;
   let connection;
 
   try {
     connection = await oracledb.getConnection(dbConfig);
-
-    // Aktualizuj dane użytkownika w bazie danych
     await connection.execute(
       `UPDATE USERS
        SET name = :name, password = :password, club = :club, email = :email,
            phone = :phone, role = :role, avatar = :avatar
-       WHERE email = :email`,
-      [name, password, club, email, phone, role, avatar, email]
+       WHERE id = :id`,
+      [name, password, club, email, phone, role, avatar, id]
     );
-
-    // Zatwierdź transakcję
     await connection.commit();
-
     res.status(200).json({
       success: true,
       message: "Dane użytkownika zostały zaktualizowane",
@@ -201,7 +185,7 @@ app.post("/api/update-profile", async (req, res) => {
     }
   }
 });
-// Endpoint do pobierania danych użytkownika
+
 app.get("/api/user/:email", async (req, res) => {
   const { email } = req.params;
   let connection;
@@ -248,6 +232,4 @@ app.get("/api/user/:email", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+app.listen(port, () => {});
