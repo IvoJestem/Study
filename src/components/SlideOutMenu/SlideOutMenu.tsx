@@ -12,7 +12,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    onClose(); // Close the menu after navigation
+    onClose();
   };
 
   return (

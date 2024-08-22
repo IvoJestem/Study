@@ -49,7 +49,7 @@ const Register: React.FC = () => {
       });
 
       if (response.data.success) {
-        navigate("/");
+        navigate("/login");
       } else {
         setError(response.data.error);
       }

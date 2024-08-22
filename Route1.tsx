@@ -18,7 +18,6 @@ const Route1: React.FC = () => {
         <Route path="/userprofilepage" element={<UserProfilePage />} />
         <Route path="/transferlist" element={<TransferList />} />
         <Route path="/search" element={<Search />} />
-        {/* The Search component should be a separate page or feature. If it's a page, ensure it has its own route */}
       </Routes>
     </UserProvider>
   );

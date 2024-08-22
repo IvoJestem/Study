@@ -1,4 +1,4 @@
-import React from "react"; // Add this import
+import React from "react";
 import { Container, Typography, Box, Button } from "@mui/material";
 import UserProfile from "../../components/UserProfile/UserProfile";
 import { useNavigate } from "react-router-dom";

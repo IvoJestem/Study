@@ -232,4 +232,6 @@ app.get("/api/user/:email", async (req, res) => {
   }
 });
 
-app.listen(port, () => {});
+app.listen(port, () => {
+  console.log("Działa");
+});
