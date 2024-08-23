@@ -7,11 +7,13 @@ import TransferList from "./src/pages/transferlist/TransferList";
 import Search from "./src/pages/search/Search";
 import UserProfilePage from "./src/pages/userprofilepage/UserProfilePage";
 import { UserProvider } from "./src/contexts/UserContext";
+import Error404 from "./src/pages/error404/Error404.tsx";
 
 const Route1: React.FC = () => {
   return (
     <UserProvider>
       <Routes>
+        <Route path="/" element={<Error404 />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
