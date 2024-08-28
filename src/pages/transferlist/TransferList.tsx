@@ -51,6 +51,8 @@ const TransferList: React.FC = () => {
         paddingBottom: 4,
         backgroundColor: "#f5f5f5",
         minHeight: "100vh",
+        transition: "margin-left 0.3s ease",
+        marginLeft: isMenuOpen ? "250px" : "0",
       }}
     >
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

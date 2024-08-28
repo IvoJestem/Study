@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Button, Typography, Link as MUILink } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext"; // Import UserContext
 
 interface SlideOutMenuProps {
   isOpen: boolean;
@@ -9,10 +10,25 @@ interface SlideOutMenuProps {
 
 const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("UserContext must be used within a UserProvider");
+  }
+
+  const { setUser } = userContext;
 
   const handleNavigation = (path: string) => {
     navigate(path);
     onClose();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+
+    setUser(null);
+
+    handleNavigation("/login");
   };
 
   return (
@@ -151,7 +167,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
         >
           <MUILink
             component="button"
-            onClick={() => handleNavigation("/login")}
+            onClick={handleLogout}
             sx={{
               textDecoration: "none",
               color: "error.main",

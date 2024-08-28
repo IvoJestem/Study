@@ -10,7 +10,7 @@ import {
   Typography,
   TableSortLabel,
 } from "@mui/material";
-import { Player } from "../../components/Database/Database";
+import { Player } from "../../types/Player";
 
 interface PlayerTableProps {
   players: Player[];

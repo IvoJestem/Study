@@ -1,8 +1,16 @@
-import axios from "axios";
 import React, { useState, useContext } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
-import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Alert,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login: React.FC = () => {
@@ -22,8 +30,12 @@ const Login: React.FC = () => {
       });
 
       if (response.data.success) {
-        setUser(response.data.user);
-        navigate("/userprofilepage");
+        const user = response.data.user;
+        setUser(user);
+
+        localStorage.setItem("user", JSON.stringify(user));
+
+        navigate("/home");
       } else {
         setError(response.data.message);
       }
@@ -40,15 +52,24 @@ const Login: React.FC = () => {
     <Box
       sx={{
         maxWidth: 400,
-        margin: "auto",
-        padding: 3,
-        border: "1px solid #ddd",
+        mx: "auto",
+        mt: 8,
+        p: 4,
         borderRadius: 2,
         boxShadow: 3,
-        bgcolor: "background.paper",
+        backgroundColor: "background.default",
       }}
     >
-      <Typography variant="h4" component="h2" align="center" gutterBottom>
+      <Typography
+        variant="h4"
+        component="h2"
+        align="center"
+        gutterBottom
+        sx={{
+          fontWeight: "bold",
+          color: "primary.main",
+        }}
+      >
         Login
       </Typography>
       <form onSubmit={handleLogin}>
@@ -62,7 +83,7 @@ const Login: React.FC = () => {
             required
           />
         </Box>
-        <Box mb={2} position="relative">
+        <Box mb={2}>
           <TextField
             label="Hasło"
             variant="outlined"
@@ -73,21 +94,14 @@ const Login: React.FC = () => {
             required
             InputProps={{
               endAdornment: (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    px: 2,
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </Box>
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
               ),
             }}
           />
@@ -102,13 +116,23 @@ const Login: React.FC = () => {
           variant="contained"
           color="primary"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{
+            mt: 2,
+            py: 1.5,
+            fontWeight: "bold",
+          }}
         >
           Zaloguj
         </Button>
       </form>
       <Box mt={2} textAlign="center">
-        <Button onClick={goToRegister} color="secondary">
+        <Button
+          onClick={goToRegister}
+          color="secondary"
+          sx={{
+            fontWeight: "bold",
+          }}
+        >
           Zarejestruj
         </Button>
       </Box>

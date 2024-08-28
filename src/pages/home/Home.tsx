@@ -7,21 +7,27 @@ import {
   Avatar,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { testimonials } from "../../components/Opinions/opinions";
+import { testimonials } from "../../components/Opinions/Opinions";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleGetStartedClick = () => {
     alert("Witaj użytkowniku, na naszej stronie");
+  };
+
+  const handleLogoClick = () => {
+    navigate("/userprofilepage");
   };
 
   const sliderSettings = {
@@ -73,9 +79,9 @@ const Home: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <a href="/userprofilepage" style={{ textDecoration: "none" }}>
-            <img src="/pic.jpg" alt="Logo" style={{ maxHeight: "50px" }} />
-          </a>
+          <IconButton onClick={handleLogoClick} sx={{ textDecoration: "none" }}>
+            <img src="/user.jpg" alt="Logo" style={{ maxHeight: "60px" }} />
+          </IconButton>
         </Box>
       </Box>
 
@@ -189,79 +195,79 @@ const Home: React.FC = () => {
           <Box component="nav">
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               <li>
-                <a
-                  href="https://www.youtube.com/watch?v=6yP4Nm86yk0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
+                <Button
+                  onClick={() =>
+                    window.open(
+                      "https://www.youtube.com/watch?v=6yP4Nm86yk0",
+                      "_blank"
+                    )
+                  }
+                  sx={{
                     textDecoration: "none",
                     color: theme.palette.primary.main,
+                    display: "block",
                   }}
                 >
                   About Us
-                </a>
+                </Button>
               </li>
               <li>
-                <a
-                  href="../../../public/services.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
+                <Button
+                  onClick={() =>
+                    window.open("../../../public/services.pdf", "_blank")
+                  }
+                  sx={{
                     textDecoration: "none",
                     color: theme.palette.primary.main,
+                    display: "block",
                   }}
                 >
                   Services
-                </a>
+                </Button>
               </li>
               <li>
-                <a
-                  href="mailto:mail@mail.pl"
-                  style={{
+                <Button
+                  onClick={() => window.open("mailto:mail@mail.pl")}
+                  sx={{
                     textDecoration: "none",
                     color: theme.palette.primary.main,
+                    display: "block",
                   }}
                 >
                   Contact
-                </a>
+                </Button>
               </li>
             </ul>
           </Box>
 
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <a
-              href="https://www.facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
+            <Button
+              onClick={() => window.open("https://www.facebook.com", "_blank")}
+              sx={{
                 textDecoration: "none",
                 color: theme.palette.primary.main,
               }}
             >
               Facebook
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
+            </Button>
+            <Button
+              onClick={() => window.open("https://twitter.com", "_blank")}
+              sx={{
                 textDecoration: "none",
                 color: theme.palette.primary.main,
               }}
             >
               Twitter
-            </a>
-            <a
-              href="https://www.instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
+            </Button>
+            <Button
+              onClick={() => window.open("https://www.instagram.com", "_blank")}
+              sx={{
                 textDecoration: "none",
                 color: theme.palette.primary.main,
               }}
             >
               Instagram
-            </a>
+            </Button>
           </Box>
         </Box>
       </Box>

@@ -1,29 +1,27 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, ReactNode, useState } from "react";
 
-interface User {
+export type User = {
   id: string;
   name: string;
-  password: string;
-  club: string;
-  role: string;
   email: string;
+  password: string;
+  role: string;
+  club: string;
   phone: string;
-  verify: boolean;
   avatar: string;
-}
+  verify: boolean;
+};
 
-export interface UserContextType {
+export type UserContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
-}
+};
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   return (

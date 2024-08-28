@@ -1,9 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import Home from "./Home.tsx";
+import { UserProvider } from "../../contexts/UserContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <UserProvider>
     <Home />
-  </React.StrictMode>
+  </UserProvider>
 );

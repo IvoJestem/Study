@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext, UserContextType } from "../../contexts/UserContext";
 
 export const useUser = (): UserContextType => {
@@ -6,5 +6,13 @@ export const useUser = (): UserContextType => {
   if (!context) {
     throw new Error("useUser must be used within a UserProvider");
   }
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      context.setUser(JSON.parse(storedUser));
+    }
+  }, [context]);
+
   return context;
 };

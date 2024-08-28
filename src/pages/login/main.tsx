@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom/client";
 import Login from "./Login.tsx";
-import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "../../contexts/UserContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
+  <UserProvider>
     <Login />
-  </BrowserRouter>
+  </UserProvider>
 );
