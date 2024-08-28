@@ -32,9 +32,7 @@ const Login: React.FC = () => {
       if (response.data.success) {
         const user = response.data.user;
         setUser(user);
-
         localStorage.setItem("user", JSON.stringify(user));
-
         navigate("/home");
       } else {
         setError(response.data.message);

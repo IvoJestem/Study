@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -80,7 +81,7 @@ const Home: React.FC = () => {
           }}
         >
           <IconButton onClick={handleLogoClick} sx={{ textDecoration: "none" }}>
-            <img src="/user.jpg" alt="Logo" style={{ maxHeight: "60px" }} />
+            <AccountCircle />{" "}
           </IconButton>
         </Box>
       </Box>

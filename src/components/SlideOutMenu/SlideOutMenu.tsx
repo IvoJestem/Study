@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Box, Button, Typography, Link as MUILink } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../contexts/UserContext"; // Import UserContext
+import { UserContext } from "../../contexts/UserContext";
 
 interface SlideOutMenuProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
 
     setUser(null);
 
-    handleNavigation("/login");
+    navigate("/login");
   };
 
   return (
