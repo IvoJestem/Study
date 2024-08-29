@@ -15,7 +15,7 @@ const Route1: React.FC = () => {
   return (
     <UserProvider>
       <Routes>
-        <Route path="/" element={<Error404 />} />
+        <Route path="*" element={<Error404 />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/notloggedinpage" element={<NotLoggedInPage />} />

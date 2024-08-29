@@ -21,6 +21,7 @@ const Register: React.FC = () => {
   const [phone, setPhone] = useState<number | "">("");
   const [role, setRole] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [agreeToPrivacy, setAgreeToPrivacy] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -34,6 +35,13 @@ const Register: React.FC = () => {
 
     if (isNaN(phone as number)) {
       setError("Numer telefonu jest nieprawidłowy");
+      return;
+    }
+
+    if (!agreeToTerms || !agreeToPrivacy) {
+      setError(
+        "Musisz zaakceptować warunki korzystania z systemu i politykę prywatności."
+      );
       return;
     }
 
@@ -159,7 +167,18 @@ const Register: React.FC = () => {
             required
           />
           <Typography variant="body2" component="span" sx={{ ml: 1 }}>
-            Akceptuję warunki korzystania z systemu
+            Zgadzam się na przetwarzanie danych
+          </Typography>
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <input
+            type="checkbox"
+            checked={agreeToPrivacy}
+            onChange={(e) => setAgreeToPrivacy(e.target.checked)}
+            required
+          />
+          <Typography variant="body2" component="span" sx={{ ml: 1 }}>
+            Akceptuję politykę prywatności
           </Typography>
         </Box>
         {error && (
