@@ -20,7 +20,6 @@ const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({
-    id: user?.id || "",
     name: user?.name || "",
     password: user?.password || "",
     club: user?.club || "",
@@ -47,7 +46,6 @@ const UserProfile: React.FC = () => {
     setIsEditing(false);
     if (user) {
       setEditedUser({
-        id: user.id,
         name: user.name,
         password: user.password,
         club: user.club,
@@ -66,7 +64,6 @@ const UserProfile: React.FC = () => {
       const response = await axios.post(
         "http://localhost:5000/api/update-profile",
         {
-          id: editedUser.id,
           name: editedUser.name,
           password: editedUser.password,
           club: editedUser.club,
