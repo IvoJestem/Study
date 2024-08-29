@@ -73,15 +73,14 @@ app.post("/api/login", async (req, res) => {
       success: true,
       message: "Zalogowano pomyślnie!",
       user: {
-        id: user[0],
+        phone: user[0],
         name: user[1],
         password: user[2],
         club: user[3],
         role: user[4],
         email: user[5],
-        phone: user[6],
-        verify: user[7] === 1,
-        avatar: user[8] || "",
+        verify: user[6] === 1,
+        avatar: user[7] || "",
       },
     });
   } catch (err) {
@@ -104,27 +103,29 @@ app.post("/api/register", async (req, res) => {
   const { name, password, club, email, phone, role, verify } = req.body;
   let connection;
 
-  if (!name || !password || !email) {
-    return res.status(400).json({ error: "Imię, hasło i email są wymagane" });
+  if (!name || !password || !email || !phone) {
+    return res
+      .status(400)
+      .json({ error: "Imię, hasło, email i numer telefonu są wymagane" });
   }
 
   try {
     connection = await oracledb.getConnection(dbConfig);
 
     const existingUser = await connection.execute(
-      `SELECT * FROM USERS WHERE email = :email`,
-      [email]
+      `SELECT * FROM USERS WHERE email = :email OR phone = :phone`,
+      [email, phone]
     );
 
     if (existingUser.rows.length > 0) {
-      return res
-        .status(400)
-        .json({ error: "Użytkownik o tym emailu już istnieje" });
+      return res.status(400).json({
+        error: "Użytkownik o tym emailu lub numerze telefonu już istnieje",
+      });
     }
 
     await connection.execute(
       `INSERT INTO USERS (name, password, club, email, phone, role, verify) 
-       VALUES (:name, :password, :club, :email, :phone, :role, :verify)`,
+        VALUES (:name, :password, :club, :email, :phone, :role, :verify)`,
       [name, password, club, email, phone, role, verify ? 1 : 0]
     );
 
@@ -152,18 +153,28 @@ app.post("/api/register", async (req, res) => {
 });
 
 app.post("/api/update-profile", async (req, res) => {
-  const { id, name, password, club, email, phone, role, avatar } = req.body;
+  const { phone, name, password, club, email, role, avatar } = req.body;
   let connection;
+
+  if (!phone) {
+    return res.status(400).json({ error: "Numer telefonu jest wymagany" });
+  }
 
   try {
     connection = await oracledb.getConnection(dbConfig);
+
+    console.log("Updating user with phone:", phone); // Dodaj ten wiersz do debugowania
+
     await connection.execute(
       `UPDATE USERS
-       SET name = :name, password = :password, club = :club, email = :email,
-           phone = :phone, role = :role, avatar = :avatar
-       WHERE id = :id`,
-      [name, password, club, email, phone, role, avatar, id]
+        SET name = :name, password = :password, club = :club, email = :email,
+            role = :role, avatar = :avatar
+        WHERE phone = :phone`,
+      [name, password, club, email, role, avatar, phone]
     );
+
+    console.log("User updated"); // Dodaj ten wiersz do debugowania
+
     await connection.commit();
     res.status(200).json({
       success: true,
@@ -205,20 +216,57 @@ app.get("/api/user/:email", async (req, res) => {
     res.json({
       success: true,
       user: {
-        id: user[0],
+        phone: user[0],
         name: user[1],
         email: user[5],
         role: user[4],
-        phone: user[6],
         club: user[3],
         avatar: user[7] || "",
-        verify: user[8] || true,
+        verify: user[6] === 1,
       },
     });
   } catch (err) {
     console.error("Error:", err);
     res.status(500).json({
       error: "Błąd podczas pobierania danych użytkownika",
+      details: err.message,
+    });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing the connection", err);
+      }
+    }
+  }
+});
+
+app.delete("/api/delete-user/:phone", async (req, res) => {
+  const { phone } = req.params;
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+    const result = await connection.execute(
+      `DELETE FROM USERS WHERE phone = :phone`,
+      [phone]
+    );
+
+    if (result.rowsAffected === 0) {
+      return res
+        .status(404)
+        .json({ error: "Nie znaleziono użytkownika do usunięcia" });
+    }
+
+    await connection.commit();
+    res
+      .status(200)
+      .json({ success: true, message: "Użytkownik został pomyślnie usunięty" });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({
+      error: "Błąd podczas usuwania użytkownika",
       details: err.message,
     });
   } finally {

@@ -8,8 +8,13 @@ import {
   Paper,
   TextField,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { useUser } from "../UseUser/UseUser";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
@@ -29,6 +34,10 @@ const UserProfile: React.FC = () => {
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(
     user?.avatar || null
   );
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -68,6 +77,8 @@ const UserProfile: React.FC = () => {
         }
       );
 
+      console.log(response.data); // Dodaj ten wiersz do debugowania
+
       if (response.data.success) {
         setUser({ ...editedUser, avatar: avatar as string });
         setIsEditing(false);
@@ -96,6 +107,31 @@ const UserProfile: React.FC = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5000/api/delete-user/${user?.phone}`
+      );
+      if (response.data.success) {
+        setUser(null);
+        navigate("/login");
+      } else {
+        console.error(response.data.error);
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+    handleCloseConfirmDialog();
   };
 
   if (!user) {
@@ -200,13 +236,23 @@ const UserProfile: React.FC = () => {
         </Grid>
         <Grid item xs={12} mt={2}>
           {!isEditing ? (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleEditClick}
-            >
-              Edit
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleEditClick}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleOpenConfirmDialog}
+                sx={{ ml: 2 }}
+              >
+                Delete Account
+              </Button>
+            </>
           ) : (
             <>
               <Button
@@ -228,6 +274,24 @@ const UserProfile: React.FC = () => {
           )}
         </Grid>
       </Grid>
+
+      <Dialog open={openConfirmDialog} onClose={handleCloseConfirmDialog}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Czy na pewno chcesz usunąć swoje konto? Tej czynności nie można
+            cofnąć.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmDialog} color="primary">
+            Anuluj
+          </Button>
+          <Button onClick={handleDeleteAccount} color="error">
+            Usuń
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

@@ -196,6 +196,15 @@ const Register: React.FC = () => {
           Zarejestruj
         </Button>
       </form>
+      <Button
+        variant="outlined"
+        color="secondary"
+        fullWidth
+        sx={{ mt: 2 }}
+        onClick={() => navigate("/login")}
+      >
+        Powrót do logowania
+      </Button>
     </Box>
   );
 };
