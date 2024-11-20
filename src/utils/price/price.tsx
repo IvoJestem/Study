@@ -1,4 +1,5 @@
-import { Player } from "../../components/Database/Database";
+import { Player } from "../../types/Player";
+
 
 export const convertPriceToNumber = (
   amount: number | null,

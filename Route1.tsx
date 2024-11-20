@@ -9,6 +9,7 @@ import UserProfilePage from "./src/pages/userprofilepage/UserProfilePage";
 import { UserProvider } from "./src/contexts/UserContext";
 import Error404 from "./src/pages/error404/Error404";
 import NotLoggedInPage from "./src/pages/notloggedInpage/NotLoggedInPage";
+import NoAccess from "./src/pages/noaccess/NoAccess"
 import PrivateRoute from "./privateroute";
 
 const Route1: React.FC = () => {
@@ -19,6 +20,7 @@ const Route1: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/notloggedinpage" element={<NotLoggedInPage />} />
+        <Route path="/noaccess" element={<NoAccess />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/home" element={<Home />} />

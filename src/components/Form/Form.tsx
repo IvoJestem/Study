@@ -23,18 +23,18 @@ interface FormProps {
 
 const positions = [
   "Bramkarz",
-  "Lewy Obrońca",
-  "Środkowy Obrońca",
-  "Prawy Obrońca",
-  "Defensywny Pomocnik",
-  "Lewy Pomocnik",
-  "Środkowy Pomocnik",
-  "Ofensywny Pomocnik",
-  "Prawy Pomocnik",
-  "Lewy Napastnik",
-  "Prawy Napastnik",
-  "Cofnięty Napastnik",
-  "Środkowy Napastnik",
+  "Lewy obrońca",
+  "Środkowy obrońca",
+  "Prawy obrońca",
+  "Defensywny pomocnik",
+  "Lewy pomocnik",
+  "Środkowy pomocnik",
+  "Ofensywny pomocnik",
+  "Prawy pomocnik",
+  "Lewy napastnik",
+  "Prawy napastnik",
+  "Cofnięty napastnik",
+  "Środkowy napastnik",
 ];
 
 export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {

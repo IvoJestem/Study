@@ -1,4 +1,5 @@
-import { Player } from "../../components/Database/Database";
+
+import { Player } from "../../types/Player";
 import { calculateTotalPrice } from "../price/price";
 
 const generateCombinations = (
