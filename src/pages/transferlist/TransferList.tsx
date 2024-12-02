@@ -36,7 +36,7 @@ const TransferList: React.FC = () => {
     const fetchClubPlayers = async () => {
       if (!user || !user.club) return;
       try {
-        const response = await fetch(`http://localhost:5000/Clubs/${user.club}`);
+        const response = await fetch(`http://localhost:5000/transferlist/${user.club}`);
         if (!response.ok) {
                    throw new Error("Nie jesteś związany z klubem więc niektóre funkcje mogą być dla Ciebie niedostępne");
         }

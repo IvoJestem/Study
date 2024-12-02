@@ -3,22 +3,25 @@ import { Box, Typography, Button } from "@mui/material";
 import generateCombinations from "../../utils/Combinations/combinations";
 import PlayerTable from "../PlayerTable/PlayerTable";
 import { Player } from "../../types/Player";
+import { useUser } from "../UseUser/UseUser";
 
 const CombinationResults: React.FC<{
   players: Player[];
   positions: string[];
   budget: number;
 }> = ({ players, positions, budget }) => {
-  const [combinations, setCombinations] = useState<Player[][]>([]);
+  const { user } = useUser(); // Uzyskiwanie klubu użytkownika z kontekstu
+    const [combinations, setCombinations] = useState<Player[][]>([]);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
 
   const handleGenerateCombinations = () => {
-    const result = generateCombinations(players, positions, budget);
-    setCombinations(result);
+    const userClub = user?.club || ""; // Domyślnie pusty string, jeśli brak klubu
+    const result = generateCombinations(players, positions, budget, userClub);
+    console.log("Generated combinations:", combinations);
+     setCombinations(result);
     setHasGenerated(true);
   };
-
-  return (
+return (
     <Box>
       <Typography variant="h6" gutterBottom>
         Propozycje transferowe

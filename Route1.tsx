@@ -9,6 +9,7 @@ import UserProfilePage from "./src/pages/userprofilepage/UserProfilePage";
 import { UserProvider } from "./src/contexts/UserContext";
 import Error404 from "./src/pages/error404/Error404";
 import NotLoggedInPage from "./src/pages/notloggedInpage/NotLoggedInPage";
+import Players from "./src/pages/players/Players";
 import NoAccess from "./src/pages/noaccess/NoAccess"
 import PrivateRoute from "./privateroute";
 
@@ -27,6 +28,7 @@ const Route1: React.FC = () => {
           <Route path="/userprofilepage" element={<UserProfilePage />} />
           <Route path="/transferlist" element={<TransferList />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/players" element={<Players/>}/>
         </Route>
       </Routes>
     </UserProvider>

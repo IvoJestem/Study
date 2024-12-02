@@ -14,7 +14,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { testimonials } from "../../components/Opinions/Opinions";
+import { testimonials } from "../../components/opinions/opinions";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -50,8 +50,11 @@ const Home: React.FC = () => {
         backgroundColor: "#f0f4f8",
         padding: 2,
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
+      {/* Header */}
       <Box
         component="header"
         sx={{
@@ -81,40 +84,40 @@ const Home: React.FC = () => {
           }}
         >
           <IconButton onClick={handleLogoClick} sx={{ textDecoration: "none" }}>
-            <AccountCircle />{" "}
+            <AccountCircle />
           </IconButton>
         </Box>
       </Box>
 
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           padding: 3,
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
+          flexGrow: 1,
         }}
       >
+        {/* Hero Section */}
         <Box
           component="section"
           sx={{
             textAlign: "center",
             marginBottom: 4,
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.primary.main,
             padding: 4,
-            boxShadow: 1,
+            boxShadow: 3,
             borderRadius: 3,
             backgroundImage:
               "linear-gradient(135deg, #6b73ff 0%, #000dff 100%)",
             color: "#fff",
+            animation: "fadeIn 2s ease-in-out",
           }}
         >
-          <Typography
-            variant="h3"
-            component="h1"
-            sx={{ mb: 2, fontWeight: 600 }}
-          >
+          <Typography variant="h3" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
             Welcome to Our Service
           </Typography>
           <Typography variant="body1" sx={{ mb: 3 }}>
@@ -131,6 +134,7 @@ const Home: React.FC = () => {
           </Button>
         </Box>
 
+        {/* Offerings Section */}
         <Box component="section" sx={{ mb: 4 }}>
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
             What We Offer
@@ -140,6 +144,7 @@ const Home: React.FC = () => {
           </Typography>
         </Box>
 
+        {/* Testimonials Section */}
         <Box
           component="section"
           sx={{
@@ -149,6 +154,7 @@ const Home: React.FC = () => {
             padding: 3,
             boxShadow: 3,
             borderRadius: 2,
+            animation: "fadeIn 2s ease-in-out",
           }}
         >
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
@@ -180,6 +186,7 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
+      {/* Footer */}
       <Box
         component="footer"
         sx={{

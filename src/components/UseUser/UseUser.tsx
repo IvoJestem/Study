@@ -12,7 +12,7 @@ export const useUser = (): UserContextType => {
     if (storedUser) {
       context.setUser(JSON.parse(storedUser));
     }
-  }, [context]);
+  }, [context.setUser]); // Używamy context.setUser jako zależności, a nie całego context
 
   return context;
 };

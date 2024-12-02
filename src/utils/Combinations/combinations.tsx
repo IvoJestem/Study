@@ -1,16 +1,16 @@
-
 import { Player } from "../../types/Player";
 import { calculateTotalPrice } from "../price/price";
 
 const generateCombinations = (
   players: Player[],
   positions: string[],
-  budget: number
+  budget: number,
+  userClub: string // Dodano argument z nazwą klubu użytkownika
 ): Player[][] => {
   const results: Player[][] = [];
 
-  const filteredPlayers = players.filter((player) =>
-    positions.includes(player.position)
+  const filteredPlayers = players.filter(
+    (player) => positions.includes(player.position) && player.club !== userClub
   );
 
   const findCombinations = (currentCombo: Player[], start: number) => {

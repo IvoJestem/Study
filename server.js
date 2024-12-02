@@ -43,7 +43,43 @@ app.get("/players", async (req, res) => {
       }
     }
   }
+  });
+  app.post("/transferlist", async (req, res) => {
+  const { id, name, position, age, nation, club } = req.body;
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Dodaj zawodnika do tabeli TRANSFERLIST bez ceny
+    await connection.execute(
+      `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
+       VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
+      [name, position, age, nation, club]
+    );
+
+    // Usuń zawodnika z tabeli PLAYERS
+    await connection.execute(
+      `DELETE FROM PLAYERS WHERE ID = :id`,
+      [id]
+    );
+
+    await connection.commit();
+    res.status(201).json({ message: "Zawodnik został przeniesiony do transferlisty" });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Błąd podczas przenoszenia zawodnika", details: err.message });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing the connection", err);
+      }
+    }
+  }
 });
+
 
 app.post("/api/login", async (req, res) => {
   const { name, password } = req.body;
@@ -279,14 +315,14 @@ app.delete("/api/delete-user/:phone", async (req, res) => {
     }
   }
 });
-app.get("/Clubs/:clubName", async (req, res) => {
+app.get("/transferlist/:clubName", async (req, res) => {
     const { clubName } = req.params;
     let connection;
 
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `SELECT * FROM CLUBS WHERE CLUB = :clubName`, 
+            `SELECT * FROM TRANSFERLIST WHERE CLUB = :clubName`, 
             [clubName]
         );
 
@@ -315,17 +351,16 @@ app.post("/players", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Dodaj zawodnika do tabeli CLUBS (jeśli tam ma trafić)
-  await connection.execute(
-  `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB, PRICE) 
-   VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club, :price)`,
-  [name, position, age, nation, club, price]
-);
-
-
-    // Usuń zawodnika z tabeli PLAYERS
+    // Dodaj zawodnika do tabeli PLAYERS (klub docelowy)
     await connection.execute(
-      `DELETE FROM CLUBS WHERE ID = :id`,
+      `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB, PRICE) 
+       VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club, :price)`,
+      [name, position, age, nation, club, price]
+    );
+
+    // Usuń zawodnika z tabeli TRANSFERLIST
+    await connection.execute(
+      `DELETE FROM TRANSFERLIST WHERE ID = :id`,
       [id]
     );
 
@@ -343,6 +378,72 @@ app.post("/players", async (req, res) => {
       }
     }
   }
+});
+app.post("/transferlist", async (req, res) => {
+  const { id, name, position, age, nation, club } = req.body;
+  let connection;
+
+  try {
+    connection = await oracledb.getConnection(dbConfig);
+
+    // Dodaj zawodnika do tabeli CLUBS (jeśli tam ma trafić)
+  await connection.execute(
+  `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
+   VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
+  [name, position, age, nation, club]
+);
+
+
+    // Usuń zawodnika z tabeli PLAYERS
+    await connection.execute(
+      `DELETE FROM PLAYERS WHERE ID = :id`,
+      [id]
+    );
+
+    await connection.commit();
+    res.status(201).json({ message: "Zawodnik został przeniesiony do listy transferowej i usunięty z klubu" });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ error: "Błąd podczas przenoszenia zawodnika", details: err.message });
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error("Error closing the connection", err);
+      }
+    }
+  }
+});
+// Endpoint do pobierania zawodników po nazwie klubu
+app.get("/Players/:clubName", async (req, res) => {
+    const { clubName } = req.params;
+    let connection;
+
+    try {
+        connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `SELECT * FROM PLAYERS WHERE CLUB = :clubName`, 
+            [clubName]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Nie znaleziono zawodników dla tego klubu" });
+        }
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error:", err);
+        res.status(500).json({ error: "Błąd podczas pobierania zawodników", details: err.message });
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error("Error closing the connection", err);
+            }
+        }
+    }
 });
 
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Typography, Button, Box } from "@mui/material";
 import { Player } from "../../types/Player";
 import { SearchForm } from "../../components/Form/Form";
-import CombinationResults from "../../components/CombinationResults/CombinationResults";
+import  CombinationResults  from "../../components/CombinationResults/CombinationResults";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 import { useUser } from "../../components/UseUser/UseUser"; // Przyjmuję, że masz hooka do pobierania danych użytkownika
 import { useNavigate } from "react-router-dom"; // Do przekierowania
