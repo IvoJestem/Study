@@ -22,12 +22,12 @@ const dbConfig = {
   privilege: oracledb.SYSDBA,
 };
 
-app.get("/players", async (req, res) => {
+app.get("/transferlist", async (req, res) => {
   let connection;
 
   try {
     connection = await oracledb.getConnection(dbConfig);
-    const result = await connection.execute("SELECT * FROM PLAYERS");
+    const result = await connection.execute("SELECT * FROM TRANSFERLIST");
     res.json(result.rows);
   } catch (err) {
     console.error("Error:", err);
@@ -44,7 +44,7 @@ app.get("/players", async (req, res) => {
     }
   }
   });
-  app.post("/transferlist", async (req, res) => {
+  app.post("/players", async (req, res) => {
   const { id, name, position, age, nation, club } = req.body;
   let connection;
 
@@ -52,13 +52,13 @@ app.get("/players", async (req, res) => {
     connection = await oracledb.getConnection(dbConfig);
 
     await connection.execute(
-      `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
+      `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB) 
        VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
       [name, position, age, nation, club]
     );
 
     await connection.execute(
-      `DELETE FROM PLAYERS WHERE ID = :id`,
+      `DELETE FROM TRANSFERLIST WHERE ID = :id`,
       [id]
     );
 
@@ -313,14 +313,14 @@ app.delete("/api/delete-user/:phone", async (req, res) => {
     }
   }
 });
-app.get("/transferlist/:clubName", async (req, res) => {
+app.get("/players/:clubName", async (req, res) => {
     const { clubName } = req.params;
     let connection;
 
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `SELECT * FROM TRANSFERLIST WHERE CLUB = :clubName`, 
+            `SELECT * FROM PLAYERS WHERE CLUB = :clubName`, 
             [clubName]
         );
 
@@ -342,7 +342,7 @@ app.get("/transferlist/:clubName", async (req, res) => {
         }
     }
 });
-app.post("/players", async (req, res) => {
+app.post("/transferlist", async (req, res) => {
   const { id, name, position, age, nation, club, price } = req.body;
   let connection;
 
@@ -351,13 +351,13 @@ app.post("/players", async (req, res) => {
 
   
     await connection.execute(
-      `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB, PRICE) 
+      `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB, PRICE) 
        VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club, :price)`,
       [name, position, age, nation, club, price]
     );
 
     await connection.execute(
-      `DELETE FROM TRANSFERLIST WHERE ID = :id`,
+      `DELETE FROM PLAYERS WHERE ID = :id`,
       [id]
     );
 
@@ -376,7 +376,7 @@ app.post("/players", async (req, res) => {
     }
   }
 });
-app.post("/transferlist", async (req, res) => {
+app.post("/players", async (req, res) => {
   const { id, name, position, age, nation, club } = req.body;
   let connection;
 
@@ -385,14 +385,14 @@ app.post("/transferlist", async (req, res) => {
 
 
   await connection.execute(
-  `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
+  `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB) 
    VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
   [name, position, age, nation, club]
 );
 
 
     await connection.execute(
-      `DELETE FROM PLAYERS WHERE ID = :id`,
+      `DELETE FROM TRANSFERLIST WHERE ID = :id`,
       [id]
     );
 
@@ -411,14 +411,14 @@ app.post("/transferlist", async (req, res) => {
     }
   }
 });
-app.get("/Players/:clubName", async (req, res) => {
+app.get("/transferlist/:clubName", async (req, res) => {
     const { clubName } = req.params;
     let connection;
 
     try {
         connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `SELECT * FROM PLAYERS WHERE CLUB = :clubName`, 
+            `SELECT * FROM TRANSFERLIST WHERE CLUB = :clubName`, 
             [clubName]
         );
 

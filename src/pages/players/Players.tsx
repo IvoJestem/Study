@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -22,7 +23,7 @@ const Players: React.FC = () => {
     const fetchPlayersData = async () => {
         if (!user || !user.club) return;
       try {
-        const response = await fetch(`http://localhost:5000/players/${user.club}`);
+        const response = await fetch(`http://localhost:5000/transferlist/${user.club}`);
         if (!response.ok) {
           throw new Error("Nie jesteś związany z klubem więc niektóre funkcje mogą być dla Ciebie niedostępne");
         }
@@ -57,7 +58,7 @@ const Players: React.FC = () => {
 
     if (!player) return;
 
-    const response = await fetch(`http://localhost:5000/transferlist`, {
+    const response = await fetch(`http://localhost:5000/players`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

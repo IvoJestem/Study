@@ -35,7 +35,7 @@ const TransferList: React.FC = () => {
 
    const fetchPlayers = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/players`);
+      const response = await fetch(`http://localhost:5000/transferlist`);
       if (!response.ok) {
         throw new Error("Nie udało się pobrać listy zawodników.");
       }
@@ -61,7 +61,7 @@ const TransferList: React.FC = () => {
     const fetchClubPlayers = async () => {
       if (!user || !user.club) return;
       try {
-        const response = await fetch(`http://localhost:5000/transferlist/${user.club}`);
+        const response = await fetch(`http://localhost:5000/players/${user.club}`);
         if (!response.ok) {
                    throw new Error("Nie jesteś związany z klubem więc niektóre funkcje mogą być dla Ciebie niedostępne");
         }
@@ -141,7 +141,7 @@ const handleAddPlayerToTransferList = async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/players", {
+    const response = await fetch("http://localhost:5000/transferlist", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

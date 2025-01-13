@@ -25,7 +25,7 @@ const Search: React.FC = () => {
 
     const fetchPlayers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/players");
+        const response = await fetch("http://localhost:5000/transferlist");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
