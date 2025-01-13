@@ -14,7 +14,7 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <Container>
-      <Box my={4}>
+      <Box my={4} textAlign="center">
         <Typography variant="h3" component="h1" gutterBottom>
           User Profile
         </Typography>

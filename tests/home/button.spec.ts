@@ -10,7 +10,7 @@ test.describe("Home Page", () => {
 
     page.on("dialog", async (dialog) => {
       expect(dialog.message()).toBe(
-        "Witaj użytkowniku, wygrałeś nowego iPhona!"
+        "Witaj użytkowniku"
       );
       await dialog.dismiss();
     });

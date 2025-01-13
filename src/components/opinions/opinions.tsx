@@ -1,17 +1,17 @@
 export const testimonials = [
   {
-    name: "John Doe",
-    content: "This service is amazing! I highly recommend it to everyone.",
+    name: "Jan Kowalski",
+    content: "Ta usługa jest niesamowita! Gorąco polecam każdemu.",
     avatar: "/path-to-avatar1.jpg",
   },
   {
-    name: "Jane Smith",
-    content: "Excellent customer service and fantastic results!",
+    name: "Anna Nowak",
+    content: "Doskonała obsługa klienta i fantastyczne rezultaty!",
     avatar: "/path-to-avatar2.jpg",
   },
   {
-    name: "Sam Wilson",
-    content: "A seamless experience from start to finish. Great job!",
+    name: "Tomasz Wiśniewski",
+    content: "Bezproblemowe doświadczenie od początku do końca. Świetna robota!",
     avatar: "/path-to-avatar3.jpg",
   },
 ];

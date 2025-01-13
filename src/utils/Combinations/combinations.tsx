@@ -5,7 +5,7 @@ const generateCombinations = (
   players: Player[],
   positions: string[],
   budget: number,
-  userClub: string // Dodano argument z nazwą klubu użytkownika
+  userClub: string 
 ): Player[][] => {
   const results: Player[][] = [];
 

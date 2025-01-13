@@ -10,12 +10,12 @@ const CombinationResults: React.FC<{
   positions: string[];
   budget: number;
 }> = ({ players, positions, budget }) => {
-  const { user } = useUser(); // Uzyskiwanie klubu użytkownika z kontekstu
+  const { user } = useUser(); 
     const [combinations, setCombinations] = useState<Player[][]>([]);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
 
   const handleGenerateCombinations = () => {
-    const userClub = user?.club || ""; // Domyślnie pusty string, jeśli brak klubu
+    const userClub = user?.club || ""; 
     const result = generateCombinations(players, positions, budget, userClub);
     console.log("Generated combinations:", combinations);
      setCombinations(result);

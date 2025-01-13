@@ -74,7 +74,7 @@ const UserProfile: React.FC = () => {
         }
       );
 
-      console.log(response.data); // Dodaj ten wiersz do debugowania
+      console.log(response.data); 
 
       if (response.data.success) {
         setUser({ ...editedUser, avatar: avatar as string });

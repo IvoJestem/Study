@@ -138,28 +138,6 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
           <Box component="li" sx={{ marginBottom: 2 }}>
             <MUILink
               component="button"
-              onClick={() => handleNavigation("/search")}
-              sx={{
-                textDecoration: "none",
-                color: "primary.main",
-                fontWeight: "bold",
-                padding: 1,
-                display: "block",
-                borderRadius: 2,
-                "&:hover": {
-                  backgroundColor: "primary.light",
-                  color: "secondary.main",
-                },
-              }}
-            >
-              Wyszukiwarka
-            </MUILink>
-          </Box>
-      
-
-          <Box component="li" sx={{ marginBottom: 2 }}>
-            <MUILink
-              component="button"
               onClick={() => handleNavigation("/players")}
               sx={{
                 textDecoration: "none",
@@ -177,7 +155,29 @@ const SlideOutMenu: React.FC<SlideOutMenuProps> = ({ isOpen, onClose }) => {
               Moi Zawodnicy
             </MUILink>
           </Box>
-        </Box>
+   
+
+          <Box component="li" sx={{ marginBottom: 2 }}>
+            <MUILink
+              component="button"
+              onClick={() => handleNavigation("/search")}
+              sx={{
+                textDecoration: "none",
+                color: "primary.main",
+                fontWeight: "bold",
+                padding: 1,
+                display: "block",
+                borderRadius: 2,
+                "&:hover": {
+                  backgroundColor: "primary.light",
+                  color: "secondary.main",
+                },
+              }}
+            >
+              Symulacja
+            </MUILink>
+          </Box>
+           </Box>
 
         <Box
           sx={{

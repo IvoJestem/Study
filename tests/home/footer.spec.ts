@@ -5,7 +5,7 @@ test.describe("Home Page", () => {
     await page.goto("http://localhost:5173/src/pages/home");
 
     const aboutLink = page.locator(
-      'a[href="https://www.youtube.com/watch?v=6yP4Nm86yk0"]'
+      'a[href="https://www.youtube.com"]'
     );
     const servicesLink = page.locator('a[href="../../../public/services.pdf"]');
     const contactLink = page.locator('a[href="mailto:mail@mail.pl"]');

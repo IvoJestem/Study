@@ -4,11 +4,11 @@ import { Player } from "../../types/Player";
 import { SearchForm } from "../../components/Form/Form";
 import  CombinationResults  from "../../components/CombinationResults/CombinationResults";
 import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
-import { useUser } from "../../components/UseUser/UseUser"; // Przyjmuję, że masz hooka do pobierania danych użytkownika
-import { useNavigate } from "react-router-dom"; // Do przekierowania
+import { useUser } from "../../components/UseUser/UseUser"; 
+import { useNavigate } from "react-router-dom";
 
 const Search: React.FC = () => {
-  const { user } = useUser(); // Pobieranie użytkownika z kontekstu
+  const { user } = useUser(); 
   const [players, setPlayers] = useState<Player[]>([]);
   const [positions, setPositions] = useState<string[]>([]);
   const [budget, setBudget] = useState<number>(0);
@@ -17,9 +17,9 @@ const Search: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Sprawdzenie roli użytkownika
+
     if (user?.role === "Agent") {
-      // Jeśli użytkownik ma rolę "Agent", przekieruj na stronę główną lub stronę błędu
+     
       navigate("/noaccess");
     }
 

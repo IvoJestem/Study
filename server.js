@@ -51,14 +51,12 @@ app.get("/players", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Dodaj zawodnika do tabeli TRANSFERLIST bez ceny
     await connection.execute(
       `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
        VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
       [name, position, age, nation, club]
     );
 
-    // Usuń zawodnika z tabeli PLAYERS
     await connection.execute(
       `DELETE FROM PLAYERS WHERE ID = :id`,
       [id]
@@ -199,7 +197,7 @@ app.post("/api/update-profile", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    console.log("Updating user with phone:", phone); // Dodaj ten wiersz do debugowania
+    console.log("Updating user with phone:", phone); 
 
     await connection.execute(
       `UPDATE USERS
@@ -209,7 +207,7 @@ app.post("/api/update-profile", async (req, res) => {
       [name, password, club, email, role, avatar, phone]
     );
 
-    console.log("User updated"); // Dodaj ten wiersz do debugowania
+    console.log("User updated");
 
     await connection.commit();
     res.status(200).json({
@@ -351,14 +349,13 @@ app.post("/players", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Dodaj zawodnika do tabeli PLAYERS (klub docelowy)
+  
     await connection.execute(
       `INSERT INTO PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB, PRICE) 
        VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club, :price)`,
       [name, position, age, nation, club, price]
     );
 
-    // Usuń zawodnika z tabeli TRANSFERLIST
     await connection.execute(
       `DELETE FROM TRANSFERLIST WHERE ID = :id`,
       [id]
@@ -386,7 +383,7 @@ app.post("/transferlist", async (req, res) => {
   try {
     connection = await oracledb.getConnection(dbConfig);
 
-    // Dodaj zawodnika do tabeli CLUBS (jeśli tam ma trafić)
+
   await connection.execute(
   `INSERT INTO TRANSFERLIST (ID, NAME, POSITION, AGE, NATION, CLUB) 
    VALUES (player_seq.NEXTVAL, :name, :position, :age, :nation, :club)`,
@@ -394,7 +391,6 @@ app.post("/transferlist", async (req, res) => {
 );
 
 
-    // Usuń zawodnika z tabeli PLAYERS
     await connection.execute(
       `DELETE FROM PLAYERS WHERE ID = :id`,
       [id]
@@ -415,7 +411,6 @@ app.post("/transferlist", async (req, res) => {
     }
   }
 });
-// Endpoint do pobierania zawodników po nazwie klubu
 app.get("/Players/:clubName", async (req, res) => {
     const { clubName } = req.params;
     let connection;

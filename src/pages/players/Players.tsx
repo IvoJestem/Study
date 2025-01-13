@@ -18,7 +18,6 @@ const Players: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
 
-  // Pobranie danych zawodników
   useEffect(() => {
     const fetchPlayersData = async () => {
         if (!user || !user.club) return;
@@ -46,12 +45,12 @@ const Players: React.FC = () => {
     };
 
     if (user?.club) {
-      console.log("Triggering useEffect with user?.club:", user.club); // Debugging
+      console.log("Triggering useEffect with user?.club:", user.club); 
       fetchPlayersData();
     }
   }, [user?.club]);
 
-  // Funkcja do usuwania zawodnika z listy transferowej
+
   const handleRemovePlayerFromTransferList = async (playerId: number) => {
   try {
     const player = clubPlayers.find((player) => player.id === playerId);
@@ -75,7 +74,7 @@ const Players: React.FC = () => {
 
     if (!response.ok) throw new Error("Błąd podczas przenoszenia zawodnika");
 
-    // Aktualizacja danych po sukcesie
+
     const updatedClubPlayers = clubPlayers.filter((player) => player.id !== playerId);
     setClubPlayers(updatedClubPlayers);
 
@@ -135,16 +134,13 @@ const Players: React.FC = () => {
       </Box>
 
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Zawodnicy w Twoim klubie:
-        </Typography>
         {clubPlayers.map((player) => (
           <Box
             key={player.id}
             sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}
           >
             <Typography variant="body1">
-              {player.name} - {player.position} - {player.club} - {player.price} $
+              {player.name} - {player.position} - {player.price} 
             </Typography>
             <Button
               variant="contained"

@@ -62,7 +62,7 @@ const Register: React.FC = () => {
         setError(response.data.error);
       }
     } catch (error) {
-      setError("Błąd podczas rejestracji użytkownika");
+      setError("Błąd podczas rejestracji użytkownika. Użytkownik z takimi danymi już istnieje");
     }
   };
 

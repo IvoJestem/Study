@@ -118,10 +118,16 @@ const Home: React.FC = () => {
           }}
         >
           <Typography variant="h3" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
-            Welcome to Our Service
+            Witaj
           </Typography>
           <Typography variant="body1" sx={{ mb: 3 }}>
-            Discover our offerings. Use the menu to explore various sections.
+            Naszym celem jest dostarczenie innowacyjnego rozwiązania, które ułatwi zarządzanie transferami piłkarskimi. Wierzymy, że sport to nie tylko rywalizacja na boisku, ale również strategiczne decyzje podejmowane poza nim. Tworząc naszą aplikację, chcemy wspierać kluby, menedżerów i pasjonatów futbolu w efektywnym budowaniu zespołów.
+
+Nasz system umożliwia dodawanie zawodników do list transferowych, analizowanie ich wartości rynkowej oraz skuteczne zarządzanie procesem transferowym. Dzięki danym pozyskiwanym z różnych źródeł oraz aplikacja stanowi praktyczne narzędzie zarówno dla profesjonalistów, jak i entuzjastów piłki nożnej.
+
+Jesteśmy zespołem pasjonatów technologii i sportu, którzy wierzą w siłę innowacji. Nasze doświadczenie w projektowaniu aplikacji oraz dogłębna wiedza o świecie futbolu pozwoliły nam stworzyć produkt odpowiadający rzeczywistym potrzebom użytkowników.
+
+Zapraszamy do odkrywania naszego systemu i korzystania z jego możliwości. Razem możemy rewolucjonizować sposób, w jaki zarządzamy transferami piłkarskimi!
           </Typography>
           <Button
             variant="contained"
@@ -130,17 +136,17 @@ const Home: React.FC = () => {
             sx={{ paddingX: 4 }}
             onClick={handleGetStartedClick}
           >
-            Get Started
+            Kliknij!
           </Button>
         </Box>
 
         {/* Offerings Section */}
         <Box component="section" sx={{ mb: 4 }}>
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-            What We Offer
+            Co oferujemy?
           </Typography>
           <Typography variant="body1">
-            We offer assistance in recruiting new players to your team.
+        Oferujemy innowacyjne narzędzie do zarządzania transferami piłkarzy,
           </Typography>
         </Box>
 
@@ -158,7 +164,7 @@ const Home: React.FC = () => {
           }}
         >
           <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-            Testimonials
+            Referencje
           </Typography>
           <Slider {...sliderSettings}>
             {testimonials.map((testimonial, index) => (
@@ -206,8 +212,7 @@ const Home: React.FC = () => {
                 <Button
                   onClick={() =>
                     window.open(
-                      "https://www.youtube.com/watch?v=6yP4Nm86yk0",
-                      "_blank"
+                      
                     )
                   }
                   sx={{
@@ -216,7 +221,7 @@ const Home: React.FC = () => {
                     display: "block",
                   }}
                 >
-                  About Us
+                  O NAS
                 </Button>
               </li>
               <li>
@@ -230,7 +235,7 @@ const Home: React.FC = () => {
                     display: "block",
                   }}
                 >
-                  Services
+                  Usuługi
                 </Button>
               </li>
               <li>
@@ -242,7 +247,7 @@ const Home: React.FC = () => {
                     display: "block",
                   }}
                 >
-                  Contact
+                  Kontakt
                 </Button>
               </li>
             </ul>
