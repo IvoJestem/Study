@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Box, Alert, Paper, IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Player } from "../../types/Player";
 import { SearchForm } from "../../components/Form/Form";
-import  CombinationResults  from "../../components/CombinationResults/CombinationResults";
-import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
-import { useUser } from "../../components/UseUser/UseUser"; 
+import CombinationResults from "../../components/CombinationResults/CombinationResults";
+import { useUser } from "../../components/UseUser/UseUser";
 import { useNavigate } from "react-router-dom";
+import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const Search: React.FC = () => {
-  const { user } = useUser(); 
+  const { user } = useUser();
   const [players, setPlayers] = useState<Player[]>([]);
   const [positions, setPositions] = useState<string[]>([]);
   const [budget, setBudget] = useState<number>(0);
@@ -17,20 +18,19 @@ const Search: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-
-    if (user?.role === "Agent") {
-     
+    if (!user || user.role === "Agent") {
       navigate("/noaccess");
+      return;
     }
 
     const fetchPlayers = async () => {
       try {
         const response = await fetch("http://localhost:5000/transferlist");
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Wystąpił błąd podczas pobierania danych z serwera.");
         }
         const data = await response.json();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        
         const mappedData: Player[] = data.map((item: any[]) => ({
           id: item[0],
           name: item[1],
@@ -41,9 +41,8 @@ const Search: React.FC = () => {
           price: item[6],
         }));
         setPlayers(mappedData);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        setError(error.message);
+      } catch (err: any) {
+        setError(err.message);
       }
     };
 
@@ -63,73 +62,63 @@ const Search: React.FC = () => {
     setBudget(criteria.budget ?? 0);
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (!user || user.role === "Agent") return null;
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        paddingTop: 4,
-        paddingBottom: 4,
-        backgroundColor: "#f5f5f5",
-        minHeight: "100vh",
-        transition: "margin-left 0.3s ease",
-        marginLeft: isMenuOpen ? "250px" : "0",
-      }}
-    >
-      <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-
+    <Box sx={{ minHeight: "100vh", backgroundColor: "background.default", pb: 6 }}>
       <Box
+        component="header"
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          mb: 4,
+          padding: "16px 32px",
           backgroundColor: "#fff",
-          padding: 2,
-          boxShadow: 2,
-          borderRadius: 2,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
         }}
       >
-        {!isMenuOpen && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setIsMenuOpen(true)}
-            sx={{
-              borderRadius: 4,
-              boxShadow: 3,
-            }}
-          >
-            Open Menu
-          </Button>
-        )}
-        <Typography variant="h4" sx={{ fontWeight: 600 }}>
-          Wyszukiwarka Zawodników
+        <IconButton
+          onClick={() => setIsMenuOpen(true)}
+          sx={{ color: "primary.main", mr: 2 }}
+        >
+          <MenuIcon fontSize="large" />
+        </IconButton>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.main" }}>
+          Symulacja Transferowa
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          backgroundColor: "#fff",
-          padding: 3,
-          borderRadius: 2,
-          boxShadow: 2,
-        }}
-      >
-        <SearchForm onSearchPlayer={handleSearchPlayer} />
+      <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-        <Box sx={{ marginTop: 4 }}>
-          <CombinationResults
-            players={players}
-            positions={positions}
-            budget={budget}
-          />
-        </Box>
-      </Box>
-    </Container>
+      <Container maxWidth="lg" sx={{ mt: 5 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <Paper elevation={3} sx={{ padding: { xs: 3, md: 5 }, borderRadius: 3 }}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 800, mb: 4, textAlign: "center", color: "text.primary" }}
+          >
+            Wyszukiwarka Zawodników
+          </Typography>
+
+          <SearchForm onSearchPlayer={handleSearchPlayer} />
+
+          <Box sx={{ mt: 6 }}>
+            <CombinationResults
+              players={players}
+              positions={positions}
+              budget={budget}
+            />
+          </Box>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 

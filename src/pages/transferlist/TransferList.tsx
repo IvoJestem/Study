@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -15,11 +15,16 @@ import {
   DialogContent,
   DialogActions,
   Snackbar,
+  Alert,
+  Paper,
+  IconButton,
+  Grid,
 } from "@mui/material";
-import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
+import MenuIcon from "@mui/icons-material/Menu";
 import CardTable from "../../components/CardTable/CardTable";
 import { Player } from "../../types/Player";
 import { useUser } from "../../components/UseUser/UseUser";
+import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const TransferList: React.FC = () => {
   const { user } = useUser();
@@ -27,20 +32,20 @@ const TransferList: React.FC = () => {
   const [cards, setCards] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [clubPlayers, setClubPlayers] = useState<Player[]>([]);
- const [price, setPrice] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
   const [unit, setUnit] = useState<string>("tys");
-  const [error, setError] = useState<string | null>(null);
-   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-   const fetchPlayers = async () => {
+  const fetchPlayers = async () => {
     try {
       const response = await fetch(`http://localhost:5000/transferlist`);
-      if (!response.ok) {
-        throw new Error("Nie udało się pobrać listy zawodników.");
-      }
+      if (!response.ok) throw new Error("Nie udało się pobrać listy zawodników.");
       const data = await response.json();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mappedData: Player[] = data.map((item: any[]) => ({
         id: item[0],
         name: item[1],
@@ -51,49 +56,36 @@ const TransferList: React.FC = () => {
         price: item[6],
       }));
       setCards(mappedData);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-        setSnackbarOpen(true);
-      }
+    } catch (err: any) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
     }
   };
-    const fetchClubPlayers = async () => {
-      if (!user || !user.club) return;
-      try {
-        const response = await fetch(`http://localhost:5000/players/${user.club}`);
-        if (!response.ok) {
-                   throw new Error("Nie jesteś związany z klubem więc niektóre funkcje mogą być dla Ciebie niedostępne");
-        }
-        const data = await response.json();
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const mappedData: Player[] = data.map((item: any[]) => ({
-          id: item[0],
-          name: item[1],
-          position: item[2],
-          age: item[3],
-          nation: item[4],
-          club: item[5],
-          price: item[6],
-        }));
-          mappedData.sort((a, b) => a.name.localeCompare(b.name));
-        setClubPlayers(mappedData);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-          setSnackbarOpen(true); 
-        } else {
-          setError("Wystąpił nieznany błąd");
-          setSnackbarOpen(true);
-        }
-      }
-    };
+
+  const fetchClubPlayers = async () => {
+    if (!user?.club) return;
+    try {
+      const response = await fetch(`http://localhost:5000/players/${user.club}`);
+      if (!response.ok) throw new Error("Błąd pobierania kadry klubu.");
+      const data = await response.json();
+      const mappedData: Player[] = data.map((item: any[]) => ({
+        id: item[0],
+        name: item[1],
+        position: item[2],
+        age: item[3],
+        nation: item[4],
+        club: item[5],
+        price: item[6],
+      }));
+      setClubPlayers(mappedData.sort((a, b) => a.name.localeCompare(b.name)));
+    } catch (err: any) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
+    }
+  };
 
   useEffect(() => {
-
     fetchClubPlayers();
     fetchPlayers();
-  },  );
+  }, [user?.club]);
 
   const handlePlayerChange = (event: SelectChangeEvent<number>) => {
     const playerId = event.target.value as number;
@@ -102,267 +94,170 @@ const TransferList: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const value = event.target.value.replace(",", "."); 
-  if (/^\d{1,3}(\.\d{0,2})?$/.test(value)) {
-    setPrice(value.replace(".", ",")); 
-  }
-};
-
-
-const handleBlur = () => {
-  if (unit === "mln" && price && !price.includes(",")) {
-    setPrice(price + ",00"); 
-  }
-};
-
-
-
-
-  const handleUnitChange = (event: SelectChangeEvent<string>) => {
-  setUnit(event.target.value);
-    setPrice(""); 
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replace(",", ".");
+    if (/^\d{0,3}(\.\d{0,2})?$/.test(value)) {
+      setPrice(value.replace(".", ","));
+    }
   };
 
-
-const handleAddPlayerToTransferList = async () => {
-  if (!selectedPlayer || !price) {
-    alert("Wybierz zawodnika i podaj kwotę!");
-    return;
-  }
-
-
-  let formattedPrice = price;
-  if (unit === "mln") {
-
-    if (!formattedPrice.includes(",")) {
-      formattedPrice += ",00"; 
+  const handleBlur = () => {
+    if (unit === "mln" && price && !price.includes(",")) {
+      setPrice(price + ",00");
     }
-  }
+  };
 
-  try {
-    const response = await fetch("http://localhost:5000/transferlist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: selectedPlayer.id,
-        name: selectedPlayer.name,
-        position: selectedPlayer.position,
-        age: selectedPlayer.age,
-        nation: selectedPlayer.nation,
-        club: selectedPlayer.club,
-        price: `${formattedPrice} ${unit}`,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Błąd podczas dodawania zawodnika");
+  const handleAddPlayerToTransferList = async () => {
+    if (!selectedPlayer || !price) {
+      setSnackbar({ open: true, message: "Wypełnij cenę zawodnika!", severity: "error" });
+      return;
     }
 
-    alert("Zawodnik został dodany do listy transferowej");
-
-    await fetchPlayers();
-    await fetchClubPlayers(); 
-    setPrice("");
-    setIsDialogOpen(false);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error("Error:", err);
-      alert("Wystąpił problem przy dodawaniu zawodnika: " + err.message);
-    } else {
-      alert("Wystąpił nieznany błąd");
+    let formattedPrice = price;
+    if (unit === "mln" && !formattedPrice.includes(",")) {
+      formattedPrice += ",00";
     }
-  }
-};
+
+    try {
+      const response = await fetch("http://localhost:5000/transferlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: selectedPlayer.id,
+          name: selectedPlayer.name,
+          position: selectedPlayer.position,
+          age: selectedPlayer.age,
+          nation: selectedPlayer.nation,
+          club: selectedPlayer.club,
+          price: `${formattedPrice} ${unit}`,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Błąd podczas dodawania na listę.");
+
+      setSnackbar({ open: true, message: "Zawodnik wystawiony na sprzedaż!", severity: "success" });
+      fetchPlayers();
+      fetchClubPlayers();
+      handleDialogClose();
+    } catch (err: any) {
+      setSnackbar({ open: true, message: err.message, severity: "error" });
+    }
+  };
+
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setSelectedPlayer(null);
     setPrice("");
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  return (
+    <Box sx={{ minHeight: "100vh", backgroundColor: "background.default", pb: 6 }}>
+      <Box
+        component="header"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          padding: "16px 32px",
+          backgroundColor: "#fff",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+          position: "sticky",
+          top: 0,
+          zIndex: 10,
+        }}
+      >
+        <IconButton onClick={() => setIsMenuOpen(true)} sx={{ color: "primary.main", mr: 2 }}>
+          <MenuIcon fontSize="large" />
+        </IconButton>
+        <Typography variant="h6" sx={{ fontWeight: 700, color: "primary.main" }}>
+          Rynek Transferowy
+        </Typography>
+      </Box>
 
-return (
-  <Container
-    maxWidth="lg"
-    sx={{
-      paddingTop: 4,
-      paddingBottom: 4,
-      backgroundColor: "#f5f5f5",
-      minHeight: "100vh",
-      transition: "margin-left 0.3s ease",
-      marginLeft: isMenuOpen ? "250px" : "0",
-    }}
-  >
-    <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mb: 4,
-        backgroundColor: "#fff",
-        padding: 2,
-        boxShadow: 2,
-        borderRadius: 2,
-      }}
-    >
-      {!isMenuOpen && (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setIsMenuOpen(true)}
-          sx={{
-            borderRadius: 4,
-            boxShadow: 3,
-          }}
-        >
-          Open Menu
-        </Button>
-      )}
-      <Typography variant="h4" sx={{ fontWeight: 600 }}>
-        Lista Transferowa
-      </Typography>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 3, mb: 4 }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, mb: 3 }}>
+            Wystaw zawodnika
+          </Typography>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Wybierz zawodnika z kadry</InputLabel>
+            <Select
+              value={selectedPlayer?.id || ""}
+              onChange={handlePlayerChange}
+              label="Wybierz zawodnika z kadry"
+            >
+              {clubPlayers.map((player) => (
+                <MenuItem key={player.id} value={player.id}>
+                  {player.name} ({player.position})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Paper>
+
+        <Paper elevation={3} sx={{ borderRadius: 3, overflow: "hidden" }}>
+          <Box sx={{ p: 2, backgroundColor: "primary.main", color: "white" }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>Aktualna Lista Transferowa</Typography>
+          </Box>
+          <Box sx={{ p: 2 }}>
+            <CardTable cards={cards} />
+          </Box>
+        </Paper>
+      </Container>
+
+      <Dialog open={isDialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ fontWeight: "bold" }}>Wystaw zawodnika na sprzedaż</DialogTitle>
+        <DialogContent dividers>
+          {selectedPlayer && (
+            <Grid container spacing={2} sx={{ mt: 0.5 }}>
+              <Grid item xs={12}>
+                <TextField label="Zawodnik" value={selectedPlayer.name} fullWidth disabled variant="filled" />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField label="Pozycja" value={selectedPlayer.position} fullWidth disabled variant="filled" />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField label="Wiek" value={selectedPlayer.age} fullWidth disabled variant="filled" />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                  <TextField
+                    label={`Cena (${unit})`}
+                    value={price}
+                    onChange={handlePriceChange}
+                    onBlur={handleBlur}
+                    fullWidth
+                    autoFocus
+                  />
+                  <FormControl sx={{ minWidth: 100 }}>
+                    <Select value={unit} onChange={(e) => setUnit(e.target.value)}>
+                      <MenuItem value="tys">tys</MenuItem>
+                      <MenuItem value="mln">mln</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid>
+            </Grid>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ p: 3 }}>
+          <Button onClick={handleDialogClose} color="inherit">Anuluj</Button>
+          <Button onClick={handleAddPlayerToTransferList} variant="contained" color="primary">Zatwierdź ofertę</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity} variant="filled" sx={{ width: "100%", borderRadius: 2 }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
+  );
+};
 
-    <Box sx={{ mb: 4 }}>
-      <FormControl fullWidth variant="outlined">
-        <InputLabel id="player-select-label">Wybierz zawodnika</InputLabel>
-        <Select
-          labelId="player-select-label"
-          value={selectedPlayer ? selectedPlayer.id : ""}
-          onChange={handlePlayerChange}
-          label="Wybierz zawodnika"
-        >
-          {clubPlayers.map((player) => (
-            <MenuItem key={player.id} value={player.id}>
-              {player.name} - {player.position}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-
-    <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-      <DialogTitle>Wystaw zawodnika na sprzedaż</DialogTitle>
-      <DialogContent>
-        {selectedPlayer && (
-          <>
-            <TextField
-              label="Imię i nazwisko"
-              value={selectedPlayer.name}
-              fullWidth
-              margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              label="Pozycja"
-              value={selectedPlayer.position}
-              fullWidth
-              margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              label="Wiek"
-              value={selectedPlayer.age}
-              fullWidth
-              margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              label="Narodowość"
-              value={selectedPlayer.nation}
-              fullWidth
-              margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-            <TextField
-              label="Klub"
-              value={selectedPlayer.club}
-              fullWidth
-              margin="normal"
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-
-            {/* Nowe sekcje dla budżetu i jednostki */}
- <Box
-  sx={{
-    display: "flex",
-    alignItems: "center",  
-    gap: 2,
-    marginTop: 2,
-  }}
->
-<TextField
-  label={`Cena (${unit})`}
-  value={price}
-  onChange={handlePriceChange}
-  onBlur={handleBlur} 
-  fullWidth
-  sx={{
-    marginBottom: 0,
-  }}
-/>
-
-
-  <FormControl sx={{ width: "120px", marginBottom: 0 }}>
-    <Select
-      labelId="unit-label"
-      value={unit}
-      onChange={handleUnitChange}
-      fullWidth
-    >
-      <MenuItem value="tys">tys</MenuItem>
-      <MenuItem value="mln">mln</MenuItem>
-    </Select>
-  </FormControl>
-</Box>
-          </>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleDialogClose} color="secondary">
-          Anuluj
-        </Button>
-        <Button onClick={handleAddPlayerToTransferList} color="primary">
-          Dodaj do listy transferowej
-        </Button>
-      </DialogActions>
-    </Dialog>
-
-    <Snackbar
-      open={snackbarOpen}
-      autoHideDuration={6000}
-      onClose={handleSnackbarClose}
-      message={error || "Wystąpił błąd!"}
-    />
-
-    <Box
-      sx={{
-        backgroundColor: "#fff",
-        padding: 2,
-        boxShadow: 2,
-        borderRadius: 2,
-      }}
-    >
-      <CardTable cards={cards} />
-    </Box>
-  </Container>
-);
-}
 export default TransferList;

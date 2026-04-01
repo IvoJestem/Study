@@ -9,6 +9,10 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Paper,
+  Checkbox,
+  FormControlLabel,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 
@@ -39,9 +43,7 @@ const Register: React.FC = () => {
     }
 
     if (!agreeToTerms || !agreeToPrivacy) {
-      setError(
-        "Musisz zaakceptować warunki korzystania z systemu i politykę prywatności."
-      );
+      setError("Musisz zaakceptować wymagane zgody.");
       return;
     }
 
@@ -61,150 +63,153 @@ const Register: React.FC = () => {
       } else {
         setError(response.data.error);
       }
-    } catch (error) {
-      setError("Błąd podczas rejestracji użytkownika. Użytkownik z takimi danymi już istnieje");
+    } catch (err) {
+      setError("Użytkownik z takimi danymi już istnieje lub wystąpił błąd serwera.");
     }
   };
 
   return (
     <Box
       sx={{
-        width: 400,
-        margin: "0 auto",
-        padding: 3,
-        border: "1px solid #ccc",
-        borderRadius: 2,
-        boxShadow: 3,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "background.default",
+        p: 2,
       }}
     >
-      <Typography
-        variant="h4"
-        component="h2"
-        sx={{ textAlign: "center", mb: 2 }}
+      <Paper
+        elevation={4}
+        sx={{
+          maxWidth: 500,
+          width: "100%",
+          p: { xs: 3, md: 5 },
+          borderRadius: 4,
+        }}
       >
-        Rejestracja
-      </Typography>
-      <form onSubmit={handleRegister}>
-        <TextField
-          label="Imię i nazwisko"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <TextField
-          label="Hasło"
-          variant="outlined"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <TextField
-          label="Powtórz hasło"
-          variant="outlined"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-        <TextField
-          label="Klub lub Agencja"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={club}
-          onChange={(e) => setClub(e.target.value)}
-        />
-        <TextField
-          label="Adres e-mail"
-          variant="outlined"
-          type="email"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          label="Numer telefonu"
-          variant="outlined"
-          type="tel"
-          fullWidth
-          margin="normal"
-          value={phone === "" ? "" : phone}
-          onChange={(e) =>
-            setPhone(e.target.value === "" ? "" : Number(e.target.value))
-          }
-          inputProps={{ pattern: "[0-9]*", maxLength: 15 }}
-        />
-        <FormControl fullWidth variant="outlined" margin="normal">
-          <InputLabel>Rola w klubie</InputLabel>
-          <Select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            label="Rola w klubie"
-            required
-          >
-            <MenuItem value="Dyrektor Sportowy">Dyrektor Sportowy</MenuItem>
-            <MenuItem value="Menadżer">Menadżer</MenuItem>
-            <MenuItem value="Własciciel">Własciciel</MenuItem>
-            <MenuItem value="Prezydent">Prezydent</MenuItem>
-            <MenuItem value="Agent">Agent</MenuItem>
-          </Select>
-        </FormControl>
-        <Box sx={{ mt: 2 }}>
-          <input
-            type="checkbox"
-            checked={agreeToTerms}
-            onChange={(e) => setAgreeToTerms(e.target.checked)}
-            required
-          />
-          <Typography variant="body2" component="span" sx={{ ml: 1 }}>
-            Zgadzam się na przetwarzanie danych
-          </Typography>
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <input
-            type="checkbox"
-            checked={agreeToPrivacy}
-            onChange={(e) => setAgreeToPrivacy(e.target.checked)}
-            required
-          />
-          <Typography variant="body2" component="span" sx={{ ml: 1 }}>
-            Akceptuję politykę prywatności
-          </Typography>
-        </Box>
-        {error && (
-          <Box mt={2}>
-            <Typography color="error">{error}</Typography>
-          </Box>
-        )}
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{ fontWeight: 800, color: "primary.main", mb: 3 }}
         >
-          Zarejestruj
-        </Button>
-      </form>
-      <Button
-        variant="outlined"
-        color="secondary"
-        fullWidth
-        sx={{ mt: 2 }}
-        onClick={() => navigate("/login")}
-      >
-        Powrót do logowania
-      </Button>
+          Rejestracja
+        </Typography>
+
+        <Box
+          component="form"
+          onSubmit={handleRegister}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          <TextField
+            label="Imię i nazwisko"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <TextField
+              label="Hasło"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <TextField
+              label="Powtórz hasło"
+              type="password"
+              fullWidth
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </Box>
+          <TextField
+            label="Klub lub Agencja"
+            fullWidth
+            value={club}
+            onChange={(e) => setClub(e.target.value)}
+          />
+          <TextField
+            label="Adres e-mail"
+            type="email"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Numer telefonu"
+            type="tel"
+            fullWidth
+            value={phone}
+            onChange={(e) => setPhone(e.target.value === "" ? "" : Number(e.target.value))}
+            inputProps={{ pattern: "[0-9]*", maxLength: 15 }}
+          />
+          <FormControl fullWidth required>
+            <InputLabel>Rola w klubie</InputLabel>
+            <Select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              label="Rola w klubie"
+            >
+              <MenuItem value="Dyrektor Sportowy">Dyrektor Sportowy</MenuItem>
+              <MenuItem value="Menadżer">Menadżer</MenuItem>
+              <MenuItem value="Własciciel">Własciciel</MenuItem>
+              <MenuItem value="Prezydent">Prezydent</MenuItem>
+              <MenuItem value="Agent">Agent</MenuItem>
+            </Select>
+          </FormControl>
+
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={agreeToTerms}
+                  onChange={(e) => setAgreeToTerms(e.target.checked)}
+                  required
+                />
+              }
+              label={<Typography variant="body2">Zgadzam się na przetwarzanie danych</Typography>}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={agreeToPrivacy}
+                  onChange={(e) => setAgreeToPrivacy(e.target.checked)}
+                  required
+                />
+              }
+              label={<Typography variant="body2">Akceptuję politykę prywatności</Typography>}
+            />
+          </Box>
+
+          {error && <Alert severity="error">{error}</Alert>}
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            size="large"
+            sx={{ mt: 1, borderRadius: 2, fontWeight: "bold", py: 1.5 }}
+          >
+            Zarejestruj
+          </Button>
+
+          <Button
+            variant="text"
+            color="secondary"
+            fullWidth
+            onClick={() => navigate("/login")}
+            sx={{ fontWeight: "bold", textTransform: "none" }}
+          >
+            Masz już konto? Zaloguj się
+          </Button>
+        </Box>
+      </Paper>
     </Box>
   );
 };

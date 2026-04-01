@@ -16,6 +16,15 @@ import {
 import { useUser } from "../UseUser/UseUser";
 import { useNavigate } from "react-router-dom";
 
+const formFields = [
+  { label: "Imię i nazwisko", name: "name", type: "text" },
+  { label: "Email", name: "email", type: "email" },
+  { label: "Telefon", name: "phone", type: "text" },
+  { label: "Hasło", name: "password", type: "password" },
+  { label: "Klub", name: "club", type: "text" },
+  { label: "Rola", name: "role", type: "text" },
+];
+
 const UserProfile: React.FC = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
@@ -74,8 +83,6 @@ const UserProfile: React.FC = () => {
         }
       );
 
-      console.log(response.data); 
-
       if (response.data.success) {
         setUser({ ...editedUser, avatar: avatar as string });
         setIsEditing(false);
@@ -132,19 +139,19 @@ const UserProfile: React.FC = () => {
   };
 
   if (!user) {
-    return <Typography variant="h6">No user data available.</Typography>;
+    return <Typography variant="h6">Brak danych użytkownika.</Typography>;
   }
 
   return (
-    <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "0 auto" }}>
-      <Typography variant="h4" gutterBottom>
-        My Profile
+    <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "2rem auto", borderRadius: 3 }}>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "primary.main" }}>
+        Mój Profil
       </Typography>
-      <Box textAlign="center" mb={3}>
+      <Box textAlign="center" mb={4}>
         <Avatar
           alt={user.name}
           src={avatar ? String(avatar) : "/avatar.jpg"}
-          sx={{ width: 120, height: 120, margin: "0 auto" }}
+          sx={{ width: 120, height: 120, margin: "0 auto", boxShadow: 3 }}
         />
         {isEditing && (
           <Box mt={2}>
@@ -156,135 +163,64 @@ const UserProfile: React.FC = () => {
               style={{ display: "none" }}
             />
             <label htmlFor="avatar-upload">
-              <Button variant="contained" color="primary" component="span">
-                Change Avatar
+              <Button variant="outlined" color="primary" component="span" sx={{ borderRadius: 2 }}>
+                Zmień Awatar
               </Button>
             </label>
           </Box>
         )}
       </Box>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            label="Full Name"
-            name="name"
-            value={editedUser.name}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Email"
-            name="email"
-            value={editedUser.email}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Phone"
-            name="phone"
-            value={editedUser.phone}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Password"
-            name="password"
-            type="password"
-            value={editedUser.password}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Club"
-            name="club"
-            value={editedUser.club}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Role"
-            name="role"
-            value={editedUser.role}
-            onChange={handleChange}
-            fullWidth
-            disabled={!isEditing}
-            variant={isEditing ? "outlined" : "standard"}
-          />
-        </Grid>
+      <Grid container spacing={3}>
+        {formFields.map((field) => (
+          <Grid item xs={12} key={field.name}>
+            <TextField
+              label={field.label}
+              name={field.name}
+              type={field.type}
+              value={editedUser[field.name as keyof typeof editedUser]}
+              onChange={handleChange}
+              fullWidth
+              disabled={!isEditing}
+              variant={isEditing ? "outlined" : "standard"}
+            />
+          </Grid>
+        ))}
+        
         <Grid item xs={12} mt={2}>
           {!isEditing ? (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleEditClick}
-              >
-                Edit
+            <Box display="flex" justifyContent="space-between">
+              <Button variant="contained" color="primary" onClick={handleEditClick} sx={{ borderRadius: 2 }}>
+                Edytuj profil
               </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleOpenConfirmDialog}
-                sx={{ ml: 2 }}
-              >
-                Delete Account
+              <Button variant="outlined" color="error" onClick={handleOpenConfirmDialog} sx={{ borderRadius: 2 }}>
+                Usuń konto
               </Button>
-            </>
+            </Box>
           ) : (
-            <>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleSaveClick}
-              >
-                Save
+            <Box display="flex" gap={2}>
+              <Button variant="contained" color="success" onClick={handleSaveClick} sx={{ flexGrow: 1, borderRadius: 2 }}>
+                Zapisz
               </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleCancelClick}
-                sx={{ ml: 2 }}
-              >
-                Cancel
+              <Button variant="outlined" color="primary" onClick={handleCancelClick} sx={{ flexGrow: 1, borderRadius: 2 }}>
+                Anuluj
               </Button>
-            </>
+            </Box>
           )}
         </Grid>
       </Grid>
 
       <Dialog open={openConfirmDialog} onClose={handleCloseConfirmDialog}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle sx={{ fontWeight: "bold", color: "error.main" }}>Potwierdzenie usunięcia</DialogTitle>
         <DialogContent>
           <Typography>
-            Czy na pewno chcesz usunąć swoje konto? Tej czynności nie można
-            cofnąć.
+            Czy na pewno chcesz usunąć swoje konto? Tej czynności nie można cofnąć.
           </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseConfirmDialog} color="primary">
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleCloseConfirmDialog} variant="outlined" color="primary">
             Anuluj
           </Button>
-          <Button onClick={handleDeleteAccount} color="error">
+          <Button onClick={handleDeleteAccount} variant="contained" color="error">
             Usuń
           </Button>
         </DialogActions>

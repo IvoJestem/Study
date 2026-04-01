@@ -19,13 +19,15 @@ export const CardInfo: React.FC<PlayerInfoProps> = ({
   price,
 }) => {
   return (
-    <TableRow>
-      <TableCell>{name}</TableCell>
+    <TableRow hover sx={{ transition: "0.2s" }}>
+      <TableCell sx={{ fontWeight: 600 }}>{name}</TableCell>
       <TableCell>{position}</TableCell>
       <TableCell>{age}</TableCell>
       <TableCell>{nation}</TableCell>
       <TableCell>{club}</TableCell>
-      <TableCell>{price}</TableCell>
+      <TableCell sx={{ fontWeight: "bold", color: "primary.main" }}>
+        {price}
+      </TableCell>
     </TableRow>
   );
 };

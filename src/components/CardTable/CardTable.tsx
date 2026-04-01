@@ -15,6 +15,22 @@ interface CardTableProps {
   cards: Player[];
 }
 
+type SortableKeys = "name" | "position" | "age" | "nation" | "club" | "price";
+
+interface HeadCell {
+  id: SortableKeys;
+  label: string;
+}
+
+const headCells: HeadCell[] = [
+  { id: "name", label: "Nazwa" },
+  { id: "position", label: "Pozycja" },
+  { id: "age", label: "Wiek" },
+  { id: "nation", label: "Narodowość" },
+  { id: "club", label: "Klub" },
+  { id: "price", label: "Cena" },
+];
+
 const positionOrder: { [key: string]: number } = {
   Bramkarz: 1,
   "Lewy obrońca": 2,
@@ -54,31 +70,24 @@ const CardTable: React.FC<CardTableProps> = ({ cards }) => {
       sortableCards.sort((a, b) => {
         const { key, direction } = sortConfig;
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let aValue: any, bValue: any;
+        let aValue: string | number = a[key] as string | number;
+        let bValue: string | number = b[key] as string | number;
 
         if (key === "position") {
-          aValue = positionOrder[a[key]];
-          bValue = positionOrder[b[key]];
+          aValue = positionOrder[a[key] as string] || 99;
+          bValue = positionOrder[b[key] as string] || 99;
         } else if (key === "price") {
-          aValue = sortNumeric(a[key]);
-          bValue = sortNumeric(b[key]);
-        } else {
-          aValue = a[key];
-          bValue = b[key];
+          aValue = sortNumeric(a[key] as string);
+          bValue = sortNumeric(b[key] as string);
         }
 
-        if (typeof aValue === "string") {
+        if (typeof aValue === "string" && typeof bValue === "string") {
           aValue = aValue.toLowerCase();
           bValue = bValue.toLowerCase();
         }
 
-        if (aValue < bValue) {
-          return direction === "asc" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return direction === "asc" ? 1 : -1;
-        }
+        if (aValue < bValue) return direction === "asc" ? -1 : 1;
+        if (aValue > bValue) return direction === "asc" ? 1 : -1;
         return 0;
       });
     }
@@ -87,98 +96,43 @@ const CardTable: React.FC<CardTableProps> = ({ cards }) => {
 
   const requestSort = (key: keyof Player) => {
     let direction: "asc" | "desc" = "asc";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "asc"
-    ) {
+    if (sortConfig?.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
     setSortConfig({ key, direction });
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
       <Table>
-        <TableHead>
+        <TableHead sx={{ backgroundColor: "rgba(0, 0, 0, 0.04)" }}>
           <TableRow>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "name"}
-                direction={
-                  sortConfig?.key === "name" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("name")}
-              >
-                Nazwa
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "position"}
-                direction={
-                  sortConfig?.key === "position" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("position")}
-              >
-                Pozycja
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "age"}
-                direction={
-                  sortConfig?.key === "age" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("age")}
-              >
-                Wiek
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "nation"}
-                direction={
-                  sortConfig?.key === "nation" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("nation")}
-              >
-                Narodowość
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "club"}
-                direction={
-                  sortConfig?.key === "club" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("club")}
-              >
-                Klub
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig?.key === "price"}
-                direction={
-                  sortConfig?.key === "price" ? sortConfig.direction : "asc"
-                }
-                onClick={() => requestSort("price")}
-              >
-                Cena
-              </TableSortLabel>
-            </TableCell>
+            {headCells.map((headCell) => (
+              <TableCell key={headCell.id} sx={{ fontWeight: "bold" }}>
+                <TableSortLabel
+                  active={sortConfig?.key === headCell.id}
+                  direction={
+                    sortConfig?.key === headCell.id ? sortConfig.direction : "asc"
+                  }
+                  onClick={() => requestSort(headCell.id)}
+                >
+                  {headCell.label}
+                </TableSortLabel>
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {sortedCards.map((card, index) => (
-            <TableRow key={index}>
-              <TableCell>{card.name}</TableCell>
+            <TableRow key={card.id || index} hover sx={{ transition: "0.2s" }}>
+              <TableCell sx={{ fontWeight: 500 }}>{card.name}</TableCell>
               <TableCell>{card.position}</TableCell>
               <TableCell>{card.age}</TableCell>
               <TableCell>{card.nation}</TableCell>
               <TableCell>{card.club}</TableCell>
-              <TableCell>{card.price}</TableCell>
+              <TableCell sx={{ fontWeight: "bold", color: "primary.main" }}>
+                {card.price}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

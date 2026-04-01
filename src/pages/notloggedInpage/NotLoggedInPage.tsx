@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Typography, Button, useTheme, Paper } from "@mui/material";
+import { Box, Typography, Button, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const NotLoggedInPage: React.FC = () => {
-  const theme = useTheme();
   const navigate = useNavigate();
 
   const handleLoginRedirect = () => {
@@ -17,32 +17,34 @@ const NotLoggedInPage: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundColor: theme.palette.background.default,
-        padding: 2,
+        backgroundColor: "background.default",
+        padding: 3,
       }}
     >
       <Paper
+        elevation={4}
         sx={{
-          padding: 4,
+          padding: { xs: 4, md: 6 },
           textAlign: "center",
-          maxWidth: 600,
-          margin: "0 auto",
-          boxShadow: 3,
+          maxWidth: 500,
+          width: "100%",
+          borderRadius: 4,
         }}
       >
+        <LockOutlinedIcon sx={{ fontSize: 80, color: "primary.main", mb: 2 }} />
         <Typography
           variant="h4"
           component="h1"
-          sx={{ mb: 2, fontWeight: "bold" }}
+          sx={{ mb: 2, fontWeight: 800, color: "text.primary" }}
         >
           Oopsie! 😅
         </Typography>
-        <Typography variant="body1" sx={{ mb: 3 }}>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
           Wygląda na to, że próbujesz uzyskać dostęp do strony, ale nie jesteś
           jeszcze zalogowany. Czyżbyś zapomniał się zalogować? Nie martw się,
           zdarza się najlepszym z nas!
         </Typography>
-        <Typography variant="body2" sx={{ mb: 3 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
           Aby kontynuować, musisz być zalogowany. Kliknij poniższy przycisk, aby
           przejść do strony logowania.
         </Typography>
@@ -50,7 +52,14 @@ const NotLoggedInPage: React.FC = () => {
           variant="contained"
           color="primary"
           size="large"
-          sx={{ paddingX: 4 }}
+          fullWidth
+          sx={{
+            paddingY: 1.5,
+            borderRadius: 2,
+            fontWeight: "bold",
+            textTransform: "none",
+            fontSize: "1.1rem",
+          }}
           onClick={handleLoginRedirect}
         >
           Zaloguj się

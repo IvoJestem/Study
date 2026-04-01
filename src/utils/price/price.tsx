@@ -1,42 +1,40 @@
 import { Player } from "../../types/Player";
 
-
 export const convertPriceToNumber = (
   amount: number | null,
   unit: string
 ): number | null => {
-  if (amount === null) {
-    return null;
-  }
+  if (amount === null) return null;
 
-  switch (unit) {
-    case "mln":
-      return amount * 1000000;
-    case "tyś":
-      return amount * 1000;
-    default:
-      return amount;
+  const normalizedUnit = unit.toLowerCase();
+
+  if (normalizedUnit.includes("mln")) {
+    return amount * 1000000;
   }
+  if (normalizedUnit.includes("tyś") || normalizedUnit.includes("tys")) {
+    return amount * 1000;
+  }
+  return amount;
 };
 
 export const calculateTotalPrice = (players: Player[]): number => {
   return players.reduce((total, player) => {
-    if (player.price === "") {
-      return total;
-    }
+    if (!player.price) return total;
 
-    const priceString = player.price;
-    const amount = parseFloat(
-      priceString.replace(/[^0-9.,]/g, "").replace(",", ".")
-    );
+    const normalizedPrice = player.price.toLowerCase().replace(",", ".");
+    const numericMatch = normalizedPrice.match(/(\d+(\.\d+)?)/);
+    
+    if (!numericMatch) return total;
 
-    let unit: string = "tyś";
-    if (priceString.toLowerCase().includes("mln")) {
+    const amount = parseFloat(numericMatch[0]);
+    let unit = "";
+
+    if (normalizedPrice.includes("mln")) {
       unit = "mln";
-    } else if (priceString.toLowerCase().includes("tyś")) {
+    } else if (normalizedPrice.includes("tyś") || normalizedPrice.includes("tys")) {
       unit = "tyś";
     }
 
-    return total + (amount ? convertPriceToNumber(amount, unit) ?? 0 : 0);
+    return total + (convertPriceToNumber(amount, unit) ?? 0);
   }, 0);
 };

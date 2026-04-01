@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../contexts/UserContext";
+
 import {
   Box,
   Button,
@@ -10,16 +10,18 @@ import {
   Alert,
   IconButton,
   InputAdornment,
+  Paper,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useUser } from "../../components/UseUser/UseUser";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext)!;
+  const { setUser } = useUser();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,15 +32,13 @@ const Login: React.FC = () => {
       });
 
       if (response.data.success) {
-        const user = response.data.user;
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
+        setUser(response.data.user);
         navigate("/home");
       } else {
-        setError(response.data.message);
+        setErrorMsg(response.data.message);
       }
-    } catch (error) {
-      setError("Wystąpił błąd podczas logowania.");
+    } catch (err) {
+      setErrorMsg("Wystąpił błąd podczas logowania.");
     }
   };
 
@@ -49,29 +49,41 @@ const Login: React.FC = () => {
   return (
     <Box
       sx={{
-        maxWidth: 400,
-        mx: "auto",
-        mt: 8,
-        p: 4,
-        borderRadius: 2,
-        boxShadow: 3,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
         backgroundColor: "background.default",
+        p: 2,
       }}
     >
-      <Typography
-        variant="h4"
-        component="h2"
-        align="center"
-        gutterBottom
+      <Paper
+        elevation={4}
         sx={{
-          fontWeight: "bold",
-          color: "primary.main",
+          maxWidth: 450,
+          width: "100%",
+          p: { xs: 3, md: 5 },
+          borderRadius: 4,
         }}
       >
-        Login
-      </Typography>
-      <form onSubmit={handleLogin}>
-        <Box mb={2}>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          gutterBottom
+          sx={{
+            fontWeight: 800,
+            color: "primary.main",
+            mb: 4,
+          }}
+        >
+          Logowanie
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleLogin}
+          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+        >
           <TextField
             label="Imię i Nazwisko"
             variant="outlined"
@@ -80,8 +92,6 @@ const Login: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </Box>
-        <Box mb={2}>
           <TextField
             label="Hasło"
             variant="outlined"
@@ -103,37 +113,43 @@ const Login: React.FC = () => {
               ),
             }}
           />
+          {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            size="large"
+            sx={{
+              py: 1.5,
+              borderRadius: 2,
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+              textTransform: "none",
+            }}
+          >
+            Zaloguj
+          </Button>
         </Box>
-        {error && (
-          <Box mb={2}>
-            <Alert severity="error">{error}</Alert>
-          </Box>
-        )}
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{
-            mt: 2,
-            py: 1.5,
-            fontWeight: "bold",
-          }}
-        >
-          Zaloguj
-        </Button>
-      </form>
-      <Box mt={2} textAlign="center">
-        <Button
-          onClick={goToRegister}
-          color="secondary"
-          sx={{
-            fontWeight: "bold",
-          }}
-        >
-          Zarejestruj
-        </Button>
-      </Box>
+        <Box mt={3} textAlign="center">
+          <Typography variant="body2" color="text.secondary">
+            Nie masz konta?{" "}
+            <Button
+              onClick={goToRegister}
+              color="secondary"
+              sx={{
+                fontWeight: "bold",
+                textTransform: "none",
+                p: 0,
+                minWidth: "auto",
+                ml: 0.5,
+              }}
+            >
+              Zarejestruj się
+            </Button>
+          </Typography>
+        </Box>
+      </Paper>
     </Box>
   );
 };

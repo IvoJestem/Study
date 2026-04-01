@@ -4,17 +4,20 @@ import {
   Button,
   Typography,
   IconButton,
-  Avatar,
   useTheme,
+  Container,
+  Grid,
+  Card,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { testimonials } from "../../components/opinions/opinions";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import GroupIcon from "@mui/icons-material/Group";
+
+import SlideOutMenu from "../../components/SlideOutMenu/SlideOutMenu";
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -23,23 +26,13 @@ const Home: React.FC = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // Zamiast alertu, nawigacja np. do listy transferowej
   const handleGetStartedClick = () => {
-    alert("Witaj użytkowniku, na naszej stronie");
+    navigate("/transferlist");
   };
 
   const handleLogoClick = () => {
     navigate("/userprofilepage");
-  };
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    arrows: false,
   };
 
   return (
@@ -47,242 +40,167 @@ const Home: React.FC = () => {
       sx={{
         position: "relative",
         minHeight: "100vh",
-        backgroundColor: "#f0f4f8",
-        padding: 2,
-        overflow: "hidden",
+        backgroundColor: "#f4f7f6", // Delikatniejszy, nowocześniejszy szary
+        overflowX: "hidden",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      {/* Header */}
+      {/* HEADER */}
       <Box
         component="header"
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: 2,
+          padding: "16px 32px",
           backgroundColor: "#fff",
-          boxShadow: 2,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
           zIndex: 10,
+          position: "sticky",
+          top: 0,
         }}
       >
-        <IconButton
-          onClick={toggleMenu}
-          sx={{ color: theme.palette.primary.main }}
-        >
-          <MenuIcon />
+        <IconButton onClick={toggleMenu} sx={{ color: theme.palette.primary.main }}>
+          <MenuIcon fontSize="large" />
         </IconButton>
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <IconButton onClick={handleLogoClick} sx={{ textDecoration: "none" }}>
-            <AccountCircle />
-          </IconButton>
-        </Box>
+        <IconButton onClick={handleLogoClick} sx={{ color: theme.palette.primary.main }}>
+          <AccountCircle fontSize="large" />
+        </IconButton>
       </Box>
 
       <SlideOutMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      {/* Main Content */}
+      {/* MAIN CONTENT */}
       <Box
         component="main"
         sx={{
-          padding: 3,
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
           flexGrow: 1,
+          pb: 6,
         }}
       >
-        {/* Hero Section */}
+        {/* HERO SECTION */}
         <Box
-          component="section"
           sx={{
             textAlign: "center",
-            marginBottom: 4,
-            backgroundColor: theme.palette.primary.main,
-            padding: 4,
-            boxShadow: 3,
-            borderRadius: 3,
-            backgroundImage:
-              "linear-gradient(135deg, #6b73ff 0%, #000dff 100%)",
+            padding: { xs: "60px 20px", md: "100px 20px" },
+            background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)", // Bardziej profesjonalny granat
             color: "#fff",
-            animation: "fadeIn 2s ease-in-out",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
           }}
         >
-          <Typography variant="h3" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
-            Witaj
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 3 }}>
-            Naszym celem jest dostarczenie innowacyjnego rozwiązania, które ułatwi zarządzanie transferami piłkarskimi. Wierzymy, że sport to nie tylko rywalizacja na boisku, ale również strategiczne decyzje podejmowane poza nim. Tworząc naszą aplikację, chcemy wspierać kluby, menedżerów i pasjonatów futbolu w efektywnym budowaniu zespołów.
-
-Nasz system umożliwia dodawanie zawodników do list transferowych, analizowanie ich wartości rynkowej oraz skuteczne zarządzanie procesem transferowym. Dzięki danym pozyskiwanym z różnych źródeł oraz aplikacja stanowi praktyczne narzędzie zarówno dla profesjonalistów, jak i entuzjastów piłki nożnej.
-
-Jesteśmy zespołem pasjonatów technologii i sportu, którzy wierzą w siłę innowacji. Nasze doświadczenie w projektowaniu aplikacji oraz dogłębna wiedza o świecie futbolu pozwoliły nam stworzyć produkt odpowiadający rzeczywistym potrzebom użytkowników.
-
-Zapraszamy do odkrywania naszego systemu i korzystania z jego możliwości. Razem możemy rewolucjonizować sposób, w jaki zarządzamy transferami piłkarskimi!
-          </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{ paddingX: 4 }}
-            onClick={handleGetStartedClick}
-          >
-            Kliknij!
-          </Button>
+          <Container maxWidth="md">
+            <Typography variant="h2" component="h1" sx={{ fontWeight: 800, mb: 3, fontSize: { xs: "2.5rem", md: "3.75rem" } }}>
+              Zarządzaj Transferami <br /> Jak Profesjonalista
+            </Typography>
+            <Typography variant="h6" sx={{ mb: 4, fontWeight: 300, opacity: 0.9 }}>
+              Innowacyjne narzędzie dla klubów, menedżerów i pasjonatów piłki nożnej.
+              Buduj swój wymarzony skład i analizuj rynek w czasie rzeczywistym.
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                paddingX: 5,
+                paddingY: 1.5,
+                fontSize: "1.1rem",
+                backgroundColor: "#ff4081", // Ciekawy akcent kolorystyczny (Róż/Magenta)
+                "&:hover": { backgroundColor: "#f50057" },
+              }}
+              onClick={handleGetStartedClick}
+            >
+              Rozpocznij
+            </Button>
+          </Container>
         </Box>
 
-        {/* Offerings Section */}
-        <Box component="section" sx={{ mb: 4 }}>
-          <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-            Co oferujemy?
-          </Typography>
-          <Typography variant="body1">
-        Oferujemy innowacyjne narzędzie do zarządzania transferami piłkarzy,
-          </Typography>
-        </Box>
-
-        {/* Testimonials Section */}
-        <Box
-          component="section"
-          sx={{
-            textAlign: "center",
-            marginBottom: 4,
-            backgroundColor: "#fff",
-            padding: 3,
-            boxShadow: 3,
-            borderRadius: 2,
-            animation: "fadeIn 2s ease-in-out",
-          }}
-        >
-          <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
-            Referencje
-          </Typography>
-          <Slider {...sliderSettings}>
-            {testimonials.map((testimonial, index) => (
-              <Box key={index} sx={{ padding: 2 }}>
-                <Avatar
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  sx={{
-                    width: 64,
-                    height: 64,
-                    margin: "0 auto",
-                    marginBottom: 2,
-                    boxShadow: 2,
-                  }}
-                />
-                <Typography variant="body1" sx={{ fontStyle: "italic", mb: 1 }}>
-                  "{testimonial.content}"
+        <Container maxWidth="lg" sx={{ mt: -5 }}>
+          {/* CARDS / OFFERINGS SECTION */}
+          <Grid container spacing={4} sx={{ mb: 8 }}>
+            <Grid item xs={12} md={4}>
+              <Card sx={{ height: "100%", textAlign: "center", p: 3, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", borderRadius: 3 }}>
+                <GroupIcon sx={{ fontSize: 60, color: theme.palette.primary.main, mb: 2 }} />
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>Baza Zawodników</Typography>
+                <Typography color="textSecondary">
+                  Uzyskaj dostęp do szerokiej listy graczy, przeglądaj ich statystyki, pozycje i wartość rynkową w jednym miejscu.
                 </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  - {testimonial.name}
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card sx={{ height: "100%", textAlign: "center", p: 3, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", borderRadius: 3 }}>
+                <TrendingUpIcon sx={{ fontSize: 60, color: theme.palette.primary.main, mb: 2 }} />
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>Analiza Rynku</Typography>
+                <Typography color="textSecondary">
+                  Śledź trendy transferowe, sprawdzaj, kto jest na liście i dokonuj trafnych decyzji na podstawie twardych danych.
                 </Typography>
-              </Box>
-            ))}
-          </Slider>
-        </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card sx={{ height: "100%", textAlign: "center", p: 3, boxShadow: "0 10px 30px rgba(0,0,0,0.08)", borderRadius: 3 }}>
+                <SportsSoccerIcon sx={{ fontSize: 60, color: theme.palette.primary.main, mb: 2 }} />
+                <Typography variant="h5" sx={{ fontWeight: 600, mb: 2 }}>Zarządzaj Składem</Typography>
+                <Typography color="textSecondary">
+                  Kupuj i sprzedawaj zawodników, optymalizuj budżet swojego klubu i zbuduj drużynę gotową na mistrzostwo.
+                </Typography>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* ABOUT US TEXT */}
+          <Box sx={{ mb: 8, textAlign: "center", padding: "0 20px" }}>
+            <Typography variant="h4" component="h2" sx={{ fontWeight: 700, mb: 4 }}>
+              Nasza Misja
+            </Typography>
+            <Typography variant="body1" sx={{ color: "text.secondary", maxWidth: "800px", margin: "0 auto", lineHeight: 1.8 }}>
+              Wierzymy, że sport to nie tylko rywalizacja na boisku, ale również strategiczne decyzje podejmowane poza nim.
+              Tworząc naszą aplikację, chcemy wspierać kluby, menedżerów i pasjonatów futbolu w efektywnym budowaniu zespołów.
+              Nasz system umożliwia dodawanie zawodników do list transferowych, analizowanie ich wartości rynkowej oraz
+              skuteczne zarządzanie procesem transferowym. Razem możemy rewolucjonizować sposób, w jaki zarządzamy
+              transferami piłkarskimi!
+            </Typography>
+          </Box>
+        </Container>
       </Box>
 
-      {/* Footer */}
+      {/* FOOTER */}
       <Box
         component="footer"
         sx={{
-          padding: 3,
           backgroundColor: "#fff",
-          boxShadow: 2,
-          marginTop: "auto",
+          padding: "40px 20px",
+          borderTop: `1px solid #e0e0e0`,
           transition: "margin-left 0.3s ease",
           marginLeft: isMenuOpen ? "250px" : "0",
-          borderTop: `3px solid ${theme.palette.primary.light}`,
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box component="nav">
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li>
-                <Button
-                  onClick={() =>
-                    window.open(
-                      
-                    )
-                  }
-                  sx={{
-                    textDecoration: "none",
-                    color: theme.palette.primary.main,
-                    display: "block",
-                  }}
-                >
-                  O NAS
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={() =>
-                    window.open("../../../public/services.pdf", "_blank")
-                  }
-                  sx={{
-                    textDecoration: "none",
-                    color: theme.palette.primary.main,
-                    display: "block",
-                  }}
-                >
-                  Usuługi
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={() => window.open("mailto:mail@mail.pl")}
-                  sx={{
-                    textDecoration: "none",
-                    color: theme.palette.primary.main,
-                    display: "block",
-                  }}
-                >
-                  Kontakt
-                </Button>
-              </li>
-            </ul>
-          </Box>
+        <Container maxWidth="lg">
+          <Grid container spacing={4} justifyContent="center">
+            {/* Nav Links */}
+            <Grid item xs={12} sm={4} textAlign={{ xs: "center", sm: "left" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Nawigacja</Typography>
+              <Button color="inherit" onClick={() => window.scrollTo(0, 0)} sx={{ display: "block", mb: 1 }}>Strona Główna</Button>
+              <Button color="inherit" onClick={() => window.open("../../../public/services.pdf", "_blank")} sx={{ display: "block", mb: 1 }}>Usługi</Button>
+              <Button color="inherit" onClick={() => window.open("mailto:mail@mail.pl")} sx={{ display: "block" }}>Kontakt</Button>
+            </Grid>
 
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <Button
-              onClick={() => window.open("https://www.facebook.com", "_blank")}
-              sx={{
-                textDecoration: "none",
-                color: theme.palette.primary.main,
-              }}
-            >
-              Facebook
-            </Button>
-            <Button
-              onClick={() => window.open("https://twitter.com", "_blank")}
-              sx={{
-                textDecoration: "none",
-                color: theme.palette.primary.main,
-              }}
-            >
-              Twitter
-            </Button>
-            <Button
-              onClick={() => window.open("https://www.instagram.com", "_blank")}
-              sx={{
-                textDecoration: "none",
-                color: theme.palette.primary.main,
-              }}
-            >
-              Instagram
-            </Button>
+            {/* Social Media */}
+            <Grid item xs={12} sm={4} textAlign={{ xs: "center", sm: "left" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>Obserwuj nas</Typography>
+              <Button color="primary" onClick={() => window.open("https://www.facebook.com", "_blank")} sx={{ display: "block", mb: 1 }}>Facebook</Button>
+              <Button color="primary" onClick={() => window.open("https://twitter.com", "_blank")} sx={{ display: "block", mb: 1 }}>Twitter</Button>
+              <Button color="primary" onClick={() => window.open("https://www.instagram.com", "_blank")} sx={{ display: "block" }}>Instagram</Button>
+            </Grid>
+          </Grid>
+          <Box textAlign="center" sx={{ mt: 4, pt: 2, borderTop: "1px solid #eee" }}>
+            <Typography variant="body2" color="textSecondary">
+              © {new Date().getFullYear()} System Transferowy. Wszelkie prawa zastrzeżone.
+            </Typography>
           </Box>
-        </Box>
+        </Container>
       </Box>
     </Box>
   );

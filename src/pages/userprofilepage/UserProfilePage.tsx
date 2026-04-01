@@ -1,35 +1,37 @@
 import React from "react";
-import { Container, Typography, Box, Button } from "@mui/material";
+import { Container, Box, Button, Typography } from "@mui/material";
 import UserProfile from "../../components/UserProfile/UserProfile";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/UseUser/UseUser";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const UserProfilePage: React.FC = () => {
   const { user } = useUser();
   const navigate = useNavigate();
 
   if (!user) {
-    return <Typography variant="h6">Proszę się zalogować.</Typography>;
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 10 }}>
+        <Typography variant="h6">Proszę się zalogować.</Typography>
+      </Box>
+    );
   }
 
   return (
-    <Container>
-      <Box my={4} textAlign="center">
-        <Typography variant="h3" component="h1" gutterBottom>
-          User Profile
-        </Typography>
-        <UserProfile />
-        <Box mt={2} textAlign="center">
+    <Box sx={{ minHeight: "100vh", backgroundColor: "background.default", py: 4 }}>
+      <Container maxWidth="md">
+        <Box sx={{ mb: 2 }}>
           <Button
-            variant="contained"
-            color="primary"
+            startIcon={<ArrowBackIcon />}
             onClick={() => navigate("/home")}
+            sx={{ fontWeight: "bold", textTransform: "none" }}
           >
-            Przejdź do Strony Głównej
+            Wróć do Strony Głównej
           </Button>
         </Box>
-      </Box>
-    </Container>
+        <UserProfile />
+      </Container>
+    </Box>
   );
 };
 

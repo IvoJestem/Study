@@ -6,6 +6,7 @@ import {
   Select,
   InputLabel,
   Button,
+  FormControl,
 } from "@mui/material";
 import { convertPriceToNumber } from "../../utils/price/price";
 
@@ -100,7 +101,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 2,
+        gap: 2.5,
         maxWidth: 600,
         margin: "0 auto",
       }}
@@ -112,27 +113,25 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         variant="outlined"
         fullWidth
         disabled={isLocked}
-        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
-      <InputLabel id="position-select-label">Pozycja</InputLabel>
-      <Select
-        labelId="position-select-label"
-        multiple
-        value={positionsSelected}
-        onChange={(e) => setPositionsSelected(e.target.value as string[])}
-        displayEmpty
-        inputProps={{ "aria-label": "Pozycja" }}
-        fullWidth
-        variant="outlined"
-        disabled={isLocked}
-        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
-      >
-        {positions.map((pos) => (
-          <MenuItem key={pos} value={pos}>
-            {pos}
-          </MenuItem>
-        ))}
-      </Select>
+
+      <FormControl fullWidth disabled={isLocked}>
+        <InputLabel id="position-select-label">Pozycja</InputLabel>
+        <Select
+          labelId="position-select-label"
+          multiple
+          value={positionsSelected}
+          onChange={(e) => setPositionsSelected(e.target.value as string[])}
+          label="Pozycja"
+        >
+          {positions.map((pos) => (
+            <MenuItem key={pos} value={pos}>
+              {pos}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
           label="Wiek min"
@@ -144,7 +143,6 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
-          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
         <TextField
           label="Wiek max"
@@ -156,9 +154,9 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
-          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
       </Box>
+
       <TextField
         label="Narodowość"
         value={nation}
@@ -166,8 +164,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         variant="outlined"
         fullWidth
         disabled={isLocked}
-        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
+
       <TextField
         label="Klub"
         value={club}
@@ -175,8 +173,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         variant="outlined"
         fullWidth
         disabled={isLocked}
-        sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
       />
+
       <Box sx={{ display: "flex", gap: 2 }}>
         <TextField
           label="Budżet"
@@ -188,24 +186,29 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
-          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
         />
-        <Select
-          value={budgetUnit}
-          onChange={(e) => setBudgetUnit(e.target.value as string)}
-          displayEmpty
-          inputProps={{ "aria-label": "Jednostka" }}
-          fullWidth
-          variant="outlined"
-          disabled={isLocked}
-          sx={{ backgroundColor: isLocked ? "#e0e0e0" : "transparent" }}
-        >
-          <MenuItem value="tyś">tyś</MenuItem>
-          <MenuItem value="mln">mln</MenuItem>
-        </Select>
+        <FormControl fullWidth disabled={isLocked}>
+          <InputLabel id="budget-unit-label">Jednostka</InputLabel>
+          <Select
+            labelId="budget-unit-label"
+            value={budgetUnit}
+            onChange={(e) => setBudgetUnit(e.target.value as string)}
+            label="Jednostka"
+          >
+            <MenuItem value="tyś">tyś</MenuItem>
+            <MenuItem value="mln">mln</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Button type="submit" variant="contained" color="success">
+
+      <Box sx={{ display: "flex", gap: 2, mt: 1, justifyContent: "space-between" }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          disabled={isLocked}
+          sx={{ flexGrow: 1 }}
+        >
           Zatwierdź
         </Button>
         <Button
@@ -213,6 +216,8 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           onClick={handleEdit}
           variant="contained"
           color="warning"
+          disabled={!isLocked}
+          sx={{ flexGrow: 1 }}
         >
           Edytuj
         </Button>
@@ -221,6 +226,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           onClick={handleReset}
           variant="outlined"
           color="error"
+          sx={{ flexGrow: 1 }}
         >
           Resetuj
         </Button>
