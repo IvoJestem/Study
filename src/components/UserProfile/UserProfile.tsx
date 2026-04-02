@@ -4,25 +4,28 @@ import {
   Box,
   Typography,
   Avatar,
-  Grid,
-  Paper,
   TextField,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
 } from "@mui/material";
-import { useUser } from "../UseUser/UseUser";
+import { useUser } from "../../contexts/UseUser";
 import { useNavigate } from "react-router-dom";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 const formFields = [
   { label: "Imię i nazwisko", name: "name", type: "text" },
   { label: "Email", name: "email", type: "email" },
   { label: "Telefon", name: "phone", type: "text" },
   { label: "Hasło", name: "password", type: "password" },
-  { label: "Klub", name: "club", type: "text" },
-  { label: "Rola", name: "role", type: "text" },
+  { label: "Klub / Organizacja", name: "club", type: "text" },
+  { label: "Rola w systemie", name: "role", type: "text" },
 ];
 
 const UserProfile: React.FC = () => {
@@ -47,9 +50,6 @@ const UserProfile: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
 
   const handleCancelClick = () => {
     setIsEditing(false);
@@ -72,15 +72,7 @@ const UserProfile: React.FC = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/update-profile",
-        {
-          name: editedUser.name,
-          password: editedUser.password,
-          club: editedUser.club,
-          email: editedUser.email,
-          phone: editedUser.phone,
-          role: editedUser.role,
-          avatar: avatar as string,
-        }
+        { ...editedUser, avatar: avatar as string }
       );
 
       if (response.data.success) {
@@ -106,19 +98,9 @@ const UserProfile: React.FC = () => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatar(reader.result);
-      };
+      reader.onloadend = () => setAvatar(reader.result);
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleOpenConfirmDialog = () => {
-    setOpenConfirmDialog(true);
-  };
-
-  const handleCloseConfirmDialog = () => {
-    setOpenConfirmDialog(false);
   };
 
   const handleDeleteAccount = async () => {
@@ -129,29 +111,27 @@ const UserProfile: React.FC = () => {
       if (response.data.success) {
         setUser(null);
         navigate("/login");
-      } else {
-        console.error(response.data.error);
       }
     } catch (error) {
       console.error("Error deleting account:", error);
     }
-    handleCloseConfirmDialog();
+    setOpenConfirmDialog(false);
   };
 
-  if (!user) {
-    return <Typography variant="h6">Brak danych użytkownika.</Typography>;
-  }
+  if (!user) return null;
 
   return (
-    <Paper elevation={3} sx={{ padding: 4, maxWidth: 600, margin: "2rem auto", borderRadius: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "primary.main" }}>
-        Mój Profil
-      </Typography>
-      <Box textAlign="center" mb={4}>
+    <Box sx={{ maxWidth: 800, mx: "auto" }}>
+      <Box textAlign="center" mb={5} position="relative">
         <Avatar
           alt={user.name}
-          src={avatar ? String(avatar) : "/avatar.jpg"}
-          sx={{ width: 120, height: 120, margin: "0 auto", boxShadow: 3 }}
+          src={avatar ? String(avatar) : ""}
+          sx={{ 
+            width: 130, height: 130, margin: "0 auto", 
+            boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+            border: "4px solid #fff",
+            outline: "3px solid #00B4D8"
+          }}
         />
         {isEditing && (
           <Box mt={2}>
@@ -163,16 +143,26 @@ const UserProfile: React.FC = () => {
               style={{ display: "none" }}
             />
             <label htmlFor="avatar-upload">
-              <Button variant="outlined" color="primary" component="span" sx={{ borderRadius: 2 }}>
-                Zmień Awatar
+              <Button 
+                variant="outlined" 
+                component="span" 
+                startIcon={<PhotoCameraIcon />}
+                sx={{ borderRadius: "50px", fontWeight: 700, mt: 1, borderColor: "#00B4D8", color: "#00B4D8", "&:hover": { borderWidth: 2 } }}
+              >
+                Zmień zdjęcie
               </Button>
             </label>
           </Box>
         )}
       </Box>
-      <Grid container spacing={3}>
+
+      <Box 
+        display="grid" 
+        gridTemplateColumns={{ xs: "1fr", sm: "repeat(2, 1fr)" }} 
+        gap={3}
+      >
         {formFields.map((field) => (
-          <Grid item xs={12} key={field.name}>
+          <Box key={field.name}>
             <TextField
               label={field.label}
               name={field.name}
@@ -181,51 +171,83 @@ const UserProfile: React.FC = () => {
               onChange={handleChange}
               fullWidth
               disabled={!isEditing}
-              variant={isEditing ? "outlined" : "standard"}
+              variant="outlined"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 3,
+                  backgroundColor: isEditing ? "#fff" : "rgba(0,0,0,0.02)",
+                  "&.Mui-focused fieldset": { borderColor: "#00B4D8", borderWidth: 2 },
+                },
+              }}
             />
-          </Grid>
+          </Box>
         ))}
-        
-        <Grid item xs={12} mt={2}>
-          {!isEditing ? (
-            <Box display="flex" justifyContent="space-between">
-              <Button variant="contained" color="primary" onClick={handleEditClick} sx={{ borderRadius: 2 }}>
-                Edytuj profil
-              </Button>
-              <Button variant="outlined" color="error" onClick={handleOpenConfirmDialog} sx={{ borderRadius: 2 }}>
-                Usuń konto
-              </Button>
-            </Box>
-          ) : (
-            <Box display="flex" gap={2}>
-              <Button variant="contained" color="success" onClick={handleSaveClick} sx={{ flexGrow: 1, borderRadius: 2 }}>
-                Zapisz
-              </Button>
-              <Button variant="outlined" color="primary" onClick={handleCancelClick} sx={{ flexGrow: 1, borderRadius: 2 }}>
-                Anuluj
-              </Button>
-            </Box>
-          )}
-        </Grid>
-      </Grid>
+      </Box>
 
-      <Dialog open={openConfirmDialog} onClose={handleCloseConfirmDialog}>
-        <DialogTitle sx={{ fontWeight: "bold", color: "error.main" }}>Potwierdzenie usunięcia</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Czy na pewno chcesz usunąć swoje konto? Tej czynności nie można cofnąć.
+      <Divider sx={{ my: 4, opacity: 0.5 }} />
+
+      <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={2} justifyContent="space-between">
+        {!isEditing ? (
+          <>
+            <Button 
+              variant="outlined" 
+              startIcon={<DeleteForeverIcon />} 
+              onClick={() => setOpenConfirmDialog(true)} 
+              color="error"
+              sx={{ borderRadius: "50px", px: 4, py: 1.5, fontWeight: 800, borderWidth: 2, "&:hover": { borderWidth: 2 } }}
+            >
+              Usuń Konto
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button 
+              variant="contained" 
+              color="success" 
+              startIcon={<SaveIcon />}
+              onClick={handleSaveClick} 
+              sx={{ flexGrow: 1, borderRadius: "50px", py: 1.5, fontWeight: 800 }}
+            >
+              Zapisz Zmiany
+            </Button>
+            <Button 
+              variant="outlined" 
+              onClick={handleCancelClick} 
+              sx={{ flexGrow: 1, borderRadius: "50px", py: 1.5, fontWeight: 800, color: "text.secondary", borderColor: "text.disabled" }}
+            >
+              Anuluj
+            </Button>
+          </>
+        )}
+      </Box>
+
+      <Dialog 
+        open={openConfirmDialog} 
+        onClose={() => setOpenConfirmDialog(false)}
+        PaperProps={{ sx: { borderRadius: 4, p: 1, maxWidth: 400 } }}
+      >
+        <DialogTitle sx={{ textAlign: "center", pt: 3 }}>
+          <WarningAmberIcon sx={{ fontSize: 60, color: "error.main", mb: 1 }} />
+          <Typography variant="h5" sx={{ fontWeight: 900, color: "error.main" }}>
+            Strefa Zagrożenia
+          </Typography>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: "center" }}>
+          <Typography variant="body1" sx={{ color: "text.secondary", fontWeight: 500 }}>
+            Czy na pewno chcesz usunąć swoje konto z systemu? Stracisz dostęp do swojej bazy zawodników oraz narzędzi skautingowych. <br/><br/>
+            <strong>Tej operacji nie można cofnąć!</strong>
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleCloseConfirmDialog} variant="outlined" color="primary">
+        <DialogActions sx={{ justifyContent: "center", pb: 3, gap: 2 }}>
+          <Button onClick={() => setOpenConfirmDialog(false)} sx={{ fontWeight: 800, color: "text.secondary" }}>
             Anuluj
           </Button>
-          <Button onClick={handleDeleteAccount} variant="contained" color="error">
-            Usuń
+          <Button onClick={handleDeleteAccount} variant="contained" color="error" sx={{ borderRadius: "50px", px: 4, fontWeight: 800 }}>
+            Potwierdź Usunięcie
           </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+    </Box>
   );
 };
 

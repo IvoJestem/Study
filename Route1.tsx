@@ -11,6 +11,8 @@ import Error404 from "./src/pages/error404/Error404";
 import NotLoggedInPage from "./src/pages/notloggedInpage/NotLoggedInPage";
 import Players from "./src/pages/players/Players";
 import NoAccess from "./src/pages/noaccess/NoAccess"
+import ShortlistPage from "./src/pages/shortlistpage/ShortlistPage"
+import AdminPanel from "./src/pages/adminpanel/AdminPanel"
 import PrivateRoute from "./privateroute";
 
 const Route1: React.FC = () => {
@@ -29,6 +31,8 @@ const Route1: React.FC = () => {
           <Route path="/transferlist" element={<TransferList />} />
           <Route path="/search" element={<Search />} />
           <Route path="/players" element={<Players/>}/>
+          <Route path="/shortlist" element={<ShortlistPage/>}/>
+          <Route path="/admin" element={<AdminPanel/>}/>
         </Route>
       </Routes>
     </UserProvider>

@@ -7,7 +7,13 @@ import {
   InputLabel,
   Button,
   FormControl,
+  InputAdornment,
+  Divider,
 } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { convertPriceToNumber } from "../../utils/price/price";
 
 interface FormProps {
@@ -46,7 +52,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
   const [nation, setNation] = useState<string>("");
   const [club, setClub] = useState<string>("");
   const [budgetAmount, setBudgetAmount] = useState<number | null>(null);
-  const [budgetUnit, setBudgetUnit] = useState<string>("tyś");
+  const [budgetUnit, setBudgetUnit] = useState<string>("tys"); 
   const [isLocked, setIsLocked] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -76,7 +82,7 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
     setNation("");
     setClub("");
     setBudgetAmount(null);
-    setBudgetUnit("tyś");
+    setBudgetUnit("tys");
     setIsLocked(false);
 
     onSearchPlayer({
@@ -94,6 +100,14 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
     setIsLocked(false);
   };
 
+  const inputStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: 3,
+      backgroundColor: isLocked ? "rgba(0,0,0,0.02)" : "#fff",
+      "&.Mui-focused fieldset": { borderColor: "#00B4D8", borderWidth: "2px" },
+    },
+  };
+
   return (
     <Box
       component="form"
@@ -101,28 +115,29 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 2.5,
-        maxWidth: 600,
+        gap: 3,
+        maxWidth: 700,
         margin: "0 auto",
       }}
     >
       <TextField
-        label="Nazwa"
+        label="Nazwisko Zawodnika (opcjonalnie)"
         value={name}
         onChange={(e) => setName(e.target.value)}
         variant="outlined"
         fullWidth
         disabled={isLocked}
+        sx={inputStyle}
       />
 
-      <FormControl fullWidth disabled={isLocked}>
-        <InputLabel id="position-select-label">Pozycja</InputLabel>
+      <FormControl fullWidth disabled={isLocked} sx={inputStyle}>
+        <InputLabel id="position-select-label">Pozycja na boisku</InputLabel>
         <Select
           labelId="position-select-label"
           multiple
           value={positionsSelected}
           onChange={(e) => setPositionsSelected(e.target.value as string[])}
-          label="Pozycja"
+          label="Pozycja na boisku"
         >
           {positions.map((pos) => (
             <MenuItem key={pos} value={pos}>
@@ -132,9 +147,9 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
         </Select>
       </FormControl>
 
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
         <TextField
-          label="Wiek min"
+          label="Wiek (Od)"
           type="number"
           value={ageMin ?? ""}
           onChange={(e) =>
@@ -143,9 +158,10 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
+          sx={inputStyle}
         />
         <TextField
-          label="Wiek max"
+          label="Wiek (Do)"
           type="number"
           value={ageMax ?? ""}
           onChange={(e) =>
@@ -154,30 +170,34 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
+          sx={inputStyle}
         />
       </Box>
 
-      <TextField
-        label="Narodowość"
-        value={nation}
-        onChange={(e) => setNation(e.target.value)}
-        variant="outlined"
-        fullWidth
-        disabled={isLocked}
-      />
-
-      <TextField
-        label="Klub"
-        value={club}
-        onChange={(e) => setClub(e.target.value)}
-        variant="outlined"
-        fullWidth
-        disabled={isLocked}
-      />
-
-      <Box sx={{ display: "flex", gap: 2 }}>
+      <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
         <TextField
-          label="Budżet"
+          label="Narodowość"
+          value={nation}
+          onChange={(e) => setNation(e.target.value)}
+          variant="outlined"
+          fullWidth
+          disabled={isLocked}
+          sx={inputStyle}
+        />
+        <TextField
+          label="Obecny Klub"
+          value={club}
+          onChange={(e) => setClub(e.target.value)}
+          variant="outlined"
+          fullWidth
+          disabled={isLocked}
+          sx={inputStyle}
+        />
+      </Box>
+
+      <Box sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
+        <TextField
+          label="Maksymalny Budżet"
           type="number"
           value={budgetAmount ?? ""}
           onChange={(e) =>
@@ -186,8 +206,16 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           variant="outlined"
           fullWidth
           disabled={isLocked}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountBalanceWalletIcon sx={{ color: "text.secondary" }} />
+              </InputAdornment>
+            ),
+          }}
+          sx={inputStyle}
         />
-        <FormControl fullWidth disabled={isLocked}>
+        <FormControl disabled={isLocked} sx={{ ...inputStyle, minWidth: { sm: 120 } }}>
           <InputLabel id="budget-unit-label">Jednostka</InputLabel>
           <Select
             labelId="budget-unit-label"
@@ -195,29 +223,46 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
             onChange={(e) => setBudgetUnit(e.target.value as string)}
             label="Jednostka"
           >
-            <MenuItem value="tyś">tyś</MenuItem>
-            <MenuItem value="mln">mln</MenuItem>
+            <MenuItem value="tys">tys.</MenuItem>
+            <MenuItem value="mln">mln.</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
-      <Box sx={{ display: "flex", gap: 2, mt: 1, justifyContent: "space-between" }}>
+      <Divider sx={{ my: 1, borderStyle: "dashed" }} />
+
+      <Box sx={{ display: "flex", gap: 2, flexDirection: { xs: "column", sm: "row" } }}>
         <Button
           type="submit"
           variant="contained"
-          color="success"
+          startIcon={<SearchIcon />}
           disabled={isLocked}
-          sx={{ flexGrow: 1 }}
+          sx={{ 
+            flexGrow: 1, 
+            borderRadius: "50px", 
+            py: 1.5, 
+            fontWeight: 800,
+            bgcolor: "#00B4D8",
+            "&:hover": { bgcolor: "#008ba8" }
+          }}
         >
-          Zatwierdź
+          Zatwierdź Kryteria
         </Button>
         <Button
           type="button"
           onClick={handleEdit}
           variant="contained"
-          color="warning"
+          startIcon={<EditIcon />}
           disabled={!isLocked}
-          sx={{ flexGrow: 1 }}
+          sx={{ 
+            flexGrow: 1, 
+            borderRadius: "50px", 
+            py: 1.5, 
+            fontWeight: 800,
+            bgcolor: "#f59e0b",
+            color: "#fff",
+            "&:hover": { bgcolor: "#d97706" }
+          }}
         >
           Edytuj
         </Button>
@@ -225,8 +270,16 @@ export const SearchForm: React.FC<FormProps> = ({ onSearchPlayer }) => {
           type="button"
           onClick={handleReset}
           variant="outlined"
+          startIcon={<RestartAltIcon />}
           color="error"
-          sx={{ flexGrow: 1 }}
+          sx={{ 
+            flexGrow: 1, 
+            borderRadius: "50px", 
+            py: 1.5, 
+            fontWeight: 800,
+            borderWidth: "2px",
+            "&:hover": { borderWidth: "2px" }
+          }}
         >
           Resetuj
         </Button>

@@ -1,4 +1,5 @@
 import os
+import re # <-- DODANE DO PARSOWANIA CENY
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import oracledb
@@ -17,6 +18,32 @@ db_config = {
 
 def get_connection():
     return oracledb.connect(**db_config)
+
+# ==========================================
+# FUNKCJA POMOCNICZA: PARSOWANIE CENY
+# ==========================================
+def parse_price(price_str):
+    if not price_str:
+        return 0
+    # Zamiana ewentualnego przecinka na kropkę
+    price_str = str(price_str).replace(',', '.')
+    # Wyciągamy tylko cyfry i kropkę dziesiętną
+    numeric_part = re.sub(r'[^\d.]', '', price_str)
+    
+    if not numeric_part:
+        return 0
+        
+    numeric_value = float(numeric_part)
+    price_lower = price_str.lower()
+    
+    # Przelicznik
+    if 'mln' in price_lower:
+        return numeric_value * 1000000
+    elif 'tys' in price_lower or 'tyś' in price_lower:
+        return numeric_value * 1000
+        
+    return numeric_value
+
 
 @app.route('/<path:path>')
 def send_static(path):
@@ -244,41 +271,203 @@ def delete_user(phone):
 
 @app.route("/players/<clubName>", methods=["GET"])
 def get_players_by_club(clubName):
-    conn = None
     try:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM SYS.PLAYERS WHERE CLUB = :clubName", clubName=clubName)
-        rows = cursor.fetchall()
-        
-        if len(rows) == 0:
-            return jsonify({"error": "Nie znaleziono zawodników dla tego klubu"}), 404
-
-        return jsonify(rows)
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT ID, NAME, POSITION, AGE, NATION, CLUB, PRICE FROM SYS.PLAYERS WHERE CLUB = :clubName", clubName=clubName)
+                columns = [col[0] for col in cursor.description]
+                rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                return jsonify(rows), 200
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Błąd podczas pobierania zawodników", "details": str(e)}), 500
-    finally:
-        if conn: conn.close()
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/transferlist/<clubName>", methods=["GET"])
 def get_transferlist_by_club(clubName):
-    conn = None
     try:
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM SYS.TRANSFERLIST WHERE CLUB = :clubName", clubName=clubName)
-        rows = cursor.fetchall()
-        
-        if len(rows) == 0:
-            return jsonify({"error": "Nie znaleziono zawodników dla tego klubu"}), 404
-
-        return jsonify(rows)
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT ID, NAME, POSITION, AGE, NATION, CLUB, PRICE FROM SYS.TRANSFERLIST WHERE CLUB = :clubName", clubName=clubName)
+                columns = [col[0] for col in cursor.description]
+                rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                return jsonify(rows), 200
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Błąd podczas pobierania zawodników", "details": str(e)}), 500
-    finally:
-        if conn: conn.close()
+        return jsonify({"error": str(e)}), 500
 
+@app.route("/api/shortlist", methods=["GET"])
+def get_shortlist():
+    phone = request.args.get('phone')
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+                    SELECT ID, NAME, POSITION, AGE, NATION, CLUB, PRICE FROM SYS.TRANSFERLIST WHERE ID IN (SELECT PLAYER_ID FROM SYS.SHORTLIST WHERE PHONE = :phone)
+                    UNION
+                    SELECT ID, NAME, POSITION, AGE, NATION, CLUB, PRICE FROM SYS.PLAYERS WHERE ID IN (SELECT PLAYER_ID FROM SYS.SHORTLIST WHERE PHONE = :phone)
+                """, phone=phone)
+                columns = [col[0] for col in cursor.description]
+                rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                return jsonify(rows)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/shortlist/ids", methods=["GET"])
+def get_shortlist_ids():
+    phone = request.args.get('phone')
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT PLAYER_ID FROM SYS.SHORTLIST WHERE PHONE = :phone", phone=phone)
+                rows = [row[0] for row in cursor.fetchall()]
+                return jsonify(rows)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/shortlist", methods=["POST"])
+def add_to_shortlist():
+    data = request.json
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT 1 FROM SYS.SHORTLIST WHERE PHONE = :phone AND PLAYER_ID = :id", phone=data.get('phone'), id=data.get('id'))
+                if cursor.fetchone():
+                    return jsonify({"error": "Już jest na liście"}), 400
+                
+                cursor.execute("INSERT INTO SYS.SHORTLIST (PHONE, PLAYER_ID) VALUES (:phone, :id)", phone=data.get('phone'), id=data.get('id'))
+                conn.commit()
+                return jsonify({"success": True}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/shortlist", methods=["DELETE"])
+def remove_from_shortlist():
+    phone = request.args.get('phone')
+    player_id = request.args.get('id')
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("DELETE FROM SYS.SHORTLIST WHERE PHONE = :phone AND PLAYER_ID = :id", phone=phone, id=player_id)
+                conn.commit()
+                return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/users/unverified", methods=["GET"])
+def get_unverified_users():
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT phone, name, email, role, club FROM SYS.USERS WHERE verify = 0")
+                columns = [col[0] for col in cursor.description]
+                rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                return jsonify(rows)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/users/verify/<phone>", methods=["POST"])
+def verify_user(phone):
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("UPDATE SYS.USERS SET verify = 1 WHERE phone = :phone", phone=phone)
+                conn.commit()
+                return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ==================================================
+# SYSTEM KUPTOWANIA ZAWODNIKA (TRANSAKCJA BAZODANOWA)
+# ==================================================
+@app.route('/api/buy-player', methods=['POST'])
+def buy_player():
+    data = request.json
+    user_phone = data.get('userPhone')
+    player_id = data.get('playerId')
+    player_price_string = data.get('playerPriceString')
+    new_club = data.get('newClub')
+
+    # Parsujemy tekstową cenę (np. "12,50 mln") do zwykłej liczby (12500000)
+    player_price = parse_price(player_price_string)
+
+    connection = None
+    cursor = None
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+
+        # 1. Sprawdzamy obecny budżet kupującego
+        cursor.execute("SELECT BUDGET FROM SYS.USERS WHERE PHONE = :phone", phone=user_phone)
+        row = cursor.fetchone()
+
+        if not row:
+            return jsonify({"success": False, "error": "Nie znaleziono konta użytkownika w bazie."}), 404
+
+        current_budget = row[0]
+        if current_budget is None:
+            current_budget = 0 # Jeśli ktoś miał Null, zakładamy, że ma 0 na koncie
+
+        # 2. Sprawdzamy, czy użytkownika stać na ten transfer
+        if current_budget < player_price:
+            return jsonify({"success": False, "error": f"Odmowa: Brak środków! Masz {current_budget:,.0f}, a potrzebujesz {player_price:,.0f}."}), 400
+
+        new_budget = current_budget - player_price
+
+        # --- START TRANSAKCJI ---
+        # 3. Odejmujemy pieniądze z budżetu (UPDATE SYS.USERS)
+        cursor.execute("""
+            UPDATE SYS.USERS 
+            SET BUDGET = :new_budget 
+            WHERE PHONE = :phone
+        """, new_budget=new_budget, phone=user_phone)
+
+        # 4. Przenosimy zawodnika z Giełdy (TRANSFERLIST) do Składu (PLAYERS) zachowując to samo ID,
+        # żeby nie zepsuć listy obserwowanych (SHORTLIST)
+        cursor.execute("""
+            INSERT INTO SYS.PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB)
+            SELECT ID, NAME, POSITION, AGE, NATION, :new_club
+            FROM SYS.TRANSFERLIST
+            WHERE ID = :player_id
+        """, new_club=new_club, player_id=player_id)
+
+        # 5. Zdejmujemy zawodnika z Giełdy (TRANSFERLIST)
+        cursor.execute("""
+            DELETE FROM SYS.TRANSFERLIST 
+            WHERE ID = :player_id
+        """, player_id=player_id)
+
+        # --- ZATWIERDZAMY ZMIANY W BAZIE ---
+        connection.commit()
+
+        return jsonify({
+            "success": True, 
+            "message": "Transfer zakończony sukcesem! Zawodnik dołącza do Twojej drużyny.",
+            "remainingBudget": new_budget
+        }), 200
+
+    except Exception as e:
+        # COFANIE TRANSAKCJI (ROLLBACK) W RAZIE BŁĘDU! Nikt nie traci ani kasy, ani zawodnika.
+        if connection:
+            connection.rollback()
+        print("Błąd podczas kupowania zawodnika:", e)
+        return jsonify({"success": False, "error": "Wystąpił błąd serwera podczas finalizacji transferu.", "details": str(e)}), 500
+        
+    finally:
+        # Bezpieczne zamykanie połączeń
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+@app.route("/api/users/all", methods=["GET"])
+def get_all_users():
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                # Wyciągamy wszystkich, wraz z polem VERIFY
+                cursor.execute("SELECT phone, name, email, role, club, verify FROM SYS.USERS")
+                columns = [col[0] for col in cursor.description]
+                rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                return jsonify(rows)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500            
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

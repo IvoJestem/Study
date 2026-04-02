@@ -11,9 +11,10 @@ import {
   IconButton,
   InputAdornment,
   Paper,
+  Container,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useUser } from "../../components/UseUser/UseUser";
+import { useUser } from "../../contexts/UseUser";
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -53,103 +54,140 @@ const Login: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundColor: "background.default",
+        backgroundColor: "#0A1929", 
+        backgroundImage:
+          "radial-gradient(circle at 80% 20%, rgba(0, 180, 216, 0.15) 0%, transparent 40%), radial-gradient(circle at 20% 80%, rgba(255, 0, 122, 0.1) 0%, transparent 40%)",
         p: 2,
       }}
     >
-      <Paper
-        elevation={4}
-        sx={{
-          maxWidth: 450,
-          width: "100%",
-          p: { xs: 3, md: 5 },
-          borderRadius: 4,
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          gutterBottom
+      <Container maxWidth="xs">
+        <Paper
+          elevation={10}
           sx={{
-            fontWeight: 800,
-            color: "primary.main",
-            mb: 4,
+            p: { xs: 4, md: 5 },
+            borderRadius: 4,
+            backgroundColor: "rgba(255, 255, 255, 0.98)", 
+            borderTop: "5px solid #FF007A", 
+            boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
           }}
         >
-          Logowanie
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleLogin}
-          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
-        >
-          <TextField
-            label="Imię i Nazwisko"
-            variant="outlined"
-            fullWidth
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <TextField
-            label="Hasło"
-            variant="outlined"
-            type={showPassword ? "text" : "password"}
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            size="large"
-            sx={{
-              py: 1.5,
-              borderRadius: 2,
-              fontWeight: "bold",
-              fontSize: "1.1rem",
-              textTransform: "none",
-            }}
-          >
-            Zaloguj
-          </Button>
-        </Box>
-        <Box mt={3} textAlign="center">
-          <Typography variant="body2" color="text.secondary">
-            Nie masz konta?{" "}
-            <Button
-              onClick={goToRegister}
-              color="secondary"
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography
+              variant="overline"
+              sx={{ color: "#00B4D8", fontWeight: 900, letterSpacing: 2 }}
+            >
+              System Transferowy
+            </Typography>
+            <Typography
+              variant="h4"
+              component="h1"
               sx={{
-                fontWeight: "bold",
-                textTransform: "none",
-                p: 0,
-                minWidth: "auto",
-                ml: 0.5,
+                fontWeight: 900,
+                color: "#0A1929",
+                mt: 1,
               }}
             >
-              Zarejestruj się
+              Witaj Ponownie
+            </Typography>
+          </Box>
+
+          <Box
+            component="form"
+            onSubmit={handleLogin}
+            sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+          >
+            <TextField
+              label="Imię i Nazwisko"
+              variant="outlined"
+              fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#00B4D8" },
+                },
+              }}
+            />
+            <TextField
+              label="Hasło"
+              variant="outlined"
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#00B4D8" },
+                },
+              }}
+            />
+            
+            {errorMsg && (
+              <Alert severity="error" sx={{ borderRadius: 2 }}>
+                {errorMsg}
+              </Alert>
+            )}
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              size="large"
+              sx={{
+                py: 1.5,
+                mt: 1,
+                borderRadius: 50,
+                fontWeight: 800,
+                fontSize: "1.1rem",
+                textTransform: "none",
+                backgroundColor: "#FF007A",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#D80065",
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 20px rgba(255,0,122,0.3)",
+                },
+              }}
+            >
+              Zaloguj do Panelu
             </Button>
-          </Typography>
-        </Box>
-      </Paper>
+          </Box>
+
+          <Box mt={4} textAlign="center">
+            <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 500 }}>
+              Nowy w świecie transferów?{" "}
+              <Button
+                onClick={goToRegister}
+                sx={{
+                  fontWeight: 800,
+                  textTransform: "none",
+                  color: "#00B4D8",
+                  p: 0,
+                  minWidth: "auto",
+                  ml: 0.5,
+                  "&:hover": { backgroundColor: "transparent", textDecoration: "underline" }
+                }}
+              >
+                Załóż konto
+              </Button>
+            </Typography>
+          </Box>
+        </Paper>
+      </Container>
     </Box>
   );
 };
