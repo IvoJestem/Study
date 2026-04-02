@@ -1,5 +1,5 @@
 import os
-import re # <-- DODANE DO PARSOWANIA CENY
+import re 
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import oracledb
@@ -19,15 +19,10 @@ db_config = {
 def get_connection():
     return oracledb.connect(**db_config)
 
-# ==========================================
-# FUNKCJA POMOCNICZA: PARSOWANIE CENY
-# ==========================================
 def parse_price(price_str):
     if not price_str:
         return 0
-    # Zamiana ewentualnego przecinka na kropkę
     price_str = str(price_str).replace(',', '.')
-    # Wyciągamy tylko cyfry i kropkę dziesiętną
     numeric_part = re.sub(r'[^\d.]', '', price_str)
     
     if not numeric_part:
@@ -36,7 +31,6 @@ def parse_price(price_str):
     numeric_value = float(numeric_part)
     price_lower = price_str.lower()
     
-    # Przelicznik
     if 'mln' in price_lower:
         return numeric_value * 1000000
     elif 'tys' in price_lower or 'tyś' in price_lower:
@@ -188,34 +182,6 @@ def register():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Błąd podczas rejestracji użytkownika", "details": str(e)}), 500
-    finally:
-        if conn: conn.close()
-
-@app.route("/api/update-profile", methods=["POST"])
-def update_profile():
-    data = request.json
-    phone = data.get('phone')
-
-    if not phone:
-        return jsonify({"error": "Numer telefonu jest wymagany"}), 400
-
-    conn = None
-    try:
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        cursor.execute(
-            """UPDATE SYS.USERS
-               SET name = :name, password = :password, club = :club, email = :email, role = :role, avatar = :avatar
-               WHERE phone = :phone""",
-            name=data.get('name'), password=data.get('password'), club=data.get('club'), 
-            email=data.get('email'), role=data.get('role'), avatar=data.get('avatar'), phone=phone
-        )
-        conn.commit()
-        return jsonify({"success": True, "message": "Dane użytkownika zostały zaktualizowane"}), 200
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Błąd podczas aktualizacji danych użytkownika", "details": str(e)}), 500
     finally:
         if conn: conn.close()
 
@@ -373,11 +339,7 @@ def verify_user(phone):
                 return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-# ==================================================
-# SYSTEM KUPTOWANIA ZAWODNIKA (TRANSAKCJA BAZODANOWA)
-# ==================================================
+# DO IMPLEMENTACJI W FRONT
 @app.route('/api/buy-player', methods=['POST'])
 def buy_player():
     data = request.json
@@ -386,7 +348,6 @@ def buy_player():
     player_price_string = data.get('playerPriceString')
     new_club = data.get('newClub')
 
-    # Parsujemy tekstową cenę (np. "12,50 mln") do zwykłej liczby (12500000)
     player_price = parse_price(player_price_string)
 
     connection = None
@@ -395,7 +356,6 @@ def buy_player():
         connection = get_connection()
         cursor = connection.cursor()
 
-        # 1. Sprawdzamy obecny budżet kupującego
         cursor.execute("SELECT BUDGET FROM SYS.USERS WHERE PHONE = :phone", phone=user_phone)
         row = cursor.fetchone()
 
@@ -404,38 +364,29 @@ def buy_player():
 
         current_budget = row[0]
         if current_budget is None:
-            current_budget = 0 # Jeśli ktoś miał Null, zakładamy, że ma 0 na koncie
+            current_budget = 0 
 
-        # 2. Sprawdzamy, czy użytkownika stać na ten transfer
         if current_budget < player_price:
             return jsonify({"success": False, "error": f"Odmowa: Brak środków! Masz {current_budget:,.0f}, a potrzebujesz {player_price:,.0f}."}), 400
 
         new_budget = current_budget - player_price
 
-        # --- START TRANSAKCJI ---
-        # 3. Odejmujemy pieniądze z budżetu (UPDATE SYS.USERS)
         cursor.execute("""
             UPDATE SYS.USERS 
             SET BUDGET = :new_budget 
             WHERE PHONE = :phone
         """, new_budget=new_budget, phone=user_phone)
 
-        # 4. Przenosimy zawodnika z Giełdy (TRANSFERLIST) do Składu (PLAYERS) zachowując to samo ID,
-        # żeby nie zepsuć listy obserwowanych (SHORTLIST)
         cursor.execute("""
             INSERT INTO SYS.PLAYERS (ID, NAME, POSITION, AGE, NATION, CLUB)
             SELECT ID, NAME, POSITION, AGE, NATION, :new_club
             FROM SYS.TRANSFERLIST
             WHERE ID = :player_id
         """, new_club=new_club, player_id=player_id)
-
-        # 5. Zdejmujemy zawodnika z Giełdy (TRANSFERLIST)
         cursor.execute("""
             DELETE FROM SYS.TRANSFERLIST 
             WHERE ID = :player_id
         """, player_id=player_id)
-
-        # --- ZATWIERDZAMY ZMIANY W BAZIE ---
         connection.commit()
 
         return jsonify({
@@ -445,29 +396,28 @@ def buy_player():
         }), 200
 
     except Exception as e:
-        # COFANIE TRANSAKCJI (ROLLBACK) W RAZIE BŁĘDU! Nikt nie traci ani kasy, ani zawodnika.
         if connection:
             connection.rollback()
         print("Błąd podczas kupowania zawodnika:", e)
         return jsonify({"success": False, "error": "Wystąpił błąd serwera podczas finalizacji transferu.", "details": str(e)}), 500
         
     finally:
-        # Bezpieczne zamykanie połączeń
         if cursor:
             cursor.close()
         if connection:
             connection.close()
+
 @app.route("/api/users/all", methods=["GET"])
 def get_all_users():
     try:
         with get_connection() as conn:
             with conn.cursor() as cursor:
-                # Wyciągamy wszystkich, wraz z polem VERIFY
                 cursor.execute("SELECT phone, name, email, role, club, verify FROM SYS.USERS")
                 columns = [col[0] for col in cursor.description]
                 rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
                 return jsonify(rows)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500            
+        return jsonify({"error": str(e)}), 500           
+     
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
