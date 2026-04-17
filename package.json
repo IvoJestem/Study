@@ -21,7 +21,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-charts": "^8.28.2",
     "axios": "^1.7.7",
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
